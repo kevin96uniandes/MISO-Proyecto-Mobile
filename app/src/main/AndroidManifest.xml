@@ -13,10 +13,9 @@
         android:theme="@style/Theme.ABCAll"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.ui.login.LoginActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ABCAll.NoActionBar">
+            android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
