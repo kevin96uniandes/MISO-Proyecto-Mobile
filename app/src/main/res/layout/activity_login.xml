@@ -44,6 +44,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -63,6 +64,7 @@
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
