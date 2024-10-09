@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.squareup.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.androidx.security.crypto)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
