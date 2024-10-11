@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.squareup.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.security.crypto)
+    implementation ("com.airbnb.android:lottie:6.0.0")
+    implementation (libs.github.glide)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
