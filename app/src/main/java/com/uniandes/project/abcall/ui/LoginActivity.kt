@@ -13,6 +13,7 @@ import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
+import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.AuthViewModel
 
@@ -50,7 +51,7 @@ class LoginActivity : CrossIntentActivity() {
 
         viewModel.token.observe(this) { token ->
             if (token != null) {
-               // nextActivity(MainActivity::class.java)
+                nextActivity(DashboardActivity::class.java)
             } else {
                 val dialog = CustomDialogFragment().newInstance(
                     "Inicio de sesión",
