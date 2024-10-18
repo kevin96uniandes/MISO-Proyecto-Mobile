@@ -11,41 +11,68 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.TokenManager
+
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
+
 import com.uniandes.project.abcall.repositories.rest.AuthClient
+
 import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
+
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
-import com.uniandes.project.abcall.viewmodels.AuthViewModel
+
+import com.uniandes.project.abcall.viewmodels.RegisterUserViewModel
+
 
 class UserRegisterActivity : CrossIntentActivity() {
 
-    private lateinit var etUsername: TextInputEditText
+    private lateinit var etFullName: TextInputEditText
+    private lateinit var etUserName: TextInputEditText
     private lateinit var etPassword: TextInputEditText
+    private lateinit var etCheckPassword: TextInputEditText
+
+
+    private lateinit var ilFullName: TextInputLayout
     private lateinit var ilUsername: TextInputLayout
-    private lateinit var ilPassword: TextInputLayout
+    private lateinit var ilPasword: TextInputLayout
+    private lateinit var ilCheckpassword: TextInputLayout
+
     private lateinit var btnLogin: Button
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: RegisterUserViewModel
+
     private val authClient = AuthClient()
     private lateinit var tokenManager: TokenManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
         tokenManager = TokenManager(binding.root.context)
 
-        viewModel = AuthViewModel(authClient, tokenManager)
+        viewModel = RegisterUserViewModel(authClient, tokenManager)
 
-        etUsername = findViewById(R.id.et_username)
+
+        etFullName = findViewById(R.id.et_fullName)
+        etUserName = findViewById(R.id.et_username)
+
         etPassword = findViewById(R.id.et_password)
+
+        etPassword = findViewById(R.id.et_checkpassword)
+
+        ilFullName = findViewById(R.id.ilFullName)
         ilUsername = findViewById(R.id.ilUsername)
-        ilPassword = findViewById(R.id.ilPasword)
+        ilPasword = findViewById(R.id.ilPasword)
+        ilCheckpassword = findViewById(R.id.ilCheckpassword)
+
+
         btnLogin = findViewById(R.id.btn_log_in)
+
 
         btnLogin.setOnClickListener { validateForm() }
 
@@ -68,34 +95,57 @@ class UserRegisterActivity : CrossIntentActivity() {
 
     private fun validateForm() {
 
+        ilFullName.error = null
         ilUsername.error = null
-        ilPassword.error = null
+        ilPasword.error = null
+        ilCheckpassword.error = null
 
-        val username = etUsername.text.toString().trim()
+        val fullName = etFullName.text.toString().trim()
+        val username = etUserName.text.toString().trim()
         val password = etPassword.text.toString().trim()
+        val checkPassword = etCheckPassword.text.toString().trim()
 
         var isValid = true
 
         if (TextUtils.isEmpty(username)) {
-            ilUsername.error = "Por favor ingresa tu nombre de usuario"
+            ilFullName.error = "FullName"
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(username)) {
+            ilUsername.error = "User"
             isValid = false
         }
 
         if (TextUtils.isEmpty(password)) {
-            ilPassword.error = "Por favor ingresa tu contraseña"
+            ilPasword.error = "Password"
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            ilCheckpassword.error = "CheckPassword"
             isValid = false
         }
 
         if (isValid) {
-            viewModel.authenticate(username, password)
+            viewModel.registerUser(fullName, username, password, checkPassword)
         }
     }
 
     private fun setupTextWatchers() {
         // Configura el TextWatcher para el nombre de usuario
-        etUsername.addTextChangedListener(object : TextWatcher {
+        etFullName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                clearUsernameError()
+                clearFullNameError()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        etUserName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                clearUserNameError()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -111,13 +161,30 @@ class UserRegisterActivity : CrossIntentActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        etCheckPassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                clearCheckPasswordError()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
-    private fun clearUsernameError() {
+    private fun clearFullNameError() {
+        ilFullName.error = null
+    }
+
+    private fun clearUserNameError() {
         ilUsername.error = null
     }
 
     private fun clearPasswordError() {
-        ilPassword.error = null
+        ilPasword.error = null
+    }
+
+    private fun clearCheckPasswordError() {
+        ilPasword.error = null
     }
 }
