@@ -90,6 +90,16 @@
             android:layout_marginTop="16dp"
             android:text="@string/signIn"
             />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customSecondaryButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Registro"
+            />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>
