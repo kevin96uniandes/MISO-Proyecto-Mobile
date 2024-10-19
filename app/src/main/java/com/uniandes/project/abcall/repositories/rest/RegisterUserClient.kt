@@ -22,15 +22,14 @@ class RegisterUserClient {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
                     val resp = response.body()
-                    // val auth = resp?.toAuth()
-                    callback()
+                    return resp
                 } else {
                     Log.e("AuthClient", "Error: ${response.errorBody()?.string()}")
                     callback(null)
                 }
             }
 
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 Log.e("MainActivity", "Failure: ${t.message}")
                 callback(null)
             }
@@ -50,6 +49,7 @@ class RegisterUserClient {
     data class RegisterResponse(
         val token: String
     )
+
 
 }
 

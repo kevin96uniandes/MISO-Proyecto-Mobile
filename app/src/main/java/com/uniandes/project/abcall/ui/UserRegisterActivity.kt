@@ -12,9 +12,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.TokenManager
 
-import com.uniandes.project.abcall.databinding.ActivityLoginBinding
+import com.uniandes.project.abcall.databinding.ActivityUserRegisterBinding
 
-import com.uniandes.project.abcall.repositories.rest.AuthClient
+import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 
 import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
 
@@ -36,12 +36,12 @@ class UserRegisterActivity : CrossIntentActivity() {
     private lateinit var ilPasword: TextInputLayout
     private lateinit var ilCheckpassword: TextInputLayout
 
-    private lateinit var btnLogin: Button
+    private lateinit var btnRegister: Button
 
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityUserRegisterBinding
     private lateinit var viewModel: RegisterUserViewModel
 
-    private val authClient = AuthClient()
+    private val registerClient = RegisterUserClient()
     private lateinit var tokenManager: TokenManager
 
 
@@ -49,13 +49,13 @@ class UserRegisterActivity : CrossIntentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityUserRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
         tokenManager = TokenManager(binding.root.context)
 
-        viewModel = RegisterUserViewModel(authClient, tokenManager)
+        viewModel = RegisterUserViewModel(registerClient)
 
 
         etFullName = findViewById(R.id.et_fullName)
@@ -71,11 +71,13 @@ class UserRegisterActivity : CrossIntentActivity() {
         ilCheckpassword = findViewById(R.id.ilCheckpassword)
 
 
-        btnLogin = findViewById(R.id.btn_log_in)
+        btnRegister = findViewById(R.id.btn_register)
 
 
-        btnLogin.setOnClickListener { validateForm() }
+        btnRegister.setOnClickListener { validateForm() }
 
+
+        /*
         viewModel.token.observe(this) { token ->
             if (token != null) {
                 nextActivity(DashboardActivity::class.java)
@@ -86,9 +88,10 @@ class UserRegisterActivity : CrossIntentActivity() {
                     R.raw.error
                 )
                 dialog.show(supportFragmentManager, "CustomDialog")
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Register failed", Toast.LENGTH_SHORT).show()
             }
         }
+        */
 
         setupTextWatchers()
     }
