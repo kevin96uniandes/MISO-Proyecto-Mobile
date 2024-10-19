@@ -36,7 +36,8 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:src="@mipmap/ic_white_bg_logo_with_text"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:contentDescription="@string/abcall_icon"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ilUsername"
@@ -98,7 +99,7 @@
             style="@style/customSecondaryButton"
             app:cornerRadius="20sp"
             android:layout_marginTop="16dp"
-            android:text="Registro"
+            android:text="@string/registro"
             />
     </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -5,7 +5,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Button
-import android.widget.Toast
+// import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -17,7 +17,7 @@ import com.uniandes.project.abcall.databinding.ActivityUserRegisterBinding
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 
 
-import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
+// import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 
 import com.uniandes.project.abcall.viewmodels.RegisterUserViewModel
 
