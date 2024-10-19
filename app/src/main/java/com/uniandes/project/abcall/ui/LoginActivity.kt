@@ -24,6 +24,7 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var ilUsername: TextInputLayout
     private lateinit var ilPassword: TextInputLayout
     private lateinit var btnLogin: Button
+    private lateinit var btnRegister: Button
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var viewModel: AuthViewModel
@@ -46,8 +47,13 @@ class LoginActivity : CrossIntentActivity() {
         ilUsername = findViewById(R.id.ilUsername)
         ilPassword = findViewById(R.id.ilPasword)
         btnLogin = findViewById(R.id.btn_log_in)
+        btnRegister = findViewById(R.id.btn_register)
 
         btnLogin.setOnClickListener { validateForm() }
+
+        btnRegister.setOnClickListener {
+            nextActivity(UserRegisterActivity::class.java)
+        }
 
         viewModel.token.observe(this) { token ->
             if (token != null) {
