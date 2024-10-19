@@ -12,7 +12,7 @@ interface ApiService {
     @POST("/user/auth/login")
     fun login(@Body loginRequestBody: AuthClient.LoginRequestBody): Call<AuthClient.LoginResponse>
 
-    @POST("user/auth/register")
+    @POST("user/register/user")
     fun register(@Body userRegisterRequestBody: RegisterUserClient.UserRegisterRequestBody): Call<RegisterUserClient.RegisterResponse>
 
 }

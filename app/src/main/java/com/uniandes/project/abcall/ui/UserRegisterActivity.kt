@@ -123,7 +123,13 @@ class UserRegisterActivity : CrossIntentActivity() {
             isValid = false
         }
 
-        if (TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(checkPassword)) {
+            ilCheckpassword.error = "CheckPassword"
+            isValid = false
+        }
+
+        if (checkPassword != password){
+            ilPasword.error = "password"
             ilCheckpassword.error = "CheckPassword"
             isValid = false
         }
