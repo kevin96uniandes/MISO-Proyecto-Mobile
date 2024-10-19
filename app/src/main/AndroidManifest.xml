@@ -22,6 +22,11 @@
             android:label="@string/title_activity_dashboard"
             android:theme="@style/Theme.ABCAll.NoActionBar" />
         <activity
+            android:name=".ui.ClientHomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/Theme.ABCAll.NoActionBar" />
+        <activity
             android:name=".ui.LoginActivity"
             android:exported="true">
             <intent-filter>
