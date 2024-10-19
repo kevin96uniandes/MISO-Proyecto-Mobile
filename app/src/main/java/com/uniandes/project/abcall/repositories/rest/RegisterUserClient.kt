@@ -8,7 +8,7 @@ import retrofit2.Response
 
 class RegisterUserClient {
 
-    fun registerUser(fullName: String, username: String, password: String, checkPassword: String, callback: () -> Unit) {
+    fun registerUser(fullName: String, username: String, password: String, checkPassword: String, callback: (Any?) -> Unit) {
 
         val body = UserRegisterRequestBody(
             fullName = fullName,
@@ -21,17 +21,14 @@ class RegisterUserClient {
         RetrofitClient.apiService.register(userRegisterRequestBody = body).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
-                    val resp = response.body()
-                    return resp
+                    response.body()?.code
                 } else {
                     Log.e("AuthClient", "Error: ${response.errorBody()?.string()}")
-                    callback(null)
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 Log.e("MainActivity", "Failure: ${t.message}")
-                callback(null)
             }
         })
 
@@ -47,11 +44,11 @@ class RegisterUserClient {
     )
 
     data class RegisterResponse(
-        val token: String
+        val code: Any?
     )
 
 
 }
 
 internal fun RegisterUserClient.RegisterResponse.toAuth() =
-    this.token
+    this.code
