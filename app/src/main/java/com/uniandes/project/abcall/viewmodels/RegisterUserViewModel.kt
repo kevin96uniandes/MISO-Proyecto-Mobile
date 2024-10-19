@@ -10,9 +10,9 @@ class RegisterUserViewModel (
     ) : ViewModel() {
 
 
-    fun registerUser(fullName: String, user: String, password: String, checkPassword: String) {
+    fun registerUser(firstName: String, lastName: String, user: String, password: String, checkPassword: String) {
 
-        registerUserClient.registerUser(fullName, user, password, checkPassword) { code ->
+        registerUserClient.registerUser(firstName, lastName, user, password, checkPassword) { code ->
             RegisterUserClient.RegisterResponse(code)
         }
 

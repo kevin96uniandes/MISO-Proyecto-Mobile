@@ -8,14 +8,14 @@ import retrofit2.Response
 
 class RegisterUserClient {
 
-    fun registerUser(fullName: String, username: String, password: String, checkPassword: String, callback: (Any?) -> Unit) {
+    fun registerUser(firstName: String, lastName: String, username: String, password: String, checkPassword: String, callback: (Any?) -> Unit) {
 
         val body = UserRegisterRequestBody(
-            fullName = fullName,
             username = username,
             password = password,
-            checkPassword = checkPassword
-
+            checkPassword = checkPassword,
+            firstName = firstName,
+            lastName = lastName
         )
 
         RetrofitClient.apiService.register(userRegisterRequestBody = body).enqueue(object : Callback<RegisterResponse> {
@@ -37,10 +37,11 @@ class RegisterUserClient {
 
 
     data class UserRegisterRequestBody(
-        val fullName: String,
         val username: String,
         val password: String,
-        val checkPassword: String
+        val checkPassword: String,
+        val firstName: String,
+        val lastName: String
     )
 
     data class RegisterResponse(
