@@ -146,7 +146,7 @@ class UserRegisterActivity : CrossIntentActivity() {
         }
 
         if (isValid) {
-            viewModel.registerUser(firstName, username, password, checkPassword)
+            viewModel.registerUser(firstName, lastName, username, password, checkPassword)
         }
     }
 
