@@ -16,7 +16,6 @@ import com.uniandes.project.abcall.databinding.ActivityUserRegisterBinding
 
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 
-import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
 
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 
@@ -74,27 +73,26 @@ class UserRegisterActivity : CrossIntentActivity() {
         btnRegister = findViewById(R.id.btn_register)
 
 
-        btnRegister.setOnClickListener { validateForm() }
-
+        btnRegister.setOnClickListener {
+            validateForm()
+            nextActivity(LoginActivity::class.java)
+        }
 
         /*
-        viewModel.token.observe(this) { token ->
-            if (token != null) {
-                nextActivity(DashboardActivity::class.java)
-            } else {
-                val dialog = CustomDialogFragment().newInstance(
-                    "Inicio de sesión",
-                    "Usuario y/o contraseña incorrecta",
-                    R.raw.error
-                )
-                dialog.show(supportFragmentManager, "CustomDialog")
-                Toast.makeText(this, "Register failed", Toast.LENGTH_SHORT).show()
+        bCancel.setOnClickListener(object : OnClickListener() {
+            fun onClick(v: View?) {
+                etFullName.text?.clear()
+                etUserName.text?.clear()
+                etPassword.text?.clear()
+                etCheckPassword.text?.clear()
             }
-        }
+        })
         */
 
         setupTextWatchers()
     }
+
+
 
     private fun validateForm() {
 
