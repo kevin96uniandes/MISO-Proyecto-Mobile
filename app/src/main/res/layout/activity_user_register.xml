@@ -27,14 +27,14 @@
             android:text="Registro usuario"
             android:gravity="center"
             android:textColor="@color/abcall_primary_color"
-            android:textSize="40sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             />
 
         <ImageView
             android:id="@+id/login_img"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:src="@mipmap/ic_white_bg_logo_with_text"
             android:layout_gravity="center" />
 
@@ -132,6 +132,16 @@
             app:cornerRadius="20sp"
             android:layout_marginTop="16dp"
             android:text="Registrar"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_clear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customSecondaryButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Limpiar"
             />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

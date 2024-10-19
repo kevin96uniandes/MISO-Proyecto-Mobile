@@ -36,6 +36,7 @@ class UserRegisterActivity : CrossIntentActivity() {
     private lateinit var ilCheckpassword: TextInputLayout
 
     private lateinit var btnRegister: Button
+    private lateinit var btnClear: Button
 
     private lateinit var binding: ActivityUserRegisterBinding
     private lateinit var viewModel: RegisterUserViewModel
@@ -78,21 +79,18 @@ class UserRegisterActivity : CrossIntentActivity() {
             nextActivity(LoginActivity::class.java)
         }
 
-        /*
-        bCancel.setOnClickListener(object : OnClickListener() {
-            fun onClick(v: View?) {
-                etFullName.text?.clear()
-                etUserName.text?.clear()
-                etPassword.text?.clear()
-                etCheckPassword.text?.clear()
-            }
+        btnClear = findViewById(R.id.btn_clear)
+
+        btnClear.setOnClickListener({
+            etFullName.text?.clear()
+            etUserName.text?.clear()
+            etPassword.text?.clear()
+            etCheckPassword.text?.clear()
+
         })
-        */
 
         setupTextWatchers()
     }
-
-
 
     private fun validateForm() {
 
