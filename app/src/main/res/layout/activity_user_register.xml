@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/signInTitle"
+            android:text="Registro usuario"
             android:gravity="center"
             android:textColor="@color/abcall_primary_color"
             android:textSize="30sp"
@@ -33,11 +33,32 @@
 
         <ImageView
             android:id="@+id/login_img"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:src="@mipmap/ic_white_bg_logo_with_text"
-            android:layout_gravity="center"
-            android:contentDescription="@string/abcall_icon"/>
+            android:layout_gravity="center" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Nombre completo"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_fullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ilUsername"
@@ -46,7 +67,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="@string/username"
+            android:hint="Usuario"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
             >
@@ -82,25 +103,47 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_log_in"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilCheckpassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/customPrimaryButton"
-            app:cornerRadius="20sp"
+            app:endIconMode="clear_text"
             android:layout_marginTop="16dp"
-            android:text="@string/signIn"
-            />
+            app:endIconTint="@color/abcall_third_one"
+            android:hint="Confirmar contrasena"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_checkpassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="textPassword|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/customPrimaryButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Registrar"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_clear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             style="@style/customSecondaryButton"
             app:cornerRadius="20sp"
             android:layout_marginTop="16dp"
-            android:text="@string/registro"
+            android:text="Limpiar"
             />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>
