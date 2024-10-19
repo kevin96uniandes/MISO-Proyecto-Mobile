@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.LoginActivity">
+
+<ScrollView
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        android:layout_gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_types"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customLoadIncidenceTypeButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Seleccione el tipo de incidencia..."
+            android:drawableRight="@android:drawable/list_selector_background"
+            />
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/il_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Asunto: "
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilDetail"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:endIconMode="clear_text"
+            android:layout_marginTop="16dp"
+            app:endIconTint="@color/abcall_third_one"
+            android:hint="Comentarios"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="textPassword|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_load_files"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customLoadFilesButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Adjuntar archivos"
+            android:drawableRight="@android:drawable/ic_input_add"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customClearCancelButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="cancel"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customPrimaryButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="enviar"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

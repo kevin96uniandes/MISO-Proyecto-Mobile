@@ -42,6 +42,26 @@
         <item name="android:textColor">@color/abcall_white</item>
     </style>
 
+    <style name="customLoadFilesButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/abcall_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/abcall_primary_color</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="customLoadIncidenceTypeButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/abcall_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/abcall_primary_color</item>
+        <item name="android:gravity">left</item>
+    </style>
+
+    <style name="customClearCancelButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/abcall_white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/abcall_primary_color</item>
+    </style>
+
     <style name="customSecondaryButton" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/abcall_third_one</item>
         <item name="android:textStyle">bold</item>
