@@ -38,7 +38,8 @@ class ClientHomeActivity : CrossIntentActivity() {
 
         btnIncidences = findViewById(R.id.btn_incidences)
         btnIncidences.setOnClickListener {
-            //nextActivity(LoginActivity::class.java)
+            val intent = Intent(this, ClientCreateIncidencesActivity::class.java)
+            startActivity(intent)
         }
 
         btnDashboard = findViewById(R.id.btn_dashboard)

@@ -29,4 +29,10 @@
     <string name="title_notifications">Notifications</string>
     <string name="registro">Registro</string>
     <string name="abcall_icon">ABCall-icon</string>
+    <string name="seleccione_el_tipo_de_incidencia">Seleccione el tipo de incidencia...</string>
+    <string name="asunto">Asunto:</string>
+    <string name="comentarios">Comentarios</string>
+    <string name="adjuntar_archivos">Adjuntar archivos</string>
+    <string name="cancel">cancel</string>
+    <string name="enviar">enviar</string>
 </resources>

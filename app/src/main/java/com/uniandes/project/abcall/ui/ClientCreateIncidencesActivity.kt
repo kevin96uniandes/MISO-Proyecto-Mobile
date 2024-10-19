@@ -1,6 +1,10 @@
 package com.uniandes.project.abcall.ui
 
+import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -31,6 +35,9 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
     private val authClient = AuthClient()
     private lateinit var tokenManager: TokenManager
 
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,7 +54,34 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         ilDetail = findViewById(R.id.il_detail)
 
         btnTypes = findViewById(R.id.btn_types)
+
+        val checkedItem = intArrayOf(-1)
+
+        btnTypes.setOnClickListener {
+            val alertDialog = AlertDialog.Builder(this)
+
+            alertDialog.setIcon(R.drawable.logo)
+
+            alertDialog.setTitle("Choose an Item")
+
+            val listItems = arrayOf("Android Development", "Web Development", "Machine Learning")
+
+            alertDialog.setSingleChoiceItems(listItems, checkedItem[0]) { dialog, which ->
+                checkedItem[0] = which
+
+                dialog.dismiss()
+            }
+        }
+
+
         btnLoadFiles = findViewById(R.id.btn_load_files)
+
+        btnLoadFiles.setOnClickListener {
+            val intent = openDirectory()
+        }
+
+
+
         btnCancel = findViewById(R.id.btn_cancel)
         btnSend = findViewById(R.id.btn_send)
 
@@ -79,6 +113,16 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         */
 
     }
+
+
+    private fun openDirectory() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            putExtra(DocumentsContract.EXTRA_INITIAL_URI, ".")
+        }
+    }
+
+
+
 
 
     private fun validateForm() {
