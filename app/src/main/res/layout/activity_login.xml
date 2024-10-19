@@ -27,7 +27,7 @@
             android:text="@string/signInTitle"
             android:gravity="center"
             android:textColor="@color/abcall_primary_color"
-            android:textSize="40sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             />
 
