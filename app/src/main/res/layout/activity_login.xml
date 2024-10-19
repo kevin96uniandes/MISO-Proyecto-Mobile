@@ -101,6 +101,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/registro"
             />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>

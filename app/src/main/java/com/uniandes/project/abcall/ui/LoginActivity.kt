@@ -54,24 +54,13 @@ class LoginActivity : CrossIntentActivity() {
         btnLogin.setOnClickListener { validateForm() }
 
         btnRegister.setOnClickListener {
-
             val intent = Intent(this, UserRegisterActivity::class.java)
             startActivity(intent)
-
-
-            /*
-                val context = holder.view.context
-                val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra("letter", holder.button.text.toString())
-                context.startActivity(intent
-             */
-
-
         }
 
         viewModel.token.observe(this) { token ->
             if (token != null) {
-                nextActivity(DashboardActivity::class.java)
+                nextActivity(ClientHomeActivity::class.java)
             } else {
                 val dialog = CustomDialogFragment().newInstance(
                     "Inicio de sesión",
