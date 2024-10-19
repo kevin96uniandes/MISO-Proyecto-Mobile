@@ -62,7 +62,7 @@ class UserRegisterActivity : CrossIntentActivity() {
 
         etPassword = findViewById(R.id.et_password)
 
-        etPassword = findViewById(R.id.et_checkpassword)
+        etCheckPassword = findViewById(R.id.et_checkpassword)
 
         ilFullName = findViewById(R.id.ilFullName)
         ilUsername = findViewById(R.id.ilUsername)

@@ -1,5 +1,6 @@
 package com.uniandes.project.abcall.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -14,6 +15,7 @@ import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
+import com.uniandes.project.abcall.ui.UserRegisterActivity
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.AuthViewModel
 
@@ -52,7 +54,19 @@ class LoginActivity : CrossIntentActivity() {
         btnLogin.setOnClickListener { validateForm() }
 
         btnRegister.setOnClickListener {
-            nextActivity(UserRegisterActivity::class.java)
+
+            val intent = Intent(this, UserRegisterActivity::class.java)
+            startActivity(intent)
+
+
+            /*
+                val context = holder.view.context
+                val intent = Intent(context, DetailActivity::class.java)
+                intent.putExtra("letter", holder.button.text.toString())
+                context.startActivity(intent
+             */
+
+
         }
 
         viewModel.token.observe(this) { token ->
