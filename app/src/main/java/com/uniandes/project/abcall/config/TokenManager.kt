@@ -10,7 +10,7 @@ class TokenManager(context: Context) {
     private val sharedPreferences = context.getSharedPreferences("ABCAllPreferences", Context.MODE_PRIVATE)
 
     companion object {
-        private const val AUTH_KEY = "authKey"
+        const val AUTH_KEY = "authKey"
         private val gson = Gson()
     }
 

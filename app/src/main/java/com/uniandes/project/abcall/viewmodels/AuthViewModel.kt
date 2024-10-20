@@ -7,8 +7,7 @@ import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 
 class AuthViewModel (
-    private val authClient: AuthClient,
-    private val tokenManager: TokenManager
+    private val authClient: AuthClient
     ) : ViewModel() {
 
     private val _token = MutableLiveData<String?>()
@@ -17,7 +16,7 @@ class AuthViewModel (
     fun authenticate(username: String, password: String) {
         authClient.authenticate(username, password) { auth ->
             if (auth != null) {
-                tokenManager.saveAuth(auth)
+                //tokenManager.saveAuth(auth)
                 _token.value = auth.token
             } else {
                 _token.value = null

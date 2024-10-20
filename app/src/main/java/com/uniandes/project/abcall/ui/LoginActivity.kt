@@ -27,9 +27,9 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var btnRegister: Button
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var viewModel: AuthViewModel
+    lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
-    private lateinit var tokenManager: TokenManager
+    //private lateinit var tokenManager: TokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +38,9 @@ class LoginActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        tokenManager = TokenManager(binding.root.context)
+        //tokenManager = TokenManager(binding.root.context)
 
-        viewModel = AuthViewModel(authClient, tokenManager)
+        viewModel = AuthViewModel(authClient)
 
         etUsername = findViewById(R.id.et_username)
         etPassword = findViewById(R.id.et_password)
@@ -126,5 +126,10 @@ class LoginActivity : CrossIntentActivity() {
 
     private fun clearPasswordError() {
         ilPassword.error = null
+    }
+
+    // Método solo para pruebas
+    fun setViewModelOnlyTest(viewModel: AuthViewModel) {
+        this.viewModel = viewModel
     }
 }
