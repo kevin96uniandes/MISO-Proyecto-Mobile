@@ -1,46 +1,37 @@
 package com.uniandes.project.abcall.config
 
-import androidx.security.crypto.EncryptedSharedPreferences
 import android.content.Context
-import androidx.security.crypto.MasterKey
 import com.google.gson.Gson
 import com.uniandes.project.abcall.models.Auth
 
 class TokenManager(context: Context) {
 
-    private val masterKey = MasterKey.Builder(context)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
-
-    private val sharedPreferences = EncryptedSharedPreferences.create(
-        context,
-        "ABCAllPreferences",
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+    // Inicializa SharedPreferences
+    private val sharedPreferences = context.getSharedPreferences("ABCAllPreferences", Context.MODE_PRIVATE)
 
     companion object {
         private const val AUTH_KEY = "authKey"
         private val gson = Gson()
     }
 
+    // Método para guardar el objeto Auth en SharedPreferences
     fun saveAuth(auth: Auth) {
-        val preference = gson.toJson(auth)
+        val preference = gson.toJson(auth) // Convierte el objeto a JSON
         val editor = sharedPreferences.edit()
-        editor.putString(AUTH_KEY, preference)
-        editor.apply()
+        editor.putString(AUTH_KEY, preference) // Guarda el JSON
+        editor.apply() // Aplica los cambios
     }
 
+    // Método para recuperar el objeto Auth desde SharedPreferences
     fun getAuth(): Auth? {
-        val authJson = sharedPreferences.getString(AUTH_KEY, null) ?: return null
-        return gson.fromJson(authJson, Auth::class.java)
+        val authJson = sharedPreferences.getString(AUTH_KEY, null) ?: return null // Obtiene el JSON
+        return gson.fromJson(authJson, Auth::class.java) // Convierte el JSON de vuelta a Auth
     }
 
+    // Método para eliminar el token
     fun deleteToken() {
         val editor = sharedPreferences.edit()
-        editor.remove(AUTH_KEY)
-        editor.apply()
+        editor.remove(AUTH_KEY) // Elimina el token
+        editor.apply() // Aplica los cambios
     }
-
 }
