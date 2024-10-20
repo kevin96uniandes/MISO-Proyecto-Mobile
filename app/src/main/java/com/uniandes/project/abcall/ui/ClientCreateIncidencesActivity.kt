@@ -57,27 +57,49 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
         val checkedItem = intArrayOf(-1)
 
+        var type = 0
+
+
         btnTypes.setOnClickListener {
             val alertDialog = AlertDialog.Builder(this)
 
             alertDialog.setIcon(R.drawable.logo)
 
-            alertDialog.setTitle("Choose an Item")
+            alertDialog.setTitle("Tipo:")
 
-            val listItems = arrayOf("Android Development", "Web Development", "Machine Learning")
+            val listItems = arrayOf("Petición", "Queja/Reclamo", "Sugerencia")
+
 
             alertDialog.setSingleChoiceItems(listItems, checkedItem[0]) { dialog, which ->
                 checkedItem[0] = which
-
+                type = which
                 dialog.dismiss()
             }
+
+            btnTypes.text = listItems[type]
+
+
+            /*
+            alertDialog.setNegativeButton("Cancelar") { dialog, which -> }
+
+            alertDialog.setPositiveButton("Aceptar") { dialog, which -> }
+
+             */
+
+
+
+            val customAlertDialog = alertDialog.create()
+
+            customAlertDialog.show()
         }
+
+
 
 
         btnLoadFiles = findViewById(R.id.btn_load_files)
 
         btnLoadFiles.setOnClickListener {
-            val intent = openDirectory()
+            openDirectory()
         }
 
 

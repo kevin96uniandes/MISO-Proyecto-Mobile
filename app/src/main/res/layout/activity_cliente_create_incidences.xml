@@ -66,7 +66,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_detail"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="match_parent"
                 app:endIconMode="clear_text"
                 android:layout_marginTop="16dp"
                 app:endIconTint="@color/abcall_third_one"
