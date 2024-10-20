@@ -1,22 +1,16 @@
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.ApiService
 import com.uniandes.project.abcall.config.RetrofitClient
-import com.uniandes.project.abcall.models.Auth
 import com.uniandes.project.abcall.repositories.rest.AuthClient
-import com.uniandes.project.abcall.repositories.rest.toAuth
 import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.viewmodels.AuthViewModel
-import io.mockk.Call
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -28,18 +22,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class LoginTest {
 
-    @MockK(relaxed = true)
-    private lateinit var mockAuthClient: AuthClient
-
     @MockK
     private lateinit var mockApiService: ApiService
-
-    private lateinit var authViewModel: AuthViewModel
 
     @get: Rule
     val loginActivityTestRule = ActivityScenarioRule(LoginActivity::class.java)
