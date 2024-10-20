@@ -13,7 +13,17 @@ object RetrofitClient {
             .build()
     }
 
+    /*
     val apiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
+    }
+
+     */
+
+    var apiService: ApiService = retrofit.create(ApiService::class.java)
+        private set // Mantener la propiedad privada para evitar asignaciones externas
+
+    fun setApiService(mock: ApiService) {
+        apiService = mock // Permitir que se establezca un mock para pruebas
     }
 }

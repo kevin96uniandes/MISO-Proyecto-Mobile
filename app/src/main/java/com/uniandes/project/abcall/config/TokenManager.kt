@@ -21,7 +21,7 @@ class TokenManager(context: Context) {
     )
 
     companion object {
-        private const val AUTH_KEY = "authKey"
+        const val AUTH_KEY = "authKey"
         private val gson = Gson()
     }
 
