@@ -14,5 +14,6 @@
     <color name="abcall_primary_color">#82BDAE</color>
     <color name="abcall_second_color">#126173</color>
     <color name="abcall_third_one">#82A5BD</color>
+    <color name="abcall_toolbar_text_color">#126173</color>
 
 </resources>
