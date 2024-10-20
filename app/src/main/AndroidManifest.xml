@@ -22,17 +22,32 @@
             android:label="@string/title_activity_dashboard"
             android:theme="@style/Theme.ABCAll.NoActionBar" />
         <activity
+            android:name=".ui.ClientHomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/Theme.ABCAll.NoActionBar" />
+        <activity
+            android:name=".ui.ClientCreateIncidencesActivity"
+            android:exported="false"
+            android:label="@string/title_activity_dashboard"
+            android:theme="@style/Theme.ABCAll.NoActionBar" />
+        <activity
             android:name=".ui.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
-            android:exported="false" />
+            android:name=".ui.UserRegisterActivity"
+            android:exported="true">
+            <!--intent-filter-->
+                <!--action android:name="android.intent.action.MAIN" /-->
+                <!--category android:name="android.intent.category.LAUNCHER" /-->
+            <!--/intent-filter-->
+        </activity>
+
     </application>
 
 </manifest>

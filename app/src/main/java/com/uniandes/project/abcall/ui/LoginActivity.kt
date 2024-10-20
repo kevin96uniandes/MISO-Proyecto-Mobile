@@ -1,5 +1,6 @@
 package com.uniandes.project.abcall.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -14,6 +15,7 @@ import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
+import com.uniandes.project.abcall.ui.UserRegisterActivity
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.AuthViewModel
 
@@ -24,6 +26,7 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var ilUsername: TextInputLayout
     private lateinit var ilPassword: TextInputLayout
     private lateinit var btnLogin: Button
+    private lateinit var btnRegister: Button
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var viewModel: AuthViewModel
@@ -46,12 +49,18 @@ class LoginActivity : CrossIntentActivity() {
         ilUsername = findViewById(R.id.ilUsername)
         ilPassword = findViewById(R.id.ilPasword)
         btnLogin = findViewById(R.id.btn_log_in)
+        btnRegister = findViewById(R.id.btn_register)
 
         btnLogin.setOnClickListener { validateForm() }
 
+        btnRegister.setOnClickListener {
+            val intent = Intent(this, UserRegisterActivity::class.java)
+            startActivity(intent)
+        }
+
         viewModel.token.observe(this) { token ->
             if (token != null) {
-                nextActivity(DashboardActivity::class.java)
+                nextActivity(ClientHomeActivity::class.java)
             } else {
                 val dialog = CustomDialogFragment().newInstance(
                     "Inicio de sesión",
