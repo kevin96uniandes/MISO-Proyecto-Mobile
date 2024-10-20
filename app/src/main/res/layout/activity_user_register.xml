@@ -157,6 +157,16 @@
             />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ingresar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customSecondaryButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Ingresar"
+            />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_clear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -165,6 +175,8 @@
             android:layout_marginTop="16dp"
             android:text="Limpiar"
             />
+
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Button
+import android.widget.Toast
 // import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
@@ -38,6 +39,7 @@ class UserRegisterActivity : CrossIntentActivity() {
     private lateinit var ilCheckpassword: TextInputLayout
 
     private lateinit var btnRegister: Button
+    private lateinit var btnIngresar: Button
     private lateinit var btnClear: Button
 
     private lateinit var binding: ActivityUserRegisterBinding
@@ -80,7 +82,20 @@ class UserRegisterActivity : CrossIntentActivity() {
 
 
         btnRegister.setOnClickListener {
-            validateForm()
+            val a = validateForm()
+
+            if (a){
+                Toast.makeText(this, "Registro Exitoso", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Registro Failed!", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+
+        btnIngresar = findViewById(R.id.btn_ingresar)
+
+        btnIngresar.setOnClickListener {
             nextActivity(LoginActivity::class.java)
         }
 
@@ -98,7 +113,7 @@ class UserRegisterActivity : CrossIntentActivity() {
         setupTextWatchers()
     }
 
-    private fun validateForm() {
+    private fun validateForm(): Boolean {
 
         ilFirstName.error = null
         ilLastName.error = null
@@ -148,6 +163,8 @@ class UserRegisterActivity : CrossIntentActivity() {
         if (isValid) {
             viewModel.registerUser(firstName, lastName, username, password, checkPassword)
         }
+
+        return isValid
     }
 
     private fun setupTextWatchers() {
