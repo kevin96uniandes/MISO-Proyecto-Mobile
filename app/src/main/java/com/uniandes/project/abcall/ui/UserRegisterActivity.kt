@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Button
+import android.widget.Toast
 // import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
@@ -24,18 +25,21 @@ import com.uniandes.project.abcall.viewmodels.RegisterUserViewModel
 
 class UserRegisterActivity : CrossIntentActivity() {
 
-    private lateinit var etFullName: TextInputEditText
+    private lateinit var etFirstName: TextInputEditText
+    private lateinit var etLastName: TextInputEditText
     private lateinit var etUserName: TextInputEditText
     private lateinit var etPassword: TextInputEditText
     private lateinit var etCheckPassword: TextInputEditText
 
 
-    private lateinit var ilFullName: TextInputLayout
+    private lateinit var ilFirstName: TextInputLayout
+    private lateinit var ilLastName: TextInputLayout
     private lateinit var ilUsername: TextInputLayout
     private lateinit var ilPasword: TextInputLayout
     private lateinit var ilCheckpassword: TextInputLayout
 
     private lateinit var btnRegister: Button
+    private lateinit var btnIngresar: Button
     private lateinit var btnClear: Button
 
     private lateinit var binding: ActivityUserRegisterBinding
@@ -58,14 +62,17 @@ class UserRegisterActivity : CrossIntentActivity() {
         viewModel = RegisterUserViewModel(registerClient)
 
 
-        etFullName = findViewById(R.id.et_fullName)
+        etFirstName = findViewById(R.id.et_firstName)
+        etLastName = findViewById(R.id.et_lastName)
+
         etUserName = findViewById(R.id.et_username)
 
         etPassword = findViewById(R.id.et_password)
 
         etCheckPassword = findViewById(R.id.et_checkpassword)
 
-        ilFullName = findViewById(R.id.ilFullName)
+        ilFirstName = findViewById(R.id.ilFirstName)
+        ilLastName = findViewById(R.id.ilLastName)
         ilUsername = findViewById(R.id.ilUsername)
         ilPasword = findViewById(R.id.ilPasword)
         ilCheckpassword = findViewById(R.id.ilCheckpassword)
@@ -75,14 +82,28 @@ class UserRegisterActivity : CrossIntentActivity() {
 
 
         btnRegister.setOnClickListener {
-            validateForm()
+            val a = validateForm()
+
+            if (a){
+                Toast.makeText(this, "Registro Exitoso", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Registro Failed!", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+
+        btnIngresar = findViewById(R.id.btn_ingresar)
+
+        btnIngresar.setOnClickListener {
             nextActivity(LoginActivity::class.java)
         }
 
         btnClear = findViewById(R.id.btn_clear)
 
         btnClear.setOnClickListener({
-            etFullName.text?.clear()
+            etFirstName.text?.clear()
+            etLastName.text?.clear()
             etUserName.text?.clear()
             etPassword.text?.clear()
             etCheckPassword.text?.clear()
@@ -92,22 +113,29 @@ class UserRegisterActivity : CrossIntentActivity() {
         setupTextWatchers()
     }
 
-    private fun validateForm() {
+    private fun validateForm(): Boolean {
 
-        ilFullName.error = null
+        ilFirstName.error = null
+        ilLastName.error = null
         ilUsername.error = null
         ilPasword.error = null
         ilCheckpassword.error = null
 
-        val fullName = etFullName.text.toString().trim()
+        val firstName = etFirstName.text.toString().trim()
+        val lastName = etLastName.text.toString().trim()
         val username = etUserName.text.toString().trim()
         val password = etPassword.text.toString().trim()
         val checkPassword = etCheckPassword.text.toString().trim()
 
         var isValid = true
 
-        if (TextUtils.isEmpty(username)) {
-            ilFullName.error = "FullName"
+        if (TextUtils.isEmpty(firstName)) {
+            ilFirstName.error = "FirstName"
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(lastName)) {
+            ilLastName.error = "LastName"
             isValid = false
         }
 
@@ -133,15 +161,26 @@ class UserRegisterActivity : CrossIntentActivity() {
         }
 
         if (isValid) {
-            viewModel.registerUser(fullName, username, password, checkPassword)
+            viewModel.registerUser(firstName, lastName, username, password, checkPassword)
         }
+
+        return isValid
     }
 
     private fun setupTextWatchers() {
         // Configura el TextWatcher para el nombre de usuario
-        etFullName.addTextChangedListener(object : TextWatcher {
+        etFirstName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                clearFullNameError()
+                clearFirstNameError()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        etLastName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                clearLastNameError()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -177,8 +216,12 @@ class UserRegisterActivity : CrossIntentActivity() {
         })
     }
 
-    private fun clearFullNameError() {
-        ilFullName.error = null
+    private fun clearFirstNameError() {
+        ilFirstName.error = null
+    }
+
+    private fun clearLastNameError() {
+        ilLastName.error = null
     }
 
     private fun clearUserNameError() {

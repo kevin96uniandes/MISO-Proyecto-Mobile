@@ -39,19 +39,41 @@
             android:layout_gravity="center" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ilFullName"
+            android:id="@+id/ilFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="Nombre completo"
+            android:hint="Nombre"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_fullName"
+                android:id="@+id/et_firstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Apellido"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_lastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -135,6 +157,16 @@
             />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ingresar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customSecondaryButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Ingresar"
+            />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_clear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,6 +175,8 @@
             android:layout_marginTop="16dp"
             android:text="Limpiar"
             />
+
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
