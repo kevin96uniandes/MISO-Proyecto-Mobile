@@ -87,7 +87,7 @@ class UserRegisterActivity : CrossIntentActivity() {
         twErrorMessage = findViewById(R.id.error_message_1)
         etFirstName = findViewById(R.id.et_firstName)
         etLastName = findViewById(R.id.et_lastName)
-        spIdentificationType = findViewById(R.id.sp_dentification_type)
+        spIdentificationType = findViewById(R.id.sp_identification_type)
         etIdentificationNumber = findViewById(R.id.et_identification_number)
         etEmail = findViewById(R.id.et_email)
         etPhone = findViewById(R.id.et_phone)
@@ -424,7 +424,7 @@ class UserRegisterActivity : CrossIntentActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = data[position]
                 when(spinner.id) {
-                    R.id.sp_dentification_type -> {
+                    R.id.sp_identification_type -> {
                         if(position == 1 && selectedIdentityTypeLabel.isNotEmpty()) {
                             twErrorMessage.text = "Campo requerido y debe seleccionar un elemento"
                             twErrorMessage.visibility = View.VISIBLE

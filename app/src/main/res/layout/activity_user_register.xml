@@ -84,7 +84,7 @@
             app:boxBackgroundMode="outline">
 
             <Spinner
-                android:id="@+id/sp_dentification_type"
+                android:id="@+id/sp_identification_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -94,8 +94,8 @@
                 android:id="@+id/error_message_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/create_album_name"
-                android:layout_below="@+id/create_album_name"
+                android:layout_alignStart="@+id/sp_identification_type"
+                android:layout_below="@+id/sp_identification_type"
                 style="@style/ErrorTextView"
                 android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
