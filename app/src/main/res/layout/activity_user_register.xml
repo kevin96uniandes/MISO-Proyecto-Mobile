@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.UserRegisterActivity"
+    android:fitsSystemWindows="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20sp"
+        android:paddingEnd="20sp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nuevo usuario"
+            android:gravity="center"
+            android:textColor="@color/abcall_primary_color"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Nombre"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_firstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Apellido"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_lastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilSpIdentificationType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:hintEnabled="true"
+            android:hint="Selecciona una opción"
+            app:boxStrokeWidth="1dp"
+            app:boxBackgroundMode="outline">
+
+            <Spinner
+                android:id="@+id/sp_identification_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:textColor="@color/abcall_third_one"
+                android:background="@android:color/transparent"/>
+            <TextView
+                android:id="@+id/error_message_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/sp_identification_type"
+                android:layout_below="@+id/sp_identification_type"
+                style="@style/ErrorTextView"
+                android:visibility="gone" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilIdentificationNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Número de identificación"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_identification_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Correo electrónico"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Teléfono"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Usuario"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            android:layout_marginTop="16dp"
+            app:endIconTint="@color/abcall_third_one"
+            android:hint="@string/password"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="textPassword|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilCheckPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            android:layout_marginTop="16dp"
+            app:endIconTint="@color/abcall_third_one"
+            android:hint="Confirmar contrasena"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_checkPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="textPassword|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customPrimaryButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Registrar"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_clear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/customSecondaryButton"
+            app:cornerRadius="20sp"
+            android:layout_marginTop="16dp"
+            android:text="Limpiar"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</ScrollView>

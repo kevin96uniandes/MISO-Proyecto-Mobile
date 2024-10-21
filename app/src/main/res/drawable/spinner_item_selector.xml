@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Elemento no seleccionado -->
+    <item android:state_selected="false">
+        <shape>
+            <solid android:color="@color/abcall_primary_color" />
+        </shape>
+    </item>
+    <!-- Elemento seleccionado -->
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="@color/abcall_second_color" />
+        </shape>
+    </item>
+</selector>
