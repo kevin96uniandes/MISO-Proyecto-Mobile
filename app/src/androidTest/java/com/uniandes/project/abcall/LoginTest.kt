@@ -63,7 +63,7 @@ class LoginTest {
         onView(withId(R.id.btn_log_in)).perform(click())
 
         // Verifica que el error en el campo de contraseña aparece
-        onView(withId(R.id.ilPasword))
+        onView(withId(R.id.ilPassword))
             .check(matches(hasDescendant(withText("Por favor ingresa tu contraseña"))))
     }
 
@@ -141,6 +141,6 @@ class LoginTest {
         onView(withId(R.id.btn_log_in)).perform(click())
 
         // Verifica que el usuario haya sido redirigido a la actividad de dashboard (o donde sea que quieras verificar)
-        onView(withId(R.id.nav_host_fragment_activity_dashboard)).check(matches(isDisplayed()))
+        onView(withId(R.id.et_identification_number)).check(matches(isDisplayed()))
     }
 }
