@@ -46,7 +46,7 @@ class LoginActivity : CrossIntentActivity() {
         etUsername = findViewById(R.id.et_username)
         etPassword = findViewById(R.id.et_password)
         ilUsername = findViewById(R.id.ilUsername)
-        ilPassword = findViewById(R.id.ilPasword)
+        ilPassword = findViewById(R.id.ilPassword)
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
 

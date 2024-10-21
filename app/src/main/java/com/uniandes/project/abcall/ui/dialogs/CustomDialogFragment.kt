@@ -16,12 +16,14 @@ class CustomDialogFragment : DialogFragment() {
     private lateinit var title: String
     private lateinit var description: String
     private var lottieImage: Int = 0
+    private var onDismissListener: (() -> Unit)? = null
 
-    fun newInstance(title: String, description: String, lottieImage: Int): CustomDialogFragment {
+    fun newInstance(title: String, description: String, lottieImage: Int,  onDismissListener: (() -> Unit)? = null): CustomDialogFragment {
         val dialog = CustomDialogFragment()
         dialog.title = title
         dialog.description = description
         dialog.lottieImage = lottieImage
+        dialog.onDismissListener = onDismissListener
         return dialog
     }
 
@@ -57,6 +59,11 @@ class CustomDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
+
+    override fun onDismiss(dialog: android.content.DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissListener?.invoke()  // Llama al callback cuando el diálogo se cierra
     }
 
 }

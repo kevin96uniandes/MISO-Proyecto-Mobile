@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.LoginActivity">
-
-<ScrollView
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    tools:context=".ui.UserRegisterActivity"
+    android:fitsSystemWindows="true">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -24,19 +20,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registro usuario"
+            android:text="Nuevo usuario"
             android:gravity="center"
             android:textColor="@color/abcall_primary_color"
             android:textSize="30sp"
             android:textStyle="bold"
             />
-
-        <ImageView
-            android:id="@+id/login_img"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@mipmap/ic_white_bg_logo_with_text"
-            android:layout_gravity="center" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ilFirstName"
@@ -47,8 +36,7 @@
             android:layout_marginTop="16dp"
             android:hint="Nombre"
             style="@style/customLoginInputText"
-            app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
-            >
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_firstName"
@@ -69,11 +57,105 @@
             android:layout_marginTop="16dp"
             android:hint="Apellido"
             style="@style/customLoginInputText"
-            app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
-            >
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_lastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilSpIdentificationType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:hintEnabled="true"
+            android:hint="Selecciona una opción"
+            app:boxStrokeWidth="1dp"
+            app:boxBackgroundMode="outline">
+
+            <Spinner
+                android:id="@+id/sp_dentification_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:textColor="@color/abcall_third_one"
+                android:background="@android:color/transparent"/>
+            <TextView
+                android:id="@+id/error_message_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/create_album_name"
+                android:layout_below="@+id/create_album_name"
+                style="@style/ErrorTextView"
+                android:visibility="gone" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilIdentificationNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Número de identificación"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_identification_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Correo electrónico"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text|textNoSuggestions"
+                style="@style/customLoginInputTextAppearance"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/abcall_third_one"
+            android:layout_marginTop="16dp"
+            android:hint="Teléfono"
+            style="@style/customLoginInputText"
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -91,8 +173,7 @@
             android:layout_marginTop="16dp"
             android:hint="Usuario"
             style="@style/customLoginInputText"
-            app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
-            >
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_username"
@@ -105,7 +186,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ilPasword"
+            android:id="@+id/ilPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="clear_text"
@@ -126,7 +207,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ilCheckpassword"
+            android:id="@+id/ilCheckPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="clear_text"
@@ -137,7 +218,7 @@
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_checkpassword"
+                android:id="@+id/et_checkPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -153,8 +234,7 @@
             style="@style/customPrimaryButton"
             app:cornerRadius="20sp"
             android:layout_marginTop="16dp"
-            android:text="Registrar"
-            />
+            android:text="Registrar"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_clear"
@@ -163,10 +243,8 @@
             style="@style/customSecondaryButton"
             app:cornerRadius="20sp"
             android:layout_marginTop="16dp"
-            android:text="Limpiar"
-            />
+            android:text="Limpiar"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>

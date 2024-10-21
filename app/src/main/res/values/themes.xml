@@ -13,13 +13,14 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="textInputStyle">@style/customLoginInputText</item>
+        <item name="android:spinnerDropDownItemStyle">@style/CustomSpinnerStyle</item>
     </style>
 
     <style name="Theme.ABCAll.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorControlNormal">@color/abcall_toolbar_text_color</item>
-
+        <item name="android:spinnerDropDownItemStyle">@style/CustomSpinnerStyle</item>
     </style>
 
     <style name="customLoginHintTextAppearance">
@@ -70,7 +71,20 @@
         <item name="android:textColor">@color/abcall_white</item>
     </style>
 
+    <style name="CustomSpinnerStyle">
+        <item name="android:dropDownSelector">@drawable/spinner_item_selector</item>
+        <item name="android:textColor">@color/abcall_third_one</item>
+        <!-- Otros atributos de estilo de los elementos del Spinner -->
+    </style>
 
+    <style name="ErrorTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/abcall_error_color</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <!-- Agrega otros atributos personalizados aquí -->
+    </style>
     <style name="Theme.ABCAll.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ABCAll.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
