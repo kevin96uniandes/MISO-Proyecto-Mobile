@@ -1,11 +1,17 @@
 package com.uniandes.project.abcall.ui
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
+import android.view.Gravity
+import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
@@ -30,7 +36,6 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var binding: ActivityLoginBinding
     lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
-    //private lateinit var tokenManager: TokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +54,7 @@ class LoginActivity : CrossIntentActivity() {
         ilPassword = findViewById(R.id.ilPassword)
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
+
 
         btnLogin.setOnClickListener { validateForm() }
 
@@ -127,10 +133,5 @@ class LoginActivity : CrossIntentActivity() {
 
     private fun clearPasswordError() {
         ilPassword.error = null
-    }
-
-    // Método solo para pruebas
-    fun setViewModelOnlyTest(viewModel: AuthViewModel) {
-        this.viewModel = viewModel
     }
 }

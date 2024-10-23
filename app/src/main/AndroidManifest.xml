@@ -19,18 +19,7 @@
         <activity
             android:name=".ui.dashboard.DashboardActivity"
             android:exported="false"
-            android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.ABCAll.NoActionBar" />
-        <activity
-            android:name=".ui.ClientHomeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.ABCAll.NoActionBar" />
-        <activity
-            android:name=".ui.ClientCreateIncidencesActivity"
-            android:exported="false"
-            android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.ABCAll.NoActionBar" />
+            android:label="@string/title_activity_dashboard"/>
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true">
@@ -42,10 +31,6 @@
         <activity
             android:name=".ui.UserRegisterActivity"
             android:exported="false">
-            <!--intent-filter-->
-                <!--action android:name="android.intent.action.MAIN" /-->
-                <!--category android:name="android.intent.category.LAUNCHER" /-->
-            <!--/intent-filter-->
         </activity>
 
     </application>
