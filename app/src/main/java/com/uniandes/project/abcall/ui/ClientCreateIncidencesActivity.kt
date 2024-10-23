@@ -68,7 +68,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         btnTypes.setOnClickListener {
             val alertDialog = AlertDialog.Builder(this)
 
-            alertDialog.setIcon(R.drawable.logo)
+            alertDialog.setIcon(R.drawable.ic_dashboard_black_24dp)
 
             alertDialog.setTitle("Tipo:")
 
@@ -78,10 +78,9 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
             alertDialog.setSingleChoiceItems(listItems, checkedItem[0]) { dialog, which ->
                 checkedItem[0] = which
                 type = which
+                btnTypes.text = listItems[type]
                 dialog.dismiss()
             }
-
-            btnTypes.text = listItems[type]
 
 
             /*
@@ -92,12 +91,10 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
              */
 
 
-
             val customAlertDialog = alertDialog.create()
-
             customAlertDialog.show()
-        }
 
+        }
 
 
         btnLoadFiles = findViewById(R.id.btn_load_files)
@@ -117,7 +114,15 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
         btnSend = findViewById(R.id.btn_send)
 
+        btnSend.setOnClickListener{
+            val a = validateForm()
 
+            if (a){
+                Toast.makeText(this, "Registro Exitoso", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Registro Failed!", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         /*
         btnRegister.setOnClickListener {
@@ -160,7 +165,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
     }
 
 
-    private fun validateForm() {
+    private fun validateForm(): Boolean {
 
         ilSubject.error = null
         ilDetail.error = null
@@ -180,11 +185,8 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
             isValid = false
         }
 
-        /*
-        if (isValid) {
-            viewModel.authenticate(username, password)
-        }
-        */
+        return isValid
+
     }
 
     private fun setupTextWatchers() {
