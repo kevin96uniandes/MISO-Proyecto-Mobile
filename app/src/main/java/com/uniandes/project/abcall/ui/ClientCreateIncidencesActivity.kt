@@ -1,6 +1,7 @@
 package com.uniandes.project.abcall.ui
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,13 +10,17 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
+import java.io.File
+
 
 class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
@@ -95,16 +100,21 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
 
 
-
         btnLoadFiles = findViewById(R.id.btn_load_files)
+
 
         btnLoadFiles.setOnClickListener {
             openDirectory()
         }
 
 
-
         btnCancel = findViewById(R.id.btn_cancel)
+
+        btnCancel.setOnClickListener({
+            etSubject.text?.clear()
+            etDetail.text?.clear()
+        })
+
         btnSend = findViewById(R.id.btn_send)
 
 
@@ -138,13 +148,16 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
 
     private fun openDirectory() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-            putExtra(DocumentsContract.EXTRA_INITIAL_URI, ".")
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.type = "*/*"
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select a file"), 100)
+        } catch (exception: Exception){
+            Toast.makeText(this, "Please install a file manager", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
 
 
     private fun validateForm() {
@@ -200,5 +213,19 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
     private fun clearDetailError() {
         ilDetail.error = null
+    }
+}
+
+
+class OpenDocumentAtFolder : ActivityResultContracts.OpenDocument() {
+    private var initialUri: Uri? = null
+
+    fun CustomContract(initialUri: Uri) {
+        this.initialUri = initialUri
+    }
+
+    override fun createIntent(context: Context, input: Array<String>): Intent {
+        return super.createIntent(context, input)
+            .putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialUri)
     }
 }
