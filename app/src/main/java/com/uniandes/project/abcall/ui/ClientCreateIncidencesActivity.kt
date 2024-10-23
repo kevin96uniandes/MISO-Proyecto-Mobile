@@ -82,15 +82,6 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
                 dialog.dismiss()
             }
 
-
-            /*
-            alertDialog.setNegativeButton("Cancelar") { dialog, which -> }
-
-            alertDialog.setPositiveButton("Aceptar") { dialog, which -> }
-
-             */
-
-
             val customAlertDialog = alertDialog.create()
             customAlertDialog.show()
 
@@ -125,12 +116,6 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         }
 
         /*
-        btnRegister.setOnClickListener {
-            val intent = Intent(this, UserRegisterActivity::class.java)
-            startActivity(intent)
-        }
-
-
 
         viewModel.token.observe(this) { token ->
             if (token != null) {
@@ -170,18 +155,18 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         ilSubject.error = null
         ilDetail.error = null
 
-        val username = etSubject.text.toString().trim()
-        val password = etDetail.text.toString().trim()
+        val subject = etSubject.text.toString().trim()
+        val detail = etDetail.text.toString().trim()
 
         var isValid = true
 
-        if (TextUtils.isEmpty(username)) {
-            ilSubject.error = "Por favor ingresa tu nombre de usuario"
+        if (TextUtils.isEmpty(subject)) {
+            ilSubject.error = "Por favor ingresa un asunto"
             isValid = false
         }
 
-        if (TextUtils.isEmpty(password)) {
-            ilDetail.error = "Por favor ingresa tu contraseña"
+        if (TextUtils.isEmpty(detail)) {
+            ilDetail.error = "Por favor ingresa un detalle de la incidencia"
             isValid = false
         }
 
@@ -215,19 +200,5 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
     private fun clearDetailError() {
         ilDetail.error = null
-    }
-}
-
-
-class OpenDocumentAtFolder : ActivityResultContracts.OpenDocument() {
-    private var initialUri: Uri? = null
-
-    fun CustomContract(initialUri: Uri) {
-        this.initialUri = initialUri
-    }
-
-    override fun createIntent(context: Context, input: Array<String>): Intent {
-        return super.createIntent(context, input)
-            .putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialUri)
     }
 }
