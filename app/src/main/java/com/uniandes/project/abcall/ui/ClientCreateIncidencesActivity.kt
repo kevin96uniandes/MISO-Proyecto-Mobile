@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.Nullable
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
@@ -142,11 +143,18 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.type = "*/*"
         intent.addCategory(Intent.CATEGORY_OPENABLE)
+
         try {
             startActivityForResult(Intent.createChooser(intent, "Select a file"), 100)
-        } catch (exception: Exception){
+        } catch (exception: Exception) {
             Toast.makeText(this, "Please install a file manager", Toast.LENGTH_SHORT).show()
         }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        var d = data?.getData()
     }
 
 
