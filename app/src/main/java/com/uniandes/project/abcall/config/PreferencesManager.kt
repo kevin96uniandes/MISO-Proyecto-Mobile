@@ -2,12 +2,11 @@ package com.uniandes.project.abcall.config
 
 import android.content.Context
 import com.google.gson.Gson
-import com.uniandes.project.abcall.models.Auth
+import com.uniandes.project.abcall.models.Principal
 
-class TokenManager(context: Context) {
+class PreferencesManager(context: Context) {
 
-    // Inicializa SharedPreferences
-    private val sharedPreferences = context.getSharedPreferences("ABCAllPreferences", Context.MODE_PRIVATE)
+    val sharedPreferences = context.getSharedPreferences("ABCAllPreferences", Context.MODE_PRIVATE)
 
     companion object {
         const val AUTH_KEY = "authKey"
@@ -15,21 +14,21 @@ class TokenManager(context: Context) {
     }
 
     // Método para guardar el objeto Auth en SharedPreferences
-    fun saveAuth(auth: Auth) {
-        val preference = gson.toJson(auth) // Convierte el objeto a JSON
+    fun savePrincipal(principal: Principal) {
+        val preference = gson.toJson(principal) // Convierte el objeto a JSON
         val editor = sharedPreferences.edit()
         editor.putString(AUTH_KEY, preference) // Guarda el JSON
         editor.apply() // Aplica los cambios
     }
 
     // Método para recuperar el objeto Auth desde SharedPreferences
-    fun getAuth(): Auth? {
-        val authJson = sharedPreferences.getString(AUTH_KEY, null) ?: return null // Obtiene el JSON
-        return gson.fromJson(authJson, Auth::class.java) // Convierte el JSON de vuelta a Auth
+    fun getAuth(): Principal? {
+        val authJson = sharedPreferences.getString(AUTH_KEY, null) ?: return null
+        return gson.fromJson(authJson, Principal::class.java)
     }
 
     // Método para eliminar el token
-    fun deleteToken() {
+    fun deletePrincipal() {
         val editor = sharedPreferences.edit()
         editor.remove(AUTH_KEY) // Elimina el token
         editor.apply() // Aplica los cambios

@@ -2,7 +2,6 @@ package com.uniandes.project.abcall.ui
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.text.Editable
@@ -13,7 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
-import com.uniandes.project.abcall.config.TokenManager
+import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 
@@ -33,7 +32,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
     private lateinit var binding: ActivityClienteCreateIncidencesBinding
     // private lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
-    private lateinit var tokenManager: TokenManager
+    private lateinit var preferencesManager: PreferencesManager
 
 
 
@@ -45,7 +44,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        tokenManager = TokenManager(binding.root.context)
+        preferencesManager = PreferencesManager(binding.root.context)
 
         etSubject = findViewById(R.id.et_subject)
         etDetail = findViewById(R.id.et_detail)

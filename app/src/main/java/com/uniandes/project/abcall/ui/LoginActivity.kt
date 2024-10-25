@@ -1,25 +1,22 @@
 package com.uniandes.project.abcall.ui
 
 import android.content.Intent
-import android.graphics.Rect
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.ApiResult
-import com.uniandes.project.abcall.config.TokenManager
+import com.uniandes.project.abcall.config.JwtManager
+import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
+import com.uniandes.project.abcall.enums.UserType
+import com.uniandes.project.abcall.models.Principal
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
@@ -37,10 +34,12 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var binding: ActivityLoginBinding
     lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
+    private lateinit var preferencesManager: PreferencesManager
+    private lateinit var jwtManager: JwtManager
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
@@ -56,6 +55,11 @@ class LoginActivity : CrossIntentActivity() {
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
 
+        preferencesManager = PreferencesManager(binding.root.context)
+
+        sharedPreferences = preferencesManager.sharedPreferences
+
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
 
         btnLogin.setOnClickListener { validateForm() }
 
@@ -64,9 +68,33 @@ class LoginActivity : CrossIntentActivity() {
             startActivity(intent)
         }
 
+        if (isLoggedIn) {
+            startActivity(
+                Intent(this, DashboardActivity::class.java)
+            )
+            finish()
+        }
+
         viewModel.result.observe(this) { result ->
             when (result) {
-                is ApiResult.Success -> nextActivity(DashboardActivity::class.java)
+                is ApiResult.Success -> {
+                    jwtManager = JwtManager()
+                    val claims = jwtManager.decodeJWT(result.data.token)
+                    val principal = Principal(
+                        id = claims["id"] as Int,
+                        idCompany = claims["id_company"] as Int?,
+                        idPerson = claims["id_person"] as Int?,
+                        userType = UserType.fromString(claims["user_type"] as String)
+                    )
+
+                    preferencesManager.savePrincipal(principal)
+                    with(sharedPreferences.edit()) {
+                        putBoolean("isLoggedIn", true)
+                        apply()
+                    }
+                    nextActivity(DashboardActivity::class.java)
+                    finish()
+                }
                 is ApiResult.Error -> {
                     val dialog = CustomDialogFragment().newInstance(
                         "Inicio de sesión",
@@ -89,6 +117,16 @@ class LoginActivity : CrossIntentActivity() {
         }
 
         setupTextWatchers()
+    }
+
+    fun logout() {
+        preferencesManager.deletePrincipal()
+        with(sharedPreferences.edit()) {
+            putBoolean("isLoggedIn", false)
+            apply()
+        }
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     private fun validateForm() {

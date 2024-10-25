@@ -14,7 +14,8 @@ class AuthClient {
 
         val body = LoginRequestBody(
             username = username,
-            password = password
+            password = password,
+            technology = "MOBILE"
         )
 
         RetrofitClient.apiService.login(loginRequestBody = body).enqueue(object : Callback<LoginResponse> {
@@ -39,7 +40,8 @@ class AuthClient {
 
     data class LoginRequestBody(
         val username: String,
-        val password: String
+        val password: String,
+        val technology: String
     )
 
     data class LoginResponse(

@@ -8,8 +8,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.uniandes.project.abcall.R
+import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityDashboardBinding
 import com.uniandes.project.abcall.databinding.FragmentHomeBinding
+import com.uniandes.project.abcall.enums.UserType
 import com.uniandes.project.abcall.ui.dashboard.fragments.DashboardFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.MenuFragment
@@ -20,7 +22,7 @@ import com.uniandes.project.abcall.ui.dashboard.ui.home.HomeFragment
 class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
 
     private lateinit var binding: ActivityDashboardBinding
-
+    private lateinit var preferencesManager: PreferencesManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +31,14 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        preferencesManager = PreferencesManager(binding.root.context)
+        val principal = preferencesManager.getAuth()!!
 
-        changeFragment(MenuFragment.newInstance(), MenuFragment.TITLE)
+        if (principal.userType == UserType.USER) {
+            changeFragment(IncidencesFragment.newInstance())
+        } else{
+            changeFragment(MenuFragment.newInstance())
+        }
 
         supportFragmentManager.addOnBackStackChangedListener {
             val fragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
@@ -62,7 +70,7 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
         return true
     }
 
-    private fun changeFragment(fragment: Fragment, title: String) {
+    private fun changeFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout, fragment)
@@ -78,8 +86,8 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
         updateToolbarTitle(fragment)
     }
 
-    override fun onFragmentChange(fragment: Fragment, title: String) {
-        changeFragment(fragment, title)
+    override fun onFragmentChange(fragment: Fragment) {
+        changeFragment(fragment)
     }
 
     private fun updateToolbarTitle(fragment: Fragment) {

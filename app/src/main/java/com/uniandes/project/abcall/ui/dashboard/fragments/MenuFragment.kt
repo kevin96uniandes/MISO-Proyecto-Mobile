@@ -42,15 +42,15 @@ class MenuFragment : Fragment() {
         _binding = FragmentMenuBinding.inflate(inflater, container, false)
 
         binding.btnIncidences.setOnClickListener {
-            fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance(), IncidencesFragment.TITLE)
+            fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
         }
 
         binding.btnReports.setOnClickListener {
-            fragmentChangeListener?.onFragmentChange(ReportFragment.newInstance(), ReportFragment.TITLE)
+            fragmentChangeListener?.onFragmentChange(ReportFragment.newInstance())
         }
 
         binding.btnDashboard.setOnClickListener {
-            fragmentChangeListener?.onFragmentChange(DashboardFragment.newInstance(), DashboardFragment.TITLE)
+            fragmentChangeListener?.onFragmentChange(DashboardFragment.newInstance())
         }
 
         return binding.root

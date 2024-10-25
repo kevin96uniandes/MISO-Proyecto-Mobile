@@ -5,31 +5,22 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 // import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
 import com.uniandes.project.abcall.IdentificationType
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.ApiResult
-import com.uniandes.project.abcall.config.TokenManager
+import com.uniandes.project.abcall.config.PreferencesManager
 
 import com.uniandes.project.abcall.databinding.ActivityUserRegisterBinding
 
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
-import com.uniandes.project.abcall.ui.components.CustomSpinnerAdapter
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.RegisterUser
 
@@ -70,7 +61,7 @@ class UserRegisterActivity : CrossIntentActivity() {
     private lateinit var viewModel: RegisterUserViewModel
 
     private val registerClient = RegisterUserClient()
-    private lateinit var tokenManager: TokenManager
+    private lateinit var preferencesManager: PreferencesManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +71,7 @@ class UserRegisterActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        tokenManager = TokenManager(binding.root.context)
+        preferencesManager = PreferencesManager(binding.root.context)
 
         viewModel = RegisterUserViewModel(registerClient)
 

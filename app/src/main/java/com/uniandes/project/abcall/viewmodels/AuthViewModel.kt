@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.uniandes.project.abcall.config.ApiResult
-import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.models.Auth
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 
