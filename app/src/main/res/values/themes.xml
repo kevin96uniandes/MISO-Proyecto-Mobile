@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ABCAll" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.ABCAll" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/abcall_third_one</item>
         <item name="colorPrimaryVariant">@color/white</item>
@@ -14,10 +14,15 @@
         <!-- Customize your theme here. -->
         <item name="textInputStyle">@style/customLoginInputText</item>
         <item name="android:spinnerDropDownItemStyle">@style/CustomSpinnerStyle</item>
+
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/abcall_toolbar_text_color</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.ABCAll.NoActionBar">
-        <item name="windowActionBar">false</item>
+    <style name="Theme.ABCAll.theme">
+        <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
         <item name="colorControlNormal">@color/abcall_toolbar_text_color</item>
         <item name="android:spinnerDropDownItemStyle">@style/CustomSpinnerStyle</item>

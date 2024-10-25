@@ -1,6 +1,7 @@
 package com.uniandes.project.abcall.repositories.rest
 
 import android.util.Log
+import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.RetrofitClient
 import com.uniandes.project.abcall.models.Auth
 import retrofit2.Call
@@ -9,7 +10,7 @@ import retrofit2.Response
 
 class AuthClient {
 
-    fun authenticate(username: String, password: String, callback: (Auth?) -> Unit) {
+    fun authenticate(username: String, password: String, callback: (ApiResult<Auth>) -> Unit) {
 
         val body = LoginRequestBody(
             username = username,
@@ -19,18 +20,18 @@ class AuthClient {
         RetrofitClient.apiService.login(loginRequestBody = body).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
-                    val resp = response.body()
-                    val auth = resp?.toAuth()
-                    callback(auth)
+                    val resp = response.body()!!
+                    callback(ApiResult.Success(resp.toAuth()))
                 } else {
                     Log.e("AuthClient", "Error: ${response.errorBody()?.string()}")
-                    callback(null) // En caso de error, devolver null
+                    val errorMessage = response.errorBody()?.string()
+                    callback(ApiResult.Error(response.code(), errorMessage))
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Log.e("MainActivity", "Failure: ${t.message}")
-                callback(null)
+                callback(ApiResult.NetworkError)
             }
         })
 

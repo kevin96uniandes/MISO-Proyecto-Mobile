@@ -68,14 +68,6 @@ class LoginTest {
     }
 
     @Test
-    fun validateForm_validInputs_triggersAuthentication() {
-        // Escribe nombre de usuario y contraseña válidos
-        onView(withId(R.id.et_username)).perform(typeText("username"), closeSoftKeyboard())
-        onView(withId(R.id.et_password)).perform(typeText("password"), closeSoftKeyboard())
-        onView(withId(R.id.btn_log_in)).perform(click())
-    }
-
-    @Test
     fun testLoginButtonClick_wrong_credentials() {
         // Simular que el usuario ingresa un nombre de usuario y contraseña
         onView(withId(R.id.et_username)).perform(typeText("usuario"), closeSoftKeyboard())

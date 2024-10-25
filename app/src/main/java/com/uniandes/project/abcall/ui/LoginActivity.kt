@@ -1,16 +1,23 @@
 package com.uniandes.project.abcall.ui
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
+import android.view.Gravity
+import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
+import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
@@ -30,7 +37,6 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var binding: ActivityLoginBinding
     lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
-    //private lateinit var tokenManager: TokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +56,7 @@ class LoginActivity : CrossIntentActivity() {
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
 
+
         btnLogin.setOnClickListener { validateForm() }
 
         btnRegister.setOnClickListener {
@@ -57,17 +64,27 @@ class LoginActivity : CrossIntentActivity() {
             startActivity(intent)
         }
 
-        viewModel.token.observe(this) { token ->
-            if (token != null) {
-                nextActivity(DashboardActivity::class.java)
-            } else {
-                val dialog = CustomDialogFragment().newInstance(
-                    "Inicio de sesión",
-                    "Usuario y/o contraseña incorrecta",
-                    R.raw.error
-                )
-                dialog.show(supportFragmentManager, "CustomDialog")
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+        viewModel.result.observe(this) { result ->
+            when (result) {
+                is ApiResult.Success -> nextActivity(DashboardActivity::class.java)
+                is ApiResult.Error -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Inicio de sesión",
+                        "Usuario y/o contraseña incorrecta",
+                        R.raw.error
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+                }
+                is ApiResult.NetworkError -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Inicio de sesión",
+                        "No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet.",
+                        R.raw.no_network
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Error de red", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -127,10 +144,5 @@ class LoginActivity : CrossIntentActivity() {
 
     private fun clearPasswordError() {
         ilPassword.error = null
-    }
-
-    // Método solo para pruebas
-    fun setViewModelOnlyTest(viewModel: AuthViewModel) {
-        this.viewModel = viewModel
     }
 }
