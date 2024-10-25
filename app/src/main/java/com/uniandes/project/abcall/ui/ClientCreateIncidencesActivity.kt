@@ -20,6 +20,8 @@ import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
+import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
+import okhttp3.MultipartBody
 import java.io.File
 
 
@@ -37,11 +39,10 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
     private lateinit var btnSend: Button
 
     private lateinit var binding: ActivityClienteCreateIncidencesBinding
-    // private lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: CreateIncidenceViewModel
     private val authClient = AuthClient()
     private lateinit var tokenManager: TokenManager
-
-
+    private lateinit var files: List<MultipartBody.Part>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -154,7 +155,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var d = data?.getData()
+        var files = data?.getData()
     }
 
 
@@ -176,6 +177,10 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         if (TextUtils.isEmpty(detail)) {
             ilDetail.error = "Por favor ingresa un detalle de la incidencia"
             isValid = false
+        }
+
+        if (isValid) {
+            viewModel.createIncidence(type = 1, subject=subject, detail=detail, files=files)
         }
 
         return isValid
