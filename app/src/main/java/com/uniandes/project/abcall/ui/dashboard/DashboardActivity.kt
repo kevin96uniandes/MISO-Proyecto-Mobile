@@ -48,6 +48,9 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 } else {
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    if (principal.userType == UserType.USER) {
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
                 }
             }
         }
