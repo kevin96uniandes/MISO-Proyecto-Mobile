@@ -17,6 +17,7 @@ import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
+import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
@@ -63,17 +64,27 @@ class LoginActivity : CrossIntentActivity() {
             startActivity(intent)
         }
 
-        viewModel.token.observe(this) { token ->
-            if (token != null) {
-                nextActivity(DashboardActivity::class.java)
-            } else {
-                val dialog = CustomDialogFragment().newInstance(
-                    "Inicio de sesión",
-                    "Usuario y/o contraseña incorrecta",
-                    R.raw.error
-                )
-                dialog.show(supportFragmentManager, "CustomDialog")
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+        viewModel.result.observe(this) { result ->
+            when (result) {
+                is ApiResult.Success -> nextActivity(DashboardActivity::class.java)
+                is ApiResult.Error -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Inicio de sesión",
+                        "Usuario y/o contraseña incorrecta",
+                        R.raw.error
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+                }
+                is ApiResult.NetworkError -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Inicio de sesión",
+                        "No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet.",
+                        R.raw.no_network
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Error de red", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

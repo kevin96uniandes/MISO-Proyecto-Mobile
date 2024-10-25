@@ -12,8 +12,6 @@ import retrofit2.Response
 class RegisterUserClient {
 
     fun registerUser(body: UserRegisterRequestBody, callback: (ApiResult<RegisterResponse>) -> Unit) {
-        val gson = Gson()
-        Log.d("UserRegisterRequest", gson.toJson(body))
         RetrofitClient.apiService.register(userRegisterRequestBody = body).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
