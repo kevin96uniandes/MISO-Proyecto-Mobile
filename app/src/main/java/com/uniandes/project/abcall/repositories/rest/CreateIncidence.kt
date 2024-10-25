@@ -11,7 +11,7 @@ import retrofit2.Response
 
 class CreateIncidence {
 
-    fun createIncidence(type: Int, channel: String = "mobil-app", subject: String, detail: String, files: List<MultipartBody.Part>){
+    fun createIncidence(type: Int, channel: String, subject: String, detail: String, files: List<MultipartBody.Part>, callback: (Any?) -> Unit){
         val body = CreateIncidenceRequestBody(
             type = type,
             channel = channel,
