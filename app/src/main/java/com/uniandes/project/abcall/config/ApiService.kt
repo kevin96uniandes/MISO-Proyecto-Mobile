@@ -2,9 +2,8 @@ package com.uniandes.project.abcall.config
 
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
+import com.uniandes.project.abcall.repositories.rest.CreateIncidence
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Multipart
@@ -22,7 +21,6 @@ interface ApiService {
 
     @Multipart
     @POST("/incident/create")
-    fun createIncidence(@Part body: RequestBody?, @Part files: List<MultipartBody.Part?>): Call<ResponseBody?>?
-
+    fun createIncidence(@Part body: CreateIncidence.CreateIncidenceRequestBody?, @Part files: List<MultipartBody.Part>): Call<CreateIncidence.CreateIncidenceResponse>
 
 }
