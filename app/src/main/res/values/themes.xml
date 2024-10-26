@@ -146,10 +146,18 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/abcall_white</item>
     </style>
-
-
     <style name="Theme.ABCAll.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ABCAll.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Custom.Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:elevation" ns1:ignore="NewApi">@dimen/design_appbar_elevation</item>
+        <item name="android:background">@color/white</item>
+        <item name="titleTextColor">@color/abcall_toolbar_text_color</item>
+        <item name="subtitleTextColor">@color/material_on_primary_emphasis_medium</item>
+
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Toolbar.Primary</item>
+        <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Toolbar.Popup.Primary</item>
+    </style>
 
 </resources>
