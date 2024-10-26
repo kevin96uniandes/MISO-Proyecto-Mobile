@@ -1,21 +1,25 @@
 package com.uniandes.project.abcall.ui
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
-import com.uniandes.project.abcall.config.TokenManager
+import com.uniandes.project.abcall.config.ApiResult
+import com.uniandes.project.abcall.config.JwtManager
+import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
+import com.uniandes.project.abcall.enums.UserType
+import com.uniandes.project.abcall.models.Principal
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
-import com.uniandes.project.abcall.ui.UserRegisterActivity
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.AuthViewModel
 
@@ -29,27 +33,32 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var btnRegister: Button
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var viewModel: AuthViewModel
+    lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
-    private lateinit var tokenManager: TokenManager
+    private lateinit var preferencesManager: PreferencesManager
+    private lateinit var jwtManager: JwtManager
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        tokenManager = TokenManager(binding.root.context)
-
-        viewModel = AuthViewModel(authClient, tokenManager)
+        viewModel = AuthViewModel(authClient)
 
         etUsername = findViewById(R.id.et_username)
         etPassword = findViewById(R.id.et_password)
         ilUsername = findViewById(R.id.ilUsername)
-        ilPassword = findViewById(R.id.ilPasword)
+        ilPassword = findViewById(R.id.ilPassword)
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
+
+        preferencesManager = PreferencesManager(binding.root.context)
+
+        sharedPreferences = preferencesManager.sharedPreferences
+
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
 
         btnLogin.setOnClickListener { validateForm() }
 
@@ -58,17 +67,54 @@ class LoginActivity : CrossIntentActivity() {
             startActivity(intent)
         }
 
-        viewModel.token.observe(this) { token ->
-            if (token != null) {
-                nextActivity(ClientHomeActivity::class.java)
-            } else {
-                val dialog = CustomDialogFragment().newInstance(
-                    "Inicio de sesión",
-                    "Usuario y/o contraseña incorrecta",
-                    R.raw.error
-                )
-                dialog.show(supportFragmentManager, "CustomDialog")
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+        //logout()
+
+        if (isLoggedIn) {
+            startActivity(
+                Intent(this, DashboardActivity::class.java)
+            )
+            finish()
+        }
+
+        viewModel.result.observe(this) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    jwtManager = JwtManager()
+                    val claims = jwtManager.decodeJWT(result.data.token)
+                    val principal = Principal(
+                        id = claims["id"] as Int,
+                        idCompany = claims["id_company"] as Int?,
+                        idPerson = claims["id_person"] as Int?,
+                        userType = UserType.fromString(claims["user_type"] as String)
+                    )
+
+                    preferencesManager.savePrincipal(principal)
+
+                    with(sharedPreferences.edit()) {
+                        putBoolean("isLoggedIn", true)
+                        apply()
+                    }
+                    nextActivity(DashboardActivity::class.java)
+                    finish()
+                }
+                is ApiResult.Error -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Inicio de sesión",
+                        "Usuario y/o contraseña incorrecta",
+                        R.raw.error
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+                }
+                is ApiResult.NetworkError -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Inicio de sesión",
+                        "No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet.",
+                        R.raw.no_network
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Error de red", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
