@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="Crear incidencias"
-            app:menu="@menu/activity_main_drawer"
             app:navigationIcon="@drawable/baseline_arrow_back_24"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             />

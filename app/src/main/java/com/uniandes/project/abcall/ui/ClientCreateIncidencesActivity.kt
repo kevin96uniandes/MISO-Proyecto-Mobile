@@ -11,9 +11,11 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
@@ -43,7 +45,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
     private val authClient = AuthClient()
     private lateinit var tokenManager: TokenManager
     private lateinit var files: List<MultipartBody.Part>
-
+    private lateinit var toolBar: MaterialToolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,16 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         supportActionBar?.hide()
 
         tokenManager = TokenManager(binding.root.context)
+
+
+        toolBar = findViewById(R.id.topAppBar)
+
+        toolBar.setNavigationOnClickListener { view ->
+            val intent = Intent(this, ClientHomeActivity::class.java)
+            startActivity(intent)
+        }
+
+
 
         etSubject = findViewById(R.id.et_subject)
         etDetail = findViewById(R.id.et_detail)
