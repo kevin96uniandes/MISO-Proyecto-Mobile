@@ -35,4 +35,6 @@
     <string name="adjuntar_archivos">Adjuntar archivos</string>
     <string name="cancel">cancel</string>
     <string name="enviar">enviar</string>
+    <string name="registar">Registar</string>
+    <string name="cancelar">cancelar</string>
 </resources>
