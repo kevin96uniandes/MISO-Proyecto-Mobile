@@ -123,7 +123,6 @@
 
     <style name="customLoadFilesButton" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/abcall_white</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/abcall_primary_color</item>
         <item name="android:gravity">center</item>
     </style>
@@ -158,6 +157,16 @@
 
         <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Toolbar.Primary</item>
         <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Toolbar.Popup.Primary</item>
+    </style>
+
+    <style name="customIncidenceInputTextAppearance">
+        <item name="android:textColor">@color/abcall_primary_color</item>
+    </style>
+
+    <style name="customIncidenceInputText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/abcall_white</item>
+        <item name="textFillColor">@color/abcall_primary_color</item>
+        <item name="android:textColorHint">@color/abcall_primary_color</item>
     </style>
 
 </resources>
