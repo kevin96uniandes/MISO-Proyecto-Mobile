@@ -21,7 +21,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
-import com.uniandes.project.abcall.repositories.rest.AuthClient
+import com.uniandes.project.abcall.repositories.rest.CreateIncidence
 import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
 import okhttp3.MultipartBody
 import java.io.File
@@ -42,7 +42,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
     private lateinit var binding: ActivityClienteCreateIncidencesBinding
     private lateinit var viewModel: CreateIncidenceViewModel
-    private val authClient = AuthClient()
+    private val createIncidenceClient = CreateIncidence()
     private lateinit var tokenManager: TokenManager
     private lateinit var files: List<MultipartBody.Part>
     private lateinit var toolBar: MaterialToolbar
@@ -55,7 +55,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         supportActionBar?.hide()
 
         tokenManager = TokenManager(binding.root.context)
-
+        viewModel = CreateIncidenceViewModel(createIncidenceClient)
 
         toolBar = findViewById(R.id.topAppBar)
 
