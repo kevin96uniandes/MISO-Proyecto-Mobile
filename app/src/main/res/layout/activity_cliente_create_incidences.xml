@@ -7,27 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="Crear incidencias"
-            app:navigationIcon="@drawable/baseline_arrow_back_24"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <ScrollView
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:ignore="ScrollViewCount">
-
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,120 +20,100 @@
             android:paddingEnd="20sp"
             android:layout_gravity="center">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card"
+            <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_types"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp">
+                style="@style/customLoadIncidenceTypeButton"
+                app:cornerRadius="20sp"
+                android:layout_marginTop="16dp"
+                android:text="@string/seleccione_el_tipo_de_incidencia"
+                android:drawableEnd="@android:drawable/list_selector_background"
+                />
 
-                <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/abcall_third_one"
+                android:layout_marginTop="16dp"
+                android:hint="@string/asunto"
+                style="@style/customLoginInputText"
+                app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_subject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:maxLines="1"
+                    android:inputType="text|textNoSuggestions"
+                    style="@style/customLoginInputTextAppearance"/>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_types"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/customLoadIncidenceTypeButton"
-                        app:cornerRadius="20sp"
-                        android:textAllCaps="false"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/seleccione_el_tipo_de_incidencia"
-                        android:drawableEnd="@drawable/baseline_arrow_drop_down_24"
-                        />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/il_subject"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:endIconMode="clear_text"
-                        app:endIconTint="@color/abcall_third_one"
-                        android:layout_marginTop="16dp"
-                        android:hint="@string/asunto"
-                        style="@style/customLoginInputText"
-                        app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
-                        >
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_detail"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:endIconMode="clear_text"
+                android:layout_marginTop="16dp"
+                app:endIconTint="@color/abcall_third_one"
+                android:hint="@string/comentarios"
+                style="@style/customLoginInputText"
+                app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_subject"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:inputType="text|textNoSuggestions"
-                            style="@style/customLoginInputTextAppearance"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="textPassword|textNoSuggestions"
+                    style="@style/customLoginInputTextAppearance"/>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/il_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        app:endIconMode="clear_text"
-                        android:layout_marginTop="16dp"
-                        app:endIconTint="@color/abcall_third_one"
-                        android:hint="@string/comentarios"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_load_files"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/customLoadFilesButton"
+                app:cornerRadius="20sp"
+                android:layout_marginTop="16dp"
+                android:text="@string/adjuntar_archivos"
+                android:drawableEnd="@android:drawable/ic_input_add"
+                />
 
-                        style="@style/customLoginInputText"
-                        app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/customClearCancelButton"
+                app:cornerRadius="20sp"
+                android:layout_marginTop="16dp"
+                android:text="@string/cancel"
+                />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_detail"
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:maxLines="1"
-                            android:gravity="top|left"
-                            android:inputType="text|textNoSuggestions"
-                            style="@style/customLoginInputTextAppearance"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_load_files"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/customLoadFilesButton"
-                        app:cornerRadius="20sp"
-                        android:layout_marginTop="16dp"
-                        android:gravity="left|center_vertical"
-                        android:text="@string/adjuntar_archivos"
-                        android:textAllCaps="false"
-                        android:drawableEnd="@drawable/baseline_attach_file_24"
-                        />
-
-
-                    <LinearLayout
-                        android:layout_width="343dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_cancel"
-                            style="@style/customClearCancelButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="39dp"
-                            android:text="@string/cancelar"
-                            app:cornerRadius="20sp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_send"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="@string/registar"
-                            app:cornerRadius="20sp" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_send"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/customPrimaryButton"
+                app:cornerRadius="20sp"
+                android:layout_marginTop="16dp"
+                android:text="@string/enviar"
+                />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </ScrollView>

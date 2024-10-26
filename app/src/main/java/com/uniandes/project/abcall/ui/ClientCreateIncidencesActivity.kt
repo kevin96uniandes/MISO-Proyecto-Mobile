@@ -1,7 +1,6 @@
 package com.uniandes.project.abcall.ui
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,23 +9,13 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Button
-import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.Nullable
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
-import com.uniandes.project.abcall.config.PreferencesManager
+import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
-import com.uniandes.project.abcall.repositories.rest.CreateIncidence
-import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
-import okhttp3.MultipartBody
-import java.io.File
-
 
 class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
@@ -42,14 +31,12 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
     private lateinit var btnSend: Button
 
     private lateinit var binding: ActivityClienteCreateIncidencesBinding
-    private lateinit var viewModel: CreateIncidenceViewModel
-    private val createIncidenceClient = CreateIncidence()
-    private lateinit var files: List<MultipartBody.Part>
-    private lateinit var toolBar: MaterialToolbar
-
     // private lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
-    private lateinit var preferencesManager: PreferencesManager
+    private lateinit var tokenManager: TokenManager
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,17 +45,8 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        viewModel = CreateIncidenceViewModel(createIncidenceClient)
+        tokenManager = TokenManager(binding.root.context)
 
-        toolBar = findViewById(R.id.topAppBar)
-
-        toolBar.setNavigationOnClickListener { view ->
-            val intent = Intent(this, ClientHomeActivity::class.java)
-            startActivity(intent)
-        }
-
-
-        preferencesManager = PreferencesManager(binding.root.context)
         etSubject = findViewById(R.id.et_subject)
         etDetail = findViewById(R.id.et_detail)
 
@@ -79,60 +57,43 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
         val checkedItem = intArrayOf(-1)
 
-        var type = 0
-
-
         btnTypes.setOnClickListener {
             val alertDialog = AlertDialog.Builder(this)
 
-            alertDialog.setIcon(R.drawable.ic_dashboard_black_24dp)
+            alertDialog.setIcon(R.drawable.logo)
 
-            alertDialog.setTitle("Tipo:")
+            alertDialog.setTitle("Choose an Item")
 
-            val listItems = arrayOf("Petición", "Queja/Reclamo", "Sugerencia")
-
+            val listItems = arrayOf("Android Development", "Web Development", "Machine Learning")
 
             alertDialog.setSingleChoiceItems(listItems, checkedItem[0]) { dialog, which ->
                 checkedItem[0] = which
-                type = which
-                btnTypes.text = listItems[type]
+
                 dialog.dismiss()
             }
-
-            val customAlertDialog = alertDialog.create()
-            customAlertDialog.show()
-
         }
 
 
         btnLoadFiles = findViewById(R.id.btn_load_files)
 
-
         btnLoadFiles.setOnClickListener {
-            openDirectory()
+            val intent = openDirectory()
         }
+
 
 
         btnCancel = findViewById(R.id.btn_cancel)
-
-        btnCancel.setOnClickListener({
-            etSubject.text?.clear()
-            etDetail.text?.clear()
-        })
-
         btnSend = findViewById(R.id.btn_send)
 
-        btnSend.setOnClickListener{
-            val a = validateForm()
 
-            if (a){
-                Toast.makeText(this, "Registro Exitoso", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "Registro Failed!", Toast.LENGTH_SHORT).show()
-            }
-        }
 
         /*
+        btnRegister.setOnClickListener {
+            val intent = Intent(this, UserRegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+
 
         viewModel.token.observe(this) { token ->
             if (token != null) {
@@ -155,51 +116,40 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
 
     private fun openDirectory() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.type = "*/*"
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-
-        try {
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), 100)
-        } catch (exception: Exception) {
-            Toast.makeText(this, "Please install a file manager", Toast.LENGTH_SHORT).show()
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            putExtra(DocumentsContract.EXTRA_INITIAL_URI, ".")
         }
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        var files = data?.getData()
     }
 
 
-    private fun validateForm(): Boolean {
+
+
+
+    private fun validateForm() {
 
         ilSubject.error = null
         ilDetail.error = null
 
-        val subject = etSubject.text.toString().trim()
-        val detail = etDetail.text.toString().trim()
+        val username = etSubject.text.toString().trim()
+        val password = etDetail.text.toString().trim()
 
         var isValid = true
 
-        if (TextUtils.isEmpty(subject)) {
-            ilSubject.error = "Por favor ingresa un asunto"
+        if (TextUtils.isEmpty(username)) {
+            ilSubject.error = "Por favor ingresa tu nombre de usuario"
             isValid = false
         }
 
-        if (TextUtils.isEmpty(detail)) {
-            ilDetail.error = "Por favor ingresa un detalle de la incidencia"
+        if (TextUtils.isEmpty(password)) {
+            ilDetail.error = "Por favor ingresa tu contraseña"
             isValid = false
         }
 
+        /*
         if (isValid) {
-            viewModel.createIncidence(type = 1, subject=subject, detail=detail, files=files)
+            viewModel.authenticate(username, password)
         }
-
-        return isValid
-
+        */
     }
 
     private fun setupTextWatchers() {
