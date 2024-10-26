@@ -1,33 +1,26 @@
 package com.uniandes.project.abcall.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 // import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
 import com.uniandes.project.abcall.IdentificationType
 import com.uniandes.project.abcall.R
-import com.uniandes.project.abcall.config.TokenManager
+import com.uniandes.project.abcall.config.ApiResult
+import com.uniandes.project.abcall.config.PreferencesManager
 
 import com.uniandes.project.abcall.databinding.ActivityUserRegisterBinding
 
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
-import com.uniandes.project.abcall.ui.components.CustomSpinnerAdapter
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.RegisterUser
 
@@ -40,17 +33,15 @@ import com.uniandes.project.abcall.viewmodels.RegisterUserViewModel
 class UserRegisterActivity : CrossIntentActivity() {
 
     private var idIdentityType = -1;
-    private var selectedIdentityTypeLabel: String = ""
-    private lateinit var twErrorMessage: TextView
     private lateinit var etFirstName: TextInputEditText
     private lateinit var etLastName: TextInputEditText
-    private lateinit var spIdentificationType: Spinner
     private lateinit var etIdentificationNumber: TextInputEditText
     private lateinit var etEmail: TextInputEditText
     private lateinit var etPhone: TextInputEditText
     private lateinit var etUserName: TextInputEditText
     private lateinit var etPassword: TextInputEditText
     private lateinit var etCheckPassword: TextInputEditText
+    private lateinit var etIdentificationType: TextInputEditText
 
 
     private lateinit var ilFirstName: TextInputLayout
@@ -70,7 +61,7 @@ class UserRegisterActivity : CrossIntentActivity() {
     private lateinit var viewModel: RegisterUserViewModel
 
     private val registerClient = RegisterUserClient()
-    private lateinit var tokenManager: TokenManager
+    private lateinit var preferencesManager: PreferencesManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,18 +71,17 @@ class UserRegisterActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        tokenManager = TokenManager(binding.root.context)
+        preferencesManager = PreferencesManager(binding.root.context)
 
         viewModel = RegisterUserViewModel(registerClient)
 
-        twErrorMessage = findViewById(R.id.error_message_1)
         etFirstName = findViewById(R.id.et_firstName)
         etLastName = findViewById(R.id.et_lastName)
-        spIdentificationType = findViewById(R.id.sp_identification_type)
         etIdentificationNumber = findViewById(R.id.et_identification_number)
         etEmail = findViewById(R.id.et_email)
         etPhone = findViewById(R.id.et_phone)
         etUserName = findViewById(R.id.et_username)
+        etIdentificationType = findViewById(R.id.et_identification_type)
 
         etPassword = findViewById(R.id.et_password)
 
@@ -99,14 +89,13 @@ class UserRegisterActivity : CrossIntentActivity() {
 
         ilFirstName = findViewById(R.id.ilFirstName)
         ilLastName = findViewById(R.id.ilLastName)
-        ilIdentificationType = findViewById(R.id.ilSpIdentificationType)
         ilIdentificationNumber = findViewById(R.id.ilIdentificationNumber)
         ilPhone = findViewById(R.id.ilPhone)
         ilEmail = findViewById(R.id.ilEmail)
         ilUsername = findViewById(R.id.ilUsername)
         ilPassword = findViewById(R.id.ilPassword)
         ilCheckPassword = findViewById(R.id.ilCheckPassword)
-
+        ilIdentificationType = findViewById(R.id.ilIdentificationType)
 
         btnRegister = findViewById(R.id.btn_register)
 
@@ -116,8 +105,6 @@ class UserRegisterActivity : CrossIntentActivity() {
             android.R.layout.simple_spinner_item, identificationTypes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        fillSpinner(spIdentificationType, identificationTypes)
-        spinnerEvents(spIdentificationType, identificationTypes)
         btnRegister.setOnClickListener {
             if ( isValidForm() ) {
                 val userRegister = RegisterUser(
@@ -136,27 +123,53 @@ class UserRegisterActivity : CrossIntentActivity() {
             }
         }
 
-        viewModel.code.observe(this) { code ->
-            if (code != null){
-                val dialog = CustomDialogFragment().newInstance(
-                    "Registro de usuario",
-                    "Usuario creado exitosamente",
-                    R.raw.success
-                ) {
-                    Toast.makeText(this, "Usuario creado exitosamente", Toast.LENGTH_SHORT).show()
-                    nextActivity(LoginActivity::class.java)
+        viewModel.result.observe(this) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Registro de usuario",
+                        "Usuario creado exitosamente",
+                        R.raw.success
+                    ) {
+                        Toast.makeText(this, "Usuario creado exitosamente", Toast.LENGTH_SHORT).show()
+                        nextActivity(LoginActivity::class.java)
+                    }
+                    dialog.show(supportFragmentManager, "CustomDialog")
                 }
-                dialog.show(supportFragmentManager, "CustomDialog")
-            } else {
-                val dialog = CustomDialogFragment().newInstance(
-                    "Registro de usuario",
-                    "Error creando usuario",
-                    R.raw.error
-                )
-                dialog.show(supportFragmentManager, "CustomDialog")
-                Toast.makeText(this, "Error creando usuario", Toast.LENGTH_SHORT).show()
+                is ApiResult.Error -> {
+                    when (result.code) {
+                        409 -> {
+                            val dialog = CustomDialogFragment().newInstance(
+                                "Registro de usuario",
+                                "El usuario ya existe. Por favor, elige otro nombre de usuario.",
+                                R.raw.error
+                            )
+                            dialog.show(supportFragmentManager, "CustomDialog")
+                            Toast.makeText(this, "Error: Usuario ya registrado", Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            val dialog = CustomDialogFragment().newInstance(
+                                "Registro de usuario",
+                                "Error al registrar el usuario: ${result.message}",
+                                R.raw.error
+                            )
+                            dialog.show(supportFragmentManager, "CustomDialog")
+                            Toast.makeText(this, "Error creando usuario", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                ApiResult.NetworkError -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Registro de usuario",
+                        "No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet.",
+                        R.raw.no_network
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Error de red", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
         btnClear = findViewById(R.id.btn_clear)
 
         btnClear.setOnClickListener({
@@ -168,37 +181,37 @@ class UserRegisterActivity : CrossIntentActivity() {
 
         })
 
-        spIdentificationType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                // Obtener el tipo de identificación seleccionado
-                val selectedType = IdentificationType.entries[position]
-
-                // Obtener el ID del enum seleccionado
-                idIdentityType = selectedType.getIdType()
-
-                // Aquí puedes hacer lo que necesites con el ID seleccionado
-                Toast.makeText(this@UserRegisterActivity, "ID seleccionado: $idIdentityType", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // No se seleccionó ningún elemento
-            }
+        etIdentificationType.setOnClickListener {
+            val items = IdentificationType.entries.map { "${it.id} - ${it.type}" }.toTypedArray()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Selecciona una opción")
+                .setSingleChoiceItems(items, -1) { dialog, which ->
+                    val selectedItem = items[which]
+                    etIdentificationType.setText(selectedItem)
+                    idIdentityType = selectedItem.split("-")[0].trim().toInt()
+                    clearIdentificationTypeError()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancelar") { dialog, which ->
+                    dialog.dismiss()
+                }
+            builder.show()
         }
 
         setupTextWatchers()
     }
 
     private fun isValidForm(): Boolean {
+        var isValid = true
         // Limpiar errores previos
         ilFirstName.error = null
         ilLastName.error = null
         ilUsername.error = null
         ilPassword.error = null
         ilCheckPassword.error = null
-        ilEmail.error = null // Añade el TextInputLayout para el correo electrónico
-        ilPhone.error = null // Añade el TextInputLayout para el teléfono
-        ilIdentificationNumber.error = null // Añade el TextInputLayout para el número de identificación
-
+        ilEmail.error = null
+        ilPhone.error = null
+        ilIdentificationNumber.error = null
 
         // Obtener los valores de los EditText
         val firstName = etFirstName.text.toString().trim()
@@ -206,80 +219,95 @@ class UserRegisterActivity : CrossIntentActivity() {
         val username = etUserName.text.toString().trim()
         val password = etPassword.text.toString().trim()
         val checkPassword = etCheckPassword.text.toString().trim()
-        val email = etEmail.text.toString().trim() // Suponiendo que tienes un EditText para el correo
-        val phoneNumber = etPhone.text.toString().trim() // Suponiendo que tienes un EditText para el teléfono
-        val idNumber = etIdentificationNumber.text.toString().trim() // Suponiendo que tienes un EditText para el número de identificación
+        val email = etEmail.text.toString().trim()
+        val phoneNumber = etPhone.text.toString().trim()
+        val idNumber = etIdentificationNumber.text.toString().trim()
 
-        var isValid = true
-
-        // Validar campos vacíos
+        // Validar campo por campo y detenerse en el primer error
         if (TextUtils.isEmpty(firstName)) {
             ilFirstName.error = "Nombres son obligatorios"
+            scrollToView(ilFirstName) // Desplazar el formulario hacia el campo con error
             isValid = false
         }
 
         if (TextUtils.isEmpty(lastName)) {
             ilLastName.error = "Apellidos son obligatorios"
+            scrollToView(ilLastName)
             isValid = false
         }
 
         if (TextUtils.isEmpty(username)) {
             ilUsername.error = "Usuario es obligatorio"
+            scrollToView(ilUsername)
             isValid = false
         }
 
         if (TextUtils.isEmpty(password)) {
             ilPassword.error = "Contraseña es obligatoria"
+            scrollToView(ilPassword)
             isValid = false
         }
 
         if (TextUtils.isEmpty(checkPassword)) {
             ilCheckPassword.error = "Confirmación de contraseña es obligatoria"
+            scrollToView(ilCheckPassword)
+            isValid = false
+        }
+
+        if (checkPassword != password) {
+            ilPassword.error = "Contraseñas no coinciden"
+            ilCheckPassword.error = "Contraseñas no coinciden"
+            scrollToView(ilPassword)
+            isValid = false
+        }
+
+        if (!isPasswordValid(password)) {
+            ilPassword.error = "Contraseñas deben tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, y un número."
+            scrollToView(ilPassword)
             isValid = false
         }
 
         if (TextUtils.isEmpty(email)) {
             ilEmail.error = "El correo electrónico es obligatorio"
+            scrollToView(ilEmail)
             isValid = false
         } else if (!isEmailValid(email)) {
             ilEmail.error = "Correo electrónico no es válido"
+            scrollToView(ilEmail)
             isValid = false
         }
 
         if (TextUtils.isEmpty(phoneNumber)) {
             ilPhone.error = "El número de teléfono es obligatorio"
+            scrollToView(ilPhone)
             isValid = false
         } else if (!isPhoneNumberValid(phoneNumber)) {
             ilPhone.error = "Número de teléfono no es válido"
+            scrollToView(ilPhone)
             isValid = false
-        }
-
-        if (idIdentityType < 2 ){
-            twErrorMessage.visibility = View.VISIBLE
         }
 
         if (TextUtils.isEmpty(idNumber)) {
             ilIdentificationNumber.error = "El número de identificación es obligatorio"
+            scrollToView(ilIdentificationNumber)
             isValid = false
         } else if (!isIdNumberValid(idNumber)) {
             ilIdentificationNumber.error = "Número de identificación no es válido"
+            scrollToView(ilIdentificationNumber)
             isValid = false
         }
 
-        // Validar coincidencia de contraseñas
-        if (checkPassword != password) {
-            ilPassword.error = "Contraseñas no coinciden"
-            ilCheckPassword.error = "Contraseñas no coinciden"
+        if (idIdentityType == -1) {
+            ilIdentificationType.error = "Debe seleccionar un tipo de documento"
             isValid = false
         }
 
-        // Validar complejidad de la contraseña
-        if (!isPasswordValid(password)) {
-            ilPassword.error = "Contraseñas deben tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, y un número."
-            isValid = false
-        }
-
+        // Si todos los campos son válidos
         return isValid
+    }
+
+    private fun scrollToView(view: View) {
+        view.parent.requestChildFocus(view, view)
     }
 
     // Funciones de validación
@@ -413,32 +441,7 @@ class UserRegisterActivity : CrossIntentActivity() {
         ilCheckPassword.error = null
     }
 
-    fun fillSpinner(spinner: Spinner, items: List<String>){
-        val adapter = CustomSpinnerAdapter(binding.root.context, android.R.layout.simple_spinner_item, items)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+    private fun clearIdentificationTypeError() {
+        ilIdentificationType.error = null
     }
-
-    private fun spinnerEvents (spinner: Spinner, data: List<String>) {
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = data[position]
-                when(spinner.id) {
-                    R.id.sp_identification_type -> {
-                        if(position == 1 && selectedIdentityTypeLabel.isNotEmpty()) {
-                            twErrorMessage.text = "Campo requerido y debe seleccionar un elemento"
-                            twErrorMessage.visibility = View.VISIBLE
-                        }else{
-                            twErrorMessage.visibility = View.GONE
-                            selectedIdentityTypeLabel = selectedItem
-                        }
-                    }
-                }
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-        }
-    }
-
 }
