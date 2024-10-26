@@ -54,9 +54,10 @@
                         android:layout_height="wrap_content"
                         style="@style/customLoadIncidenceTypeButton"
                         app:cornerRadius="20sp"
+                        android:textAllCaps="false"
                         android:layout_marginTop="16dp"
                         android:text="@string/seleccione_el_tipo_de_incidencia"
-                        android:drawableEnd="@android:drawable/list_selector_background"
+                        android:drawableEnd="@drawable/baseline_arrow_drop_down_24"
                         />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -84,19 +85,21 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/il_detail"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="120dp"
                         app:endIconMode="clear_text"
                         android:layout_marginTop="16dp"
                         app:endIconTint="@color/abcall_third_one"
                         android:hint="@string/comentarios"
+
                         style="@style/customLoginInputText"
                         app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_detail"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="120dp"
                             android:maxLines="1"
+                            android:gravity="top|left"
                             android:inputType="text|textNoSuggestions"
                             style="@style/customLoginInputTextAppearance"/>
 
@@ -109,8 +112,10 @@
                         style="@style/customLoadFilesButton"
                         app:cornerRadius="20sp"
                         android:layout_marginTop="16dp"
+                        android:gravity="left|center_vertical"
                         android:text="@string/adjuntar_archivos"
-                        android:drawableEnd="@android:drawable/ic_input_add"
+                        android:textAllCaps="false"
+                        android:drawableEnd="@drawable/baseline_attach_file_24"
                         />
 
 
