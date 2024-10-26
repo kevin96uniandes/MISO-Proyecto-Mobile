@@ -19,8 +19,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
-import com.uniandes.project.abcall.config.TokenManager
+import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
+import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.repositories.rest.CreateIncidence
 import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
 import okhttp3.MultipartBody
@@ -43,9 +44,12 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
     private lateinit var binding: ActivityClienteCreateIncidencesBinding
     private lateinit var viewModel: CreateIncidenceViewModel
     private val createIncidenceClient = CreateIncidence()
-    private lateinit var tokenManager: TokenManager
     private lateinit var files: List<MultipartBody.Part>
     private lateinit var toolBar: MaterialToolbar
+
+    // private lateinit var viewModel: AuthViewModel
+    private val authClient = AuthClient()
+    private lateinit var preferencesManager: PreferencesManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +58,6 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        tokenManager = TokenManager(binding.root.context)
         viewModel = CreateIncidenceViewModel(createIncidenceClient)
 
         toolBar = findViewById(R.id.topAppBar)
@@ -65,7 +68,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         }
 
 
-
+        preferencesManager = PreferencesManager(binding.root.context)
         etSubject = findViewById(R.id.et_subject)
         etDetail = findViewById(R.id.et_detail)
 
