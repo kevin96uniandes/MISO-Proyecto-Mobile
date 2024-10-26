@@ -77,6 +77,7 @@ dependencies {
     implementation (libs.github.glide)
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.0")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation ("com.github.clans:fab:1.6.4")
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
