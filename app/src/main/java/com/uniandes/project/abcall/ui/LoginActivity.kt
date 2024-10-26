@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
@@ -44,8 +45,6 @@ class LoginActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        //tokenManager = TokenManager(binding.root.context)
-
         viewModel = AuthViewModel(authClient)
 
         etUsername = findViewById(R.id.et_username)
@@ -68,6 +67,8 @@ class LoginActivity : CrossIntentActivity() {
             startActivity(intent)
         }
 
+        //logout()
+
         if (isLoggedIn) {
             startActivity(
                 Intent(this, DashboardActivity::class.java)
@@ -88,6 +89,7 @@ class LoginActivity : CrossIntentActivity() {
                     )
 
                     preferencesManager.savePrincipal(principal)
+
                     with(sharedPreferences.edit()) {
                         putBoolean("isLoggedIn", true)
                         apply()
@@ -117,16 +119,6 @@ class LoginActivity : CrossIntentActivity() {
         }
 
         setupTextWatchers()
-    }
-
-    fun logout() {
-        preferencesManager.deletePrincipal()
-        with(sharedPreferences.edit()) {
-            putBoolean("isLoggedIn", false)
-            apply()
-        }
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
     }
 
     private fun validateForm() {

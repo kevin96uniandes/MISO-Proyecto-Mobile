@@ -35,6 +35,8 @@
     <string name="adjuntar_archivos">Adjuntar archivos</string>
     <string name="cancel">cancel</string>
     <string name="enviar">enviar</string>
+    <string name="logout">Cerrar sesión</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

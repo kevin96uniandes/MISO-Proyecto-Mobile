@@ -1,7 +1,11 @@
 package com.uniandes.project.abcall.ui.dashboard
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -12,6 +16,8 @@ import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityDashboardBinding
 import com.uniandes.project.abcall.databinding.FragmentHomeBinding
 import com.uniandes.project.abcall.enums.UserType
+import com.uniandes.project.abcall.ui.CrossIntentActivity
+import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.ui.dashboard.fragments.DashboardFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.MenuFragment
@@ -19,10 +25,11 @@ import com.uniandes.project.abcall.ui.dashboard.fragments.ReportFragment
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
 import com.uniandes.project.abcall.ui.dashboard.ui.home.HomeFragment
 
-class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
+class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
 
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var preferencesManager: PreferencesManager
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,41 +38,72 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         preferencesManager = PreferencesManager(binding.root.context)
-        val principal = preferencesManager.getAuth()!!
+        sharedPreferences = preferencesManager.sharedPreferences
 
-        if (principal.userType == UserType.USER) {
-            changeFragment(IncidencesFragment.newInstance())
-        } else{
-            changeFragment(MenuFragment.newInstance())
-        }
+        val principal = preferencesManager.getAuth()
 
-        supportFragmentManager.addOnBackStackChangedListener {
-            val fragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
-            if (fragment != null) {
-                updateToolbarTitle(fragment)
-                if (fragment is MenuFragment) {
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                } else {
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    if (principal.userType == UserType.USER) {
+        principal?.let {
+            if (principal.userType == UserType.USER) {
+                changeFragment(IncidencesFragment.newInstance())
+            } else{
+                changeFragment(MenuFragment.newInstance())
+            }
+
+            supportFragmentManager.addOnBackStackChangedListener {
+                val fragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
+                if (fragment != null) {
+                    updateToolbarTitle(fragment)
+                    if (fragment is MenuFragment) {
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    } else {
+                        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                        if (principal.userType == UserType.USER) {
+                            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                        }
                     }
                 }
             }
-        }
 
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
+            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
 
-                if (currentFragment is MenuFragment) {
-                    finish()
-                } else {
-                    supportFragmentManager.popBackStack()
+                    if (principal.userType == UserType.USER) {
+                        if (currentFragment is IncidencesFragment) {
+                            finish()
+                        }else{
+                            supportFragmentManager.popBackStack()
+                        }
+                    }else {
+                        if (currentFragment is MenuFragment) {
+                            finish()
+                        } else {
+                            supportFragmentManager.popBackStack()
+                        }
+                    }
+
                 }
+            })
+        }?: kotlin.run {
+            logout()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.logout -> {
+                logout()
+                true
             }
-        })
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -102,5 +140,15 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
             is ReportFragment -> setTitle(ReportFragment.TITLE)
             else -> setTitle("ABCAll App") // Un título por defecto
         }
+    }
+
+    fun logout() {
+        preferencesManager.deletePrincipal()
+        with(sharedPreferences.edit()) {
+            putBoolean("isLoggedIn", false)
+            apply()
+        }
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }
