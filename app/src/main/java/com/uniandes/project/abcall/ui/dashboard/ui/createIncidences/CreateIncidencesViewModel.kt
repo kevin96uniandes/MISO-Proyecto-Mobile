@@ -1,4 +1,4 @@
-package com.uniandes.project.abcall.viewmodels
+package com.uniandes.project.abcall.ui.dashboard.ui.createIncidences
 
 import androidx.lifecycle.ViewModel
 import com.uniandes.project.abcall.repositories.rest.CreateIncidence
@@ -6,7 +6,7 @@ import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 import okhttp3.MultipartBody
 
 
-class CreateIncidenceViewModel (
+class CreateIncidencesViewModel (
     private val createIncidenceClient: CreateIncidence
     ) : ViewModel() {
 

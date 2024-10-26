@@ -15,7 +15,7 @@ class CreateIncidencesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_incidences, container, false)
+        return inflater.inflate(R.layout.fragment_create_incidences, container, false)
     }
 
     companion object {
