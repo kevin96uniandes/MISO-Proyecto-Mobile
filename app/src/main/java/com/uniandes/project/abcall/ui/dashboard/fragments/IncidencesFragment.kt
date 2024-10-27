@@ -33,6 +33,10 @@ class IncidencesFragment : Fragment() {
             fragmentChangeListener?.onFragmentChange(IncidenceCreateChatbotFragment.newInstance())
         }
 
+        binding.incidenceMenuItemManual.setOnClickListener {
+            fragmentChangeListener?.onFragmentChange(CreateIncidencesFragment.newInstance())
+        }
+
         return binding.root
     }
 

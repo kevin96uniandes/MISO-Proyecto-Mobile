@@ -16,25 +16,23 @@ import com.uniandes.project.abcall.ui.dashboard.ui.createIncidences.CreateIncide
 class CrateIncidencesFragment : Fragment() {
 
     private var _binding: FragmentCreateIncidencesBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        var idIncidenceType = -1;
 
-        val createIncidencesViewModel =
-            ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
 
         _binding = FragmentCreateIncidencesBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
 
 
+        var idIncidenceType = -1;
         val ilIncidenceType: TextInputLayout = binding.ilIncidenceType
         val etIncidenceType: TextInputEditText = binding.etIncidenceType
 
