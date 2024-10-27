@@ -31,11 +31,10 @@ class CrateIncidencesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
 
         _binding = FragmentCreateIncidencesBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        // val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
-
 
         var idIncidenceType = -1;
 
@@ -56,7 +55,7 @@ class CrateIncidencesFragment : Fragment() {
         val btnCancel: Button = binding.btnCancel
 
 
-        etIncidenceType.setOnClickListener {
+        etIncidenceType.setOnClickListener ({
             val items = IncidenceType.entries.map { "${it.id} - ${it.type}" }.toTypedArray()
 
             val builder = AlertDialog.Builder(requireContext())
@@ -75,7 +74,7 @@ class CrateIncidencesFragment : Fragment() {
                 .create()
 
             builder.show()
-        }
+        })
 
 
 
