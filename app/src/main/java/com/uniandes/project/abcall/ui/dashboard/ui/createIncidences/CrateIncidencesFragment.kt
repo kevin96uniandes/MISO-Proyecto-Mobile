@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.IncidenceType
+import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.databinding.FragmentCreateIncidencesBinding
 // import com.uniandes.project.abcall.ui.dashboard.ui.createIncidences.CreateIncidencesViewModel
 
@@ -29,10 +30,11 @@ class CrateIncidencesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
+
 
         _binding = FragmentCreateIncidencesBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        // val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
 
 
         var idIncidenceType = -1;
@@ -56,21 +58,23 @@ class CrateIncidencesFragment : Fragment() {
 
         etIncidenceType.setOnClickListener {
             val items = IncidenceType.entries.map { "${it.id} - ${it.type}" }.toTypedArray()
-            val builder = AlertDialog.Builder(requireContext())
 
-            builder.setTitle("Selecciona una opción")
+            val builder = AlertDialog.Builder(requireContext())
+                .setTitle("Selecciona una opción")
                 .setSingleChoiceItems(items, -1) { dialog, which ->
                     val selectedItem = items[which]
                     etIncidenceType.setText(selectedItem)
                     idIncidenceType = selectedItem.split("-")[0].trim().toInt()
+                    //clearIdentificationTypeError()
                     dialog.dismiss()
                 }
                 .setNegativeButton("Cancelar") { dialog, which ->
                     dialog.dismiss()
                 }
 
-            builder.show()
+                .create()
 
+            builder.show()
         }
 
 
