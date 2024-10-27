@@ -19,6 +19,7 @@ import com.uniandes.project.abcall.enums.UserType
 import com.uniandes.project.abcall.ui.CrossIntentActivity
 import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.ui.dashboard.fragments.DashboardFragment
+import com.uniandes.project.abcall.ui.dashboard.fragments.IncidenceCreateChatbotFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.MenuFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.ReportFragment
@@ -134,11 +135,12 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
     private fun updateToolbarTitle(fragment: Fragment) {
         Log.d("DashboardActivity", "Current Fragment: ${fragment::class.java.simpleName}")
         when (fragment) {
-            is MenuFragment -> setTitle(MenuFragment.TITLE)
-            is IncidencesFragment -> setTitle(IncidencesFragment.TITLE)
-            is DashboardFragment -> setTitle(DashboardFragment.TITLE)
-            is ReportFragment -> setTitle(ReportFragment.TITLE)
-            else -> setTitle("ABCAll App") // Un título por defecto
+            is MenuFragment -> title = MenuFragment.TITLE
+            is IncidencesFragment -> title = IncidencesFragment.TITLE
+            is DashboardFragment -> title = DashboardFragment.TITLE
+            is ReportFragment -> title = ReportFragment.TITLE
+            is IncidenceCreateChatbotFragment -> title = IncidenceCreateChatbotFragment.TITLE
+            else -> title = "ABCAll App"
         }
     }
 

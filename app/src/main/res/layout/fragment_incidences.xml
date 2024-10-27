@@ -53,19 +53,20 @@
         android:layout_gravity="bottom|right">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item_chatbot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_label="Manual" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item_manual"
+            android:id="@+id/incidence_menu_item_chatbot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
             android:src="@drawable/ic_bot"
-            fab:fab_label="Chatbot" />
+            fab:fab_label="Asistida" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/incidence_menu_item_manual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_size="mini"
+            android:src="@drawable/ic_edit"
+            fab:fab_label="Manual" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
