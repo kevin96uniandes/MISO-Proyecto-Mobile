@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.uniandes.project.abcall.databinding.FragmentIncidencesBinding
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
+import com.uniandes.project.abcall.ui.dashboard.fragments.CrateIncidencesFragment
 
 class IncidencesFragment : Fragment() {
 
@@ -34,7 +35,7 @@ class IncidencesFragment : Fragment() {
         }
 
         binding.incidenceMenuItemManual.setOnClickListener {
-            fragmentChangeListener?.onFragmentChange(CreateIncidencesFragment.newInstance())
+            fragmentChangeListener?.onFragmentChange(CrateIncidencesFragment.newInstance())
         }
 
         return binding.root

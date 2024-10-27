@@ -20,10 +20,10 @@ import com.uniandes.project.abcall.ui.CrossIntentActivity
 import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.ui.dashboard.fragments.DashboardFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidenceCreateChatbotFragment
-import com.uniandes.project.abcall.ui.dashboard.fragments.CreateIncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.MenuFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.ReportFragment
+import com.uniandes.project.abcall.ui.dashboard.fragments.CrateIncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
 import com.uniandes.project.abcall.ui.dashboard.ui.home.HomeFragment
 
@@ -141,7 +141,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
             is DashboardFragment -> title = DashboardFragment.TITLE
             is ReportFragment -> title = ReportFragment.TITLE
             is IncidenceCreateChatbotFragment -> title = IncidenceCreateChatbotFragment.TITLE
-            is CreateIncidencesFragment -> title = CreateIncidencesFragment.TITLE
+            is CrateIncidencesFragment -> title = CrateIncidencesFragment.TITLE
             else -> title = "ABCAll App"
         }
     }
