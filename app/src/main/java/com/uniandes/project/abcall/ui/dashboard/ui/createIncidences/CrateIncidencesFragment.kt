@@ -1,17 +1,21 @@
 package com.uniandes.project.abcall.ui.dashboard.ui.createIncidences
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.IncidenceType
 import com.uniandes.project.abcall.databinding.FragmentCreateIncidencesBinding
-import com.uniandes.project.abcall.ui.dashboard.ui.createIncidences.CreateIncidencesViewModel
+// import com.uniandes.project.abcall.ui.dashboard.ui.createIncidences.CreateIncidencesViewModel
 
 class CrateIncidencesFragment : Fragment() {
 
@@ -29,12 +33,27 @@ class CrateIncidencesFragment : Fragment() {
 
         _binding = FragmentCreateIncidencesBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
+        // val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
 
 
         var idIncidenceType = -1;
+
         val ilIncidenceType: TextInputLayout = binding.ilIncidenceType
         val etIncidenceType: TextInputEditText = binding.etIncidenceType
+
+
+        val ilSubject: TextInputLayout = binding.ilSubject
+        val etSubject: TextInputEditText = binding.etSubject
+
+
+        val ilDetail: TextInputLayout = binding.ilDetail
+        val etDetail: TextInputEditText = binding.etDetail
+
+
+        val btnLoadFiles: Button = binding.btnLoadFiles
+        val btnRegister: Button = binding.btnSend
+        val btnCancel: Button = binding.btnCancel
+
 
         etIncidenceType.setOnClickListener {
             val items = IncidenceType.entries.map { "${it.id} - ${it.type}" }.toTypedArray()
@@ -56,11 +75,35 @@ class CrateIncidencesFragment : Fragment() {
 
 
 
+        btnLoadFiles.setOnClickListener {
+            val intent = openDirectory()
+            openDirectory()
+        }
+
         return root
+    }
+
+
+    fun openDirectory() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            putExtra(DocumentsContract.EXTRA_INITIAL_URI, ".")
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.type = "*/*"
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+
+            try {
+                startActivityForResult(Intent.createChooser(intent, "Select a file"), 100)
+            } catch (exception: Exception) {
+                Toast.makeText(requireContext(), "Please install a file manager", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
