@@ -1,3 +1,5 @@
+/*
+
 package com.uniandes.project.abcall.ui
 
 import android.app.AlertDialog
@@ -23,7 +25,6 @@ import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.repositories.rest.CreateIncidence
-import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
 import okhttp3.MultipartBody
 import java.io.File
 
@@ -149,7 +150,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         }
 
         setupTextWatchers()
-        */
+
 
     }
 
@@ -230,3 +231,4 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         ilDetail.error = null
     }
 }
+*/
