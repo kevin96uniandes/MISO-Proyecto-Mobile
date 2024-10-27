@@ -149,8 +149,8 @@
 
     <style name="Theme.ABCAll.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Custom.Widget.MaterialComponents.Toolbar.Primary">
-        <item name="android:elevation" ns1:ignore="NewApi">@dimen/design_appbar_elevation</item>
+    <style name="CustomToolBar">
+        <item name="android:elevation" tools:ignore="PrivateResource">@dimen/design_appbar_elevation</item>
         <item name="android:background">@color/white</item>
         <item name="titleTextColor">@color/abcall_toolbar_text_color</item>
         <item name="subtitleTextColor">@color/material_on_primary_emphasis_medium</item>

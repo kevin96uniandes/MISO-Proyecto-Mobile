@@ -18,8 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             app:title="Registro de incidencia"
             app:navigationIcon="@drawable/baseline_arrow_back_ios_24"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-
+            style="@style/CustomToolBar"
             />
 
     </com.google.android.material.appbar.AppBarLayout>

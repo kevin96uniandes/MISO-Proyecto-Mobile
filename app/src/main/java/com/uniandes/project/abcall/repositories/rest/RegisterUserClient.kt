@@ -1,10 +1,8 @@
 package com.uniandes.project.abcall.repositories.rest
 
 import android.util.Log
-import com.google.gson.Gson
 import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.RetrofitClient
-import com.uniandes.project.abcall.exceptions.UsernameAlreadyExistsException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +38,6 @@ class RegisterUserClient {
     )
 
     data class RegisterResponse(
-        val code: Int
+        val code: Any?
     )
 }
