@@ -19,7 +19,7 @@ class CreateIncidencesFragment : Fragment() {
     }
 
     companion object {
-        const val TITLE = "Crear incidencias"
+        const val TITLE = "Registro de Incidencia"
         @JvmStatic
         fun newInstance() =
             CreateIncidencesFragment()

@@ -141,7 +141,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
             is DashboardFragment -> title = DashboardFragment.TITLE
             is ReportFragment -> title = ReportFragment.TITLE
             is IncidenceCreateChatbotFragment -> title = IncidenceCreateChatbotFragment.TITLE
-            is CreateIncidencesFragment -> title = IncidenceCreateChatbotFragment.TITLE
+            is CreateIncidencesFragment -> title = CreateIncidencesFragment.TITLE
             else -> title = "ABCAll App"
         }
     }
