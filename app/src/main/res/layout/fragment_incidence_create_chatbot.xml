@@ -28,11 +28,13 @@
             android:hint="Escribe un mensaje"
             android:padding="8dp" />
 
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_send_chatbot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Enviar"
-            android:src="@drawable/ic_send" />
+            style="@style/customPrimaryButton"
+            android:background="@color/abcall_error_color"
+            android:padding="10dp"/>
     </LinearLayout>
 </LinearLayout>

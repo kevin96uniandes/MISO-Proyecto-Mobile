@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +28,6 @@ class IncidenceCreateChatbotFragment : Fragment() {
 
     private var _binding: FragmentIncidenceCreateChatbotBinding? = null
     private val binding get() = _binding!!
-
     private var messageIsSent: Boolean = false
 
     override fun onCreateView(
@@ -41,13 +41,14 @@ class IncidenceCreateChatbotFragment : Fragment() {
         recyclerView.adapter = messageAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val sendButton: ImageButton = binding.btnSendChatbot
+        val sendButton: Button = binding.btnSendChatbot
         val messageInput: EditText = binding.etMessageChatbot
 
         sendButton.setOnClickListener {
             val messageText = messageInput.text.toString().trim()
             if (messageText.isNotEmpty()) {
-                addMessage(messageText, isSent = false)  // o isSent = false si es un mensaje recibido
+                messageIsSent = !messageIsSent
+                addMessage(messageText, isSent = messageIsSent)  // o isSent = false si es un mensaje recibido
                 messageInput.text.clear()
             }
         }
