@@ -35,7 +35,7 @@
         android:textSize="14sp"
         android:textColor="@color/abcall_request_type"
         android:fontFamily="sans-serif"
-        android:drawableLeft="@drawable/estado_abierto"
+        android:drawableLeft="@drawable/estado_escalado"
         android:drawablePadding="8dp" />
 
     <TextView

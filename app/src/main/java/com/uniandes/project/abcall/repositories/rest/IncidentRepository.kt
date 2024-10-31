@@ -1,0 +1,34 @@
+package com.uniandes.project.abcall.repositories.rest
+
+import android.util.Log
+import com.google.gson.Gson
+import com.uniandes.project.abcall.config.ApiResult
+import com.uniandes.project.abcall.config.RetrofitClient
+import com.uniandes.project.abcall.models.Incident
+import com.uniandes.project.abcall.repositories.rest.RegisterUserClient.RegisterResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+class IncidentRepository {
+    fun getIncidentsByPerson(id: Int, callback: (ApiResult<List<Incident>>) -> Unit) {
+        RetrofitClient.apiService.getIncidentsByPerson(id = id).enqueue(object :
+            Callback<List<Incident>> {
+            override fun onResponse(call: Call<List<Incident>>, response: Response<List<Incident>>) {
+                if (response.isSuccessful) {
+                    val json = Gson().toJson(response.body())
+                    Log.d("IncidentResult", "Resultado: ${json}")
+                    callback(ApiResult.Success(response.body()!!))
+                } else {
+                    val errorMessage = response.errorBody()?.string()
+                    callback(ApiResult.Error(response.code(), errorMessage))
+                }
+            }
+            override fun onFailure(call: Call<List<Incident>>, t: Throwable) {
+                Log.e("MainActivity", "Failure: ${t.message}")
+                callback(ApiResult.NetworkError)
+            }
+        })
+    }
+}
+
