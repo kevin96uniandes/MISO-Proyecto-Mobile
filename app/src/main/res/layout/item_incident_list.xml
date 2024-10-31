@@ -34,9 +34,7 @@
         android:text="Tipo"
         android:textSize="14sp"
         android:textColor="@color/abcall_request_type"
-        android:fontFamily="sans-serif"
-        android:drawableLeft="@drawable/estado_escalado"
-        android:drawablePadding="8dp" />
+        android:fontFamily="sans-serif" />
 
     <TextView
         android:id="@+id/estadoTextView"
@@ -45,7 +43,9 @@
         android:text="Estado"
         android:textSize="14sp"
         android:textColor="@color/abcall_request_type"
-        android:fontFamily="sans-serif" />
+        android:fontFamily="sans-serif"
+        android:drawableLeft="@drawable/estado_escalado"
+        android:drawablePadding="8dp" />
 
     <Button
         android:layout_width="wrap_content"
