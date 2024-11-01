@@ -42,6 +42,7 @@ class IncidencesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentIncidencesBinding.inflate(inflater, container, false)
+        incidentList.clear()
 
         viewModel = IncidentsListViewModel(incidentsList)
         viewModel.getIncidentsByPerson(3)
@@ -60,16 +61,11 @@ class IncidencesFragment : Fragment() {
                 is ApiResult.Success -> {
                     result.data.map {
                         incidentList.add(it)
-
                     }
                     incidentAdapter.notifyItemInserted(incidentList.size)
                 }
-                is ApiResult.Error -> {
-                    // Maneja el error, por ejemplo mostrando un mensaje
-                }
-                is ApiResult.NetworkError -> {
-                    // Maneja el error de red
-                }
+                is ApiResult.Error -> { }
+                is ApiResult.NetworkError -> { }
             }
         }
 
