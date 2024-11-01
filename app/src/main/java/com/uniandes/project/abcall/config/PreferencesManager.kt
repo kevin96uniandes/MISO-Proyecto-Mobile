@@ -10,6 +10,7 @@ class PreferencesManager(context: Context) {
 
     companion object {
         const val AUTH_KEY = "authKey"
+        const val TOKEN = "token"
         private val gson = Gson()
     }
 
@@ -31,5 +32,21 @@ class PreferencesManager(context: Context) {
         val editor = sharedPreferences.edit()
         editor.remove(AUTH_KEY) // Elimina el token
         editor.apply() // Aplica los cambios
+    }
+
+    fun saveToken(token: String){
+        val editor = sharedPreferences.edit()
+        editor.putString(TOKEN, token)
+        editor.apply()
+    }
+
+    fun getToken() : String? {
+        return sharedPreferences.getString(TOKEN, null)
+    }
+
+    fun deleteToken() {
+        val editor = sharedPreferences.edit()
+        editor.remove(TOKEN) // Elimina el token
+        editor.apply()
     }
 }
