@@ -16,10 +16,12 @@ class Incident (
     val usuarioCreadorId: Int,
     val usuarioAsignadoId: Int,
     val personaId: Int,
-    val estadoId: Int,
+    @SerializedName ("estado_id")val estadoId: Int,
     @SerializedName ("tipo") val tipoId: Int,
+    @SerializedName ("estado_nombre") val estadoNombre: String,
     val person: Person? = null,
     val usuarioCreador: User? = null,
-    val usuarioAsignado: User? = null,
-    @SerializedName ("estado_nombre") val estadoNombre: String
-)
+    val usuarioAsignado: User? = null
+){
+    constructor() : this(0, "", "", "", "", "", 0, "", 0, 0, 0, 0, 0, "")
+}

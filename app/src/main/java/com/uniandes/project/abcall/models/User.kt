@@ -13,4 +13,6 @@ data class User(
     val fechaActualizacion: Date,
     val esActivo: Boolean,
     val persona: Person? = null
-)
+){
+    constructor() : this(0, 0, 0, 0, "", "", Date(), Date(), true)
+}

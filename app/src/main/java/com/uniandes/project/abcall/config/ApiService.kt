@@ -20,4 +20,7 @@ interface ApiService {
 
     @GET("incident/person/{id}")
     fun getIncidentsByPerson(@Path("id") id: Int): Call<List<Incident>>
+
+    @GET("incident/get/{id}")
+    fun findIncidentById(@Path("id") id: Int): Call<Incident>
 }

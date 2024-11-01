@@ -21,6 +21,7 @@
             android:layout_marginTop="16dp" />
 
         <TextView
+            android:id="@+id/asuntoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cerrar plan" />
@@ -34,6 +35,7 @@
             android:layout_marginTop="8dp" />
 
         <TextView
+            android:id="@+id/tipoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PQR" />
@@ -53,12 +55,14 @@
             android:gravity="center_vertical">
 
             <View
+                android:id="@+id/estadoView"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:background="@drawable/estado_abierto"
                 android:layout_marginEnd="8dp" />
 
             <TextView
+                android:id="@+id/estadoTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Abierta" />

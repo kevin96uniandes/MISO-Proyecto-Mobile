@@ -12,4 +12,6 @@ data class Person(
     val correoElectronico: String? = null,
     val fechaCreacion: Date,
     val fechaActualizacion: Date
-)
+){
+    constructor() : this(0, "", "", "", "", "", "", Date(), Date())
+}

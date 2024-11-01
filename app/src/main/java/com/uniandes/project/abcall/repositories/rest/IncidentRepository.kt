@@ -30,5 +30,24 @@ class IncidentRepository {
             }
         })
     }
-}
 
+    fun findIncidentById(id: Int, callback: (ApiResult<Incident>) -> Unit) {
+        RetrofitClient.apiService.findIncidentById(id = id).enqueue(object :
+            Callback<Incident> {
+            override fun onResponse(call: Call<Incident>, response: Response<Incident>) {
+                if (response.isSuccessful) {
+                    val json = Gson().toJson(response.body())
+                    Log.d("IncidentResult", "Resultado: ${json}")
+                    callback(ApiResult.Success(response.body()!!))
+                } else {
+                    val errorMessage = response.errorBody()?.string()
+                    callback(ApiResult.Error(response.code(), errorMessage))
+                }
+            }
+            override fun onFailure(call: Call<Incident>, t: Throwable) {
+                Log.e("MainActivity", "Failure: ${t.message}")
+                callback(ApiResult.NetworkError)
+            }
+        })
+    }
+}
