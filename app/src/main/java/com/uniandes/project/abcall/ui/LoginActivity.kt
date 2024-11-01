@@ -79,6 +79,7 @@ class LoginActivity : CrossIntentActivity() {
             when (result) {
                 is ApiResult.Success -> {
                     val token = result.data.token
+                    preferencesManager.saveToken(token)
                     RetrofitClient.updateAuthToken(token)
                     jwtManager = JwtManager()
                     val claims = jwtManager.decodeJWT(token)
