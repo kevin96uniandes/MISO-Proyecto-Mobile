@@ -15,6 +15,7 @@ import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.JwtManager
 import com.uniandes.project.abcall.config.PreferencesManager
+import com.uniandes.project.abcall.config.RetrofitClient
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
 import com.uniandes.project.abcall.enums.UserType
 import com.uniandes.project.abcall.models.Principal
@@ -33,7 +34,7 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var btnRegister: Button
 
     private lateinit var binding: ActivityLoginBinding
-    lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var jwtManager: JwtManager
@@ -67,8 +68,6 @@ class LoginActivity : CrossIntentActivity() {
             startActivity(intent)
         }
 
-        //logout()
-
         if (isLoggedIn) {
             startActivity(
                 Intent(this, DashboardActivity::class.java)
@@ -79,8 +78,10 @@ class LoginActivity : CrossIntentActivity() {
         viewModel.result.observe(this) { result ->
             when (result) {
                 is ApiResult.Success -> {
+                    val token = result.data.token
+                    RetrofitClient.updateAuthToken(token)
                     jwtManager = JwtManager()
-                    val claims = jwtManager.decodeJWT(result.data.token)
+                    val claims = jwtManager.decodeJWT(token)
                     val principal = Principal(
                         id = claims["id"] as Int,
                         idCompany = claims["id_company"] as Int?,

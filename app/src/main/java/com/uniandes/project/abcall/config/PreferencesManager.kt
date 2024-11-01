@@ -21,9 +21,8 @@ class PreferencesManager(context: Context) {
         editor.apply() // Aplica los cambios
     }
 
-    // Método para recuperar el objeto Auth desde SharedPreferences
-    fun getAuth(): Principal? {
-        val authJson = sharedPreferences.getString(AUTH_KEY, null) ?: return null
+    fun getAuth(): Principal {
+        val authJson = sharedPreferences.getString(AUTH_KEY, null)
         return gson.fromJson(authJson, Principal::class.java)
     }
 

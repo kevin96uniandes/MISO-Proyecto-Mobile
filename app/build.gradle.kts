@@ -76,7 +76,7 @@ dependencies {
     implementation ("com.airbnb.android:lottie:6.0.0")
     implementation (libs.github.glide)
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.0")
-    implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("io.jsonwebtoken:jjwt:0.12.6")
     implementation ("com.github.clans:fab:1.6.4")
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
