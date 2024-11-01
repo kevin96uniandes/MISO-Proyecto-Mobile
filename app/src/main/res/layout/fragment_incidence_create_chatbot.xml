@@ -18,7 +18,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="bottom">
 
         <EditText
             android:id="@+id/et_message_chatbot"
@@ -28,13 +29,26 @@
             android:hint="Escribe un mensaje"
             android:padding="8dp" />
 
-        <com.google.android.material.button.MaterialButton
+        <ImageButton
+            android:id="@+id/btn_attach_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_attach_file"
+            android:background="@color/abcall_second_color"
+            android:contentDescription="Adjuntar archivo"
+            android:padding="10dp"/>
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"/>
+
+        <ImageButton
             android:id="@+id/btn_send_chatbot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="Enviar"
-            style="@style/customPrimaryButton"
-            android:background="@color/abcall_error_color"
+            android:src="@drawable/ic_send"
+            android:background="@color/abcall_primary_color"
             android:padding="10dp"/>
     </LinearLayout>
 </LinearLayout>

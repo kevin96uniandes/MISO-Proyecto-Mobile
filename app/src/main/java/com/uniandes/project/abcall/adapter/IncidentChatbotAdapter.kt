@@ -1,12 +1,12 @@
 package com.uniandes.project.abcall.adapter
 
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.uniandes.project.abcall.R
+import com.uniandes.project.abcall.enums.MessageChatbotSentBy
 import com.uniandes.project.abcall.models.ChatbotMessage
 
 class IncidentChatbotAdapter (private val messages: List<ChatbotMessage>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -17,7 +17,7 @@ class IncidentChatbotAdapter (private val messages: List<ChatbotMessage>) : Recy
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (messages[position].isSent) {
+        return if (messages[position].sentBy == MessageChatbotSentBy.USER) {
             VIEW_TYPE_SENT
         } else {
             VIEW_TYPE_RECEIVED

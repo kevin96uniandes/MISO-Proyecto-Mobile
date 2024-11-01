@@ -1,7 +1,6 @@
 package com.uniandes.project.abcall.config
 
 import com.uniandes.project.abcall.repositories.rest.AuthClient
-import com.uniandes.project.abcall.repositories.rest.IncidenceClient
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -28,6 +27,6 @@ interface ApiService {
         @Part("incidentChannel") incidentChannel: RequestBody,
         @Part("incidentSubject") incidentSubject: RequestBody,
         @Part("incidentDetail") incidentDetail: RequestBody,
-        @Part files: List<MultipartBody.Part>
+        @Part files: List<MultipartBody.Part?>
     ): Call<Unit>
 }
