@@ -75,9 +75,9 @@ class DetailIncidentFragment : Fragment() {
         detalleTextView = binding.detalleTextView
 
         val recyclerView: RecyclerView = binding.procesoRecyclerView
-        historyAdapter = HistoryListAdapter(historyList)
+        historyAdapter = HistoryListAdapter(requireContext(), historyList)
         recyclerView.adapter = historyAdapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.incidentDetail.observe(viewLifecycleOwner){ result ->
             when (result) {
