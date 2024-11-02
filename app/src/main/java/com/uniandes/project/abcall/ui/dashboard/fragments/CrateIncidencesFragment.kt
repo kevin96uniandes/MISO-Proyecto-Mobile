@@ -9,12 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.IncidenceType
+import com.uniandes.project.abcall.R
+import com.uniandes.project.abcall.adapter.SelectedFilesAdapter
 import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.FragmentCreateIncidencesBinding
 import com.uniandes.project.abcall.models.Incidence
@@ -41,8 +46,6 @@ class CrateIncidencesFragment : Fragment() {
 
         preferencesManager = PreferencesManager(binding.root.context)
         viewModel = CreateIncidenceViewModel()
-
-
 
         var idIncidenceType = -1;
         val etIncidenceType: TextInputEditText = binding.etIncidenceType
@@ -83,7 +86,7 @@ class CrateIncidencesFragment : Fragment() {
         val btnLoadFiles: Button = binding.btnLoadFiles
 
         btnLoadFiles.setOnClickListener {
-            //
+            showFileSelectionDialog()
         }
 
         val btnRegister: Button = binding.btnSend
@@ -99,6 +102,37 @@ class CrateIncidencesFragment : Fragment() {
         return root
     }
 
+    private fun showFileSelectionDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_file_selection, null)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        val recyclerSelectedFiles = dialogView.findViewById<RecyclerView>(R.id.recyclerSelectedFiles)
+        val adapter = SelectedFilesAdapter(selectedFiles.toMutableList()) { uri -> removeFile(uri) }
+        recyclerSelectedFiles.adapter = adapter
+        recyclerSelectedFiles.layoutManager = LinearLayoutManager(context)
+
+        val attachButton = dialogView.findViewById<ImageButton>(R.id.iv_dialog_attach_file)
+
+        attachButton.setOnClickListener {
+            openFileSelector()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun removeFile(file: File) {
+        selectedFiles.remove(file)
+        Toast.makeText(context, "Archivo eliminado", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun openFileSelector() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.type = "*/*"
+        startActivityForResult(intent, 200)
+    }
 
     fun responseStepsToIncidence(subject: String, detail: String, type: Int) : Incidence {
         return Incidence(
