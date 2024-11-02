@@ -3,6 +3,7 @@ package com.uniandes.project.abcall.config
 import com.uniandes.project.abcall.models.History
 import com.uniandes.project.abcall.models.Incident
 import com.uniandes.project.abcall.repositories.rest.AuthClient
+import com.uniandes.project.abcall.repositories.rest.IncidenceClient
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -41,5 +42,5 @@ interface ApiService {
         @Part("incidentSubject") incidentSubject: RequestBody,
         @Part("incidentDetail") incidentDetail: RequestBody,
         @Part files: List<MultipartBody.Part?>
-    ): Call<Unit>
+    ): Call<IncidenceClient.IncidenceResponse>
 }

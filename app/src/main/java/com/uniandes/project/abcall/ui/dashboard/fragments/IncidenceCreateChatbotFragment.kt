@@ -2,12 +2,15 @@ package com.uniandes.project.abcall.ui.dashboard.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.database.Cursor
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.text.Spannable
 import android.text.SpannableString
@@ -26,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.adapter.IncidentChatbotAdapter
 import com.uniandes.project.abcall.adapter.SelectedFilesAdapter
+import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.JwtManager
 import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.FragmentIncidenceCreateChatbotBinding
@@ -35,8 +39,11 @@ import com.uniandes.project.abcall.enums.Technology
 import com.uniandes.project.abcall.models.ChatbotMessage
 import com.uniandes.project.abcall.models.Incidence
 import com.uniandes.project.abcall.repositories.rest.IncidenceClient
+import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
+import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -49,7 +56,6 @@ class IncidenceCreateChatbotFragment : Fragment() {
         SpannableString("Asunto"),
         SpannableString("Detalle"),
         SpannableString("1. Enviar\n2. Ver resumen de la incidencia\n3. Salir"),
-        SpannableString("Gracias por preferirnos"),
     )
 
     private var canAddResponseStep: Boolean = true
@@ -72,7 +78,9 @@ class IncidenceCreateChatbotFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
 
     private val MAX_FILES = 3
-    private val selectedFiles = mutableListOf<Uri>()
+    private val selectedFiles = mutableListOf<File>()
+
+    private lateinit var sendingDialog: CustomDialogFragment
 
     private var fragmentChangeListener: FragmentChangeListener? = null
 
@@ -89,18 +97,49 @@ class IncidenceCreateChatbotFragment : Fragment() {
 
         preferencesManager = PreferencesManager(binding.root.context)
 
-        viewModel = CreateIncidenceViewModel(binding.root.context)
+        viewModel = CreateIncidenceViewModel()
 
         val sendButton: ImageButton = binding.btnSendChatbot
         val messageInput: EditText = binding.etMessageChatbot
 
         val attachButton: ImageButton = binding.btnAttachFile
+
         attachButton.setOnClickListener {
             showFileSelectionDialog()
         }
 
         viewModel.result.observe(viewLifecycleOwner) { result ->
-            Log.d("Result", result.toString())
+            when(result) {
+                is ApiResult.Success -> {
+                    cleanUpTempFile()
+                    sendingDialog.dismiss()
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Incidencia envia satisfactoiamente",
+                        "Su incidencia fué registrada exitosanmente, podrá visualizarla en su listado de incidencias",
+                        R.raw.success
+                    ) {
+                        fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
+                        Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
+                    }
+                    dialog.show(parentFragmentManager, "CustomDialog")
+                }
+                is ApiResult.Error -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Error enviando incidencia",
+                        "Por favor vuelva a intentarlo en unos minutos",
+                        R.raw.error
+                    )
+                    dialog.show(parentFragmentManager, "CustomDialog")
+                }
+                ApiResult.NetworkError -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Registro de usuario",
+                        "No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet.",
+                        R.raw.no_network
+                    )
+                    dialog.show(parentFragmentManager, "CustomDialog")
+                }
+            }
         }
 
         responseSteps = mutableListOf()
@@ -132,11 +171,22 @@ class IncidenceCreateChatbotFragment : Fragment() {
                                 currentTurn = MessageChatbotSentBy.USER
                             } else {
                                 when(messageText.toInt()){
-                                    1 -> viewModel.createIncidence(responseStepsToIncidence())
+                                    1 -> {
+                                        //Copiar: Envio al servidor
+                                        viewModel.createIncidence(responseStepsToIncidence())
+                                        sendingDialog = CustomDialogFragment().newInstance(
+                                            "Enviando incidencia",
+                                            "Espere un momento mientras se envía(n) el(los) adjunto(s)",
+                                            R.raw.sending,
+                                            false
+                                        )
+                                        sendingDialog.show(parentFragmentManager, "CustomDialog")
+                                    }
                                     2 -> {
                                         addMessage(showSummaryAssistedIncidence())
-                                        stepPosition--
+                                        stepPosition = steps.size - 1
                                         addMessageChatbot()
+                                        stepPosition = 5
                                     }
                                     3 -> fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
                                 }
@@ -164,13 +214,21 @@ class IncidenceCreateChatbotFragment : Fragment() {
         }
     }
 
+    //Copiar: Resultado del selector de archivos
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
                 if (selectedFiles.size < MAX_FILES) {
-                    selectedFiles.add(uri)
-                    showFileSelectionDialog()
+                    // Convertir el Uri a un File
+                    val file = uriToFile(uri)
+
+                    if (file != null && file.exists()) {
+                        selectedFiles.add(file)
+                        showFileSelectionDialog()
+                    } else {
+                        Toast.makeText(context, "No se pudo obtener el archivo.", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(context, "Solo puedes agregar hasta $MAX_FILES archivos.", Toast.LENGTH_SHORT).show()
                 }
@@ -178,12 +236,73 @@ class IncidenceCreateChatbotFragment : Fragment() {
         }
     }
 
+    //Copiar: Transformar path uri en File
+    private fun uriToFile(uri: Uri): File? {
+        return try {
+            // Verifica si el Uri proviene de un contenido
+            if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+                // Crea un archivo temporal en el directorio de caché
+                val tempFile = File.createTempFile("tempFile", null, binding.root.context.cacheDir)
+
+                // Abre el InputStream desde el Uri y copia el contenido al archivo temporal
+                binding.root.context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    inputStream.copyTo(tempFile.outputStream())
+                }
+
+                // Obtiene el nombre original del archivo
+                val fileName = getFileName(uri, binding.root.context.contentResolver) ?: "file"
+
+                // Obtiene la extensión del archivo a partir del MIME type
+                val mimeType = binding.root.context.contentResolver.getType(uri)
+                val extension = when (mimeType) {
+                    "image/jpeg" -> ".jpg"
+                    "image/png" -> ".png"
+                    "application/pdf" -> ".pdf"
+                    // Agrega más tipos según tus necesidades
+                    else -> ""
+                }
+
+                // Renombra el archivo temporal con el nombre original y la extensión correcta
+                val renamedFile = File(tempFile.parent, "$fileName$extension")
+                if (tempFile.renameTo(renamedFile)) {
+                    renamedFile // Retorna el archivo renombrado
+                } else {
+                    Log.e("FileConversion", "Error renaming temporary file.")
+                    tempFile // Retorna el archivo temporal si falla el renombrado
+                }
+            } else {
+                // Si no es un contenido, intenta tratarlo como un Uri de archivo
+                File(uri.path!!)
+            }
+        } catch (e: Exception) {
+            Log.e("FileConversion", "Error converting Uri to File: ${e.message}")
+            null
+        }
+    }
+
+    //Copiar: Obrener nombre del archivo
+    private fun getFileName(uri: Uri, contentResolver: ContentResolver): String? {
+        var name: String? = null
+        val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val nameIndex = it.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
+                if (nameIndex != -1) {
+                    name = it.getString(nameIndex)
+                }
+            }
+        }
+        return name
+    }
+
+    //Copiar: Abrir selector de archivos
     private fun openFileSelector() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.type = "*/*"
         startActivityForResult(intent, FILE_REQUEST_CODE)
     }
 
+    //Copiar: Ver el dialogo con los archivos adjuntos
     private fun showFileSelectionDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_file_selection, null)
         val dialog = AlertDialog.Builder(requireContext())
@@ -205,9 +324,24 @@ class IncidenceCreateChatbotFragment : Fragment() {
         dialog.show()
     }
 
-    private fun removeFile(uri: Uri) {
-        selectedFiles.remove(uri)
+    //Copiar: Quitar los archivos de la lista cuando se han seleccionado
+    private fun removeFile(file: File) {
+        selectedFiles.remove(file)
         Toast.makeText(context, "Archivo eliminado", Toast.LENGTH_SHORT).show()
+    }
+
+    //Copiar: Limpiar los archivos temporales luego de haberlo enviado al servidor
+    fun cleanUpTempFile() {
+        selectedFiles.map {
+            if (it.exists()) {
+                val deleted = it.delete()
+                if (deleted) {
+                    Log.d("FileCleanup", "Temporary file deleted: ${it.name}")
+                } else {
+                    Log.e("FileCleanup", "Failed to delete temporary file: ${it.name}")
+                }
+            }
+        }
     }
 
     private fun addMessageChatbot(){
@@ -310,6 +444,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
         }
     }
 
+    //Copiar: Función que contruye el objeto para el viewmodel
     fun responseStepsToIncidence() : Incidence {
         return Incidence(
             type = IncidenceType.entries[responseSteps[0].toInt() - 1].incidence,
@@ -323,7 +458,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
     fun summaryMessafeFiles() : String{
         var message = ""
         selectedFiles.map {
-            message += "${it.lastPathSegment}\n"
+            message += "${it.name}\n"
         }
         return message
     }
