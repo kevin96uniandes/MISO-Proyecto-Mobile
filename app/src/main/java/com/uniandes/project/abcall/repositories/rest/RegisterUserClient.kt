@@ -10,7 +10,9 @@ import retrofit2.Response
 class RegisterUserClient {
 
     fun registerUser(body: UserRegisterRequestBody, callback: (ApiResult<RegisterResponse>) -> Unit) {
-        RetrofitClient.apiService.register(userRegisterRequestBody = body).enqueue(object : Callback<RegisterResponse> {
+        RetrofitClient.apiService.register(
+            userRegisterRequestBody = body
+        ).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
                     callback(ApiResult.Success(response.body()!!))

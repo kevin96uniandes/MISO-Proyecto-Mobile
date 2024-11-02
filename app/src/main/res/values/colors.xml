@@ -159,4 +159,14 @@
     <color name="abcall_third_one">#82A5BD</color>
     <color name="abcall_toolbar_text_color">#126173</color>
     <color name="abcall_error_color">#FF0000</color>
+    <color name="abcall_date_incident_list">#CCCCCC</color>
+    <color name="abcall_request_type">#333333</color>
+    <color name="abcall_open_state">#E8DE00</color>
+    <color name="abcall_status_closed_successful">#B00000</color>
+    <color name="abcall_dismissed_status">#757575</color>
+    <color name="abcall_escalation_state">#1976D2</color>
+    <color name="abcall_status_closed_unsatisfactory">#D32F2F</color>
+    <color name="abcall_reopened_status">#FFA000</color>
+    <color name="abcall_file">#0000FF</color>
+
 </resources>

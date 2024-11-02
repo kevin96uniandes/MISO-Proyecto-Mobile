@@ -1,7 +1,10 @@
 package com.uniandes.project.abcall.models
 
+import android.text.SpannableString
+import com.uniandes.project.abcall.enums.MessageChatbotSentBy
+
 data class ChatbotMessage(
-    val text: String,
+    val text: SpannableString,
     val time: String,
-    val isSent: Boolean
+    val sentBy: MessageChatbotSentBy
 )
