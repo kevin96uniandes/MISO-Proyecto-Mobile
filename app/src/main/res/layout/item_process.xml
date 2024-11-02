@@ -10,6 +10,7 @@
 
 
     <TextView
+        android:id="@+id/fechaCreacionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2024-05-23 08:00:00"

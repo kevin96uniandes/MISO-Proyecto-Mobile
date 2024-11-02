@@ -8,20 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.uniandes.project.abcall.R
-import com.uniandes.project.abcall.adapter.IncidentDetailAdapter
+import com.uniandes.project.abcall.adapter.HistoryListAdapter
+import com.uniandes.project.abcall.adapter.IncidentsListAdapter
 import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.databinding.FragmentDetailIncidentBinding
+import com.uniandes.project.abcall.models.History
 import com.uniandes.project.abcall.models.Incident
 import com.uniandes.project.abcall.repositories.rest.IncidentRepository
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
+import com.uniandes.project.abcall.viewmodels.HistoryListViewModel
 import com.uniandes.project.abcall.viewmodels.IncidentDetailViewModel
+import com.uniandes.project.abcall.viewmodels.IncidentsListViewModel
 
 class DetailIncidentFragment : Fragment() {
 
     private var _binding: FragmentDetailIncidentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var incidentDetailAdapter: IncidentDetailAdapter
     private lateinit var viewModel: IncidentDetailViewModel
     private val incidentDetail = IncidentRepository()
     private var incidente: Incident = Incident()
@@ -29,6 +34,11 @@ class DetailIncidentFragment : Fragment() {
     private lateinit var tipoTextView: TextView
     private lateinit var estadoTextView: TextView
     private lateinit var estadoView: View
+
+    private lateinit var viewModelHistory: HistoryListViewModel
+    private val historiesList = IncidentRepository()
+    private lateinit var historyAdapter: HistoryListAdapter
+    private val historyList = mutableListOf<History>()
 
     private var fragmentChangeListener: FragmentChangeListener? = null
 
@@ -49,15 +59,23 @@ class DetailIncidentFragment : Fragment() {
     ): View {
         _binding = FragmentDetailIncidentBinding.inflate(inflater, container, false)
         val incedentId = arguments?.getInt("idIncident", 1) ?: 1
-        Log.d("Boton", "ID: ${incedentId}")
+        historyList.clear()
 
         viewModel = IncidentDetailViewModel(incidentDetail)
         viewModel.findIncidentById(incedentId)
+
+        viewModelHistory = HistoryListViewModel(historiesList)
+        viewModelHistory.findHistoryByIncident(incedentId)
 
         asuntoTextView = binding.asuntoTextView
         tipoTextView = binding.tipoTextView
         estadoTextView = binding.estadoTextView
         estadoView = binding.estadoView
+
+        val recyclerView: RecyclerView = binding.procesoRecyclerView
+        historyAdapter = HistoryListAdapter(historyList)
+        recyclerView.adapter = historyAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.incidentDetail.observe(viewLifecycleOwner){ result ->
             when (result) {
@@ -68,6 +86,19 @@ class DetailIncidentFragment : Fragment() {
                     tipoTextView.text = getTypeName(incidente.tipoId)
                     estadoTextView.text = getStateName(incidente.estadoId)
                     setEstadoBackground(incidente.estadoId)
+                }
+                is ApiResult.Error -> { }
+                is ApiResult.NetworkError -> { }
+            }
+        }
+
+        viewModelHistory.historias.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    result.data.map {
+                        historyList.add(it)
+                    }
+                    historyAdapter.notifyItemInserted(historyList.size)
                 }
                 is ApiResult.Error -> { }
                 is ApiResult.NetworkError -> { }

@@ -1,5 +1,6 @@
 package com.uniandes.project.abcall.config
 
+import com.uniandes.project.abcall.models.History
 import com.uniandes.project.abcall.models.Incident
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
@@ -23,4 +24,7 @@ interface ApiService {
 
     @GET("incident/get/{id}")
     fun findIncidentById(@Path("id") id: Int): Call<Incident>
+
+    @GET("incident/history/{id}")
+    fun findHistoryByIncident(@Path("id") id: Int): Call<List<History>>
 }

@@ -4,8 +4,8 @@ import android.util.Log
 import com.google.gson.Gson
 import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.RetrofitClient
+import com.uniandes.project.abcall.models.History
 import com.uniandes.project.abcall.models.Incident
-import com.uniandes.project.abcall.repositories.rest.RegisterUserClient.RegisterResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,6 +45,27 @@ class IncidentRepository {
                 }
             }
             override fun onFailure(call: Call<Incident>, t: Throwable) {
+                Log.e("MainActivity", "Failure: ${t.message}")
+                callback(ApiResult.NetworkError)
+            }
+        })
+    }
+
+    fun findHistoryByIncident(id: Int, callback: (ApiResult<List<History>>) -> Unit) {
+        RetrofitClient.apiService.findHistoryByIncident(id = id).enqueue(object :
+            Callback<List<History>> {
+            override fun onResponse(call: Call<List<History>>, response: Response<List<History>>) {
+                val json = Gson().toJson(response.body())
+                if (response.isSuccessful) {
+                    Log.d("HistoryResult", "Resultado: ${json}")
+                    callback(ApiResult.Success(response.body()!!))
+                } else {
+                    Log.d("HistoryResultError", "Resultado: ${response.errorBody()?.string()}")
+                    val errorMessage = response.errorBody()?.string()
+                    callback(ApiResult.Error(response.code(), errorMessage))
+                }
+            }
+            override fun onFailure(call: Call<List<History>>, t: Throwable) {
                 Log.e("MainActivity", "Failure: ${t.message}")
                 callback(ApiResult.NetworkError)
             }
