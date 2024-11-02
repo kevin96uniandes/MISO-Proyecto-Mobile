@@ -31,28 +31,14 @@ class CrateIncidencesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         // val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
 
         _binding = FragmentCreateIncidencesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*
         var idIncidenceType = -1;
 
-        val ilIncidenceType: TextInputLayout = binding.ilIncidenceType
         val etIncidenceType: TextInputEditText = binding.etIncidenceType
-
-
-        val ilSubject: TextInputLayout = binding.ilSubject
-        val etSubject: TextInputEditText = binding.etSubject
-
-
-        val ilDetail: TextInputLayout = binding.ilDetail
-        val etDetail: TextInputEditText = binding.etDetail
-
-        val btnRegister: Button = binding.btnSend
-        val btnCancel: Button = binding.btnCancel
 
         etIncidenceType.setOnClickListener {
             val items = IncidenceType.entries.map { "${it.id} - ${it.type}" }.toTypedArray()
@@ -74,6 +60,21 @@ class CrateIncidencesFragment : Fragment() {
 
             builder.show()
         }
+
+        /*
+        val ilIncidenceType: TextInputLayout = binding.ilIncidenceType
+
+        val ilSubject: TextInputLayout = binding.ilSubject
+        val etSubject: TextInputEditText = binding.etSubject
+
+
+        val ilDetail: TextInputLayout = binding.ilDetail
+        val etDetail: TextInputEditText = binding.etDetail
+
+        val btnRegister: Button = binding.btnSend
+        val btnCancel: Button = binding.btnCancel
+
+
 
 
         */
