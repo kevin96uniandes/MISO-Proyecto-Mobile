@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.PreferencesManager
+import com.uniandes.project.abcall.config.RetrofitClient
 import com.uniandes.project.abcall.databinding.ActivityDashboardBinding
 import com.uniandes.project.abcall.databinding.FragmentHomeBinding
 import com.uniandes.project.abcall.enums.UserType
@@ -43,10 +44,15 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
 
         preferencesManager = PreferencesManager(binding.root.context)
         sharedPreferences = preferencesManager.sharedPreferences
+        val token = preferencesManager.getToken()
+        if (token == null){
+            logout()
+        }
+        RetrofitClient.updateAuthToken(token!!)
 
         val principal = preferencesManager.getAuth()
 
-        principal?.let {
+        principal.let {
             if (principal.userType == UserType.USER) {
                 changeFragment(IncidencesFragment.newInstance())
             } else{
@@ -88,8 +94,6 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
 
                 }
             })
-        }?: kotlin.run {
-            logout()
         }
     }
 
@@ -148,6 +152,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
 
     fun logout() {
         preferencesManager.deletePrincipal()
+        preferencesManager.deleteToken()
         with(sharedPreferences.edit()) {
             putBoolean("isLoggedIn", false)
             apply()

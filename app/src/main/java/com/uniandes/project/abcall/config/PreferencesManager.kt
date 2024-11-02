@@ -10,6 +10,7 @@ class PreferencesManager(context: Context) {
 
     companion object {
         const val AUTH_KEY = "authKey"
+        const val TOKEN = "token"
         private val gson = Gson()
     }
 
@@ -21,9 +22,8 @@ class PreferencesManager(context: Context) {
         editor.apply() // Aplica los cambios
     }
 
-    // Método para recuperar el objeto Auth desde SharedPreferences
-    fun getAuth(): Principal? {
-        val authJson = sharedPreferences.getString(AUTH_KEY, null) ?: return null
+    fun getAuth(): Principal {
+        val authJson = sharedPreferences.getString(AUTH_KEY, null)
         return gson.fromJson(authJson, Principal::class.java)
     }
 
@@ -32,5 +32,21 @@ class PreferencesManager(context: Context) {
         val editor = sharedPreferences.edit()
         editor.remove(AUTH_KEY) // Elimina el token
         editor.apply() // Aplica los cambios
+    }
+
+    fun saveToken(token: String){
+        val editor = sharedPreferences.edit()
+        editor.putString(TOKEN, token)
+        editor.apply()
+    }
+
+    fun getToken() : String? {
+        return sharedPreferences.getString(TOKEN, null)
+    }
+
+    fun deleteToken() {
+        val editor = sharedPreferences.edit()
+        editor.remove(TOKEN) // Elimina el token
+        editor.apply()
     }
 }
