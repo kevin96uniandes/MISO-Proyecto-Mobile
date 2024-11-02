@@ -70,11 +70,11 @@ class IncidenceClient {
     }
 
     private fun fileToMultipart(file: File): MultipartBody.Part? {
-        val fileName = "${file.name}.${file.extension}"
-        val mimeType = when {
-            file.extension.equals("jpg", true) -> "image/jpeg"
-            file.extension.equals("png", true) -> "image/png"
-            file.extension.equals("pdf", true) -> "application/pdf"
+        val fileName = file.name
+        val mimeType = when(file.extension.lowercase()) {
+            "jpg" -> "image/jpeg"
+            "png" -> "image/png"
+            "pdf" -> "application/pdf"
             else -> "application/octet-stream"
         }
 
