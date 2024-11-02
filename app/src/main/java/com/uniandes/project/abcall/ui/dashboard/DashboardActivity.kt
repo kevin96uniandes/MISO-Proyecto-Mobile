@@ -20,6 +20,7 @@ import com.uniandes.project.abcall.enums.UserType
 import com.uniandes.project.abcall.ui.CrossIntentActivity
 import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.ui.dashboard.fragments.DashboardFragment
+import com.uniandes.project.abcall.ui.dashboard.fragments.DetailIncidentFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidenceCreateChatbotFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.MenuFragment
@@ -144,6 +145,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
             is DashboardFragment -> title = DashboardFragment.TITLE
             is ReportFragment -> title = ReportFragment.TITLE
             is IncidenceCreateChatbotFragment -> title = IncidenceCreateChatbotFragment.TITLE
+            is DetailIncidentFragment -> title = DetailIncidentFragment.TITLE
             else -> title = "ABCAll App"
         }
     }

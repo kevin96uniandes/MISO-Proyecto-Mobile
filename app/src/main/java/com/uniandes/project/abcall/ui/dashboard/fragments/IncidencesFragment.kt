@@ -2,17 +2,31 @@ package com.uniandes.project.abcall.ui.dashboard.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.uniandes.project.abcall.adapter.IncidentChatbotAdapter
+import com.uniandes.project.abcall.adapter.IncidentsListAdapter
+import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.databinding.FragmentIncidencesBinding
+import com.uniandes.project.abcall.models.ChatbotMessage
+import com.uniandes.project.abcall.models.Incident
+import com.uniandes.project.abcall.repositories.rest.IncidentRepository
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
+import com.uniandes.project.abcall.viewmodels.IncidentsListViewModel
 
 class IncidencesFragment : Fragment() {
 
     private var _binding: FragmentIncidencesBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: IncidentsListViewModel
+    private val incidentsList = IncidentRepository()
+    private lateinit var incidentAdapter: IncidentsListAdapter
+    private val incidentList = mutableListOf<Incident>()
 
     private var fragmentChangeListener: FragmentChangeListener? = null
 
@@ -28,9 +42,31 @@ class IncidencesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentIncidencesBinding.inflate(inflater, container, false)
+        incidentList.clear()
+
+        viewModel = IncidentsListViewModel(incidentsList)
+        viewModel.getIncidentsByPerson(3)
+
+        val recyclerView: RecyclerView = binding.incidentRecyclerView
+        incidentAdapter = IncidentsListAdapter(incidentList)
+        recyclerView.adapter = incidentAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         binding.incidenceMenuItemChatbot.setOnClickListener {
             fragmentChangeListener?.onFragmentChange(IncidenceCreateChatbotFragment.newInstance())
+        }
+
+        viewModel.incidentes.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    result.data.map {
+                        incidentList.add(it)
+                    }
+                    incidentAdapter.notifyItemInserted(incidentList.size)
+                }
+                is ApiResult.Error -> { }
+                is ApiResult.NetworkError -> { }
+            }
         }
 
         return binding.root
