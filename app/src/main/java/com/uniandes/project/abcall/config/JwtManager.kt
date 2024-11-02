@@ -11,7 +11,7 @@ class JwtManager {
         val secretKey: SecretKey = Keys.hmacShaKeyFor("E5P0Xc7J3deF5L5M8D9DjA3gW6F5Kz7g".toByteArray())
 
         return Jwts.parser()
-            .clockSkewSeconds(15)
+            .clockSkewSeconds(9000)
             .verifyWith(secretKey)
             .build()
             .parseSignedClaims(token)
