@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
     //private val BASE_URL = "http://34.111.136.182"
-    private const val BASE_URL = "http://192.168.0.124:5000"
+    private const val BASE_URL = "http://192.168.18.14:5000"
 
     private lateinit var authToken: String
 

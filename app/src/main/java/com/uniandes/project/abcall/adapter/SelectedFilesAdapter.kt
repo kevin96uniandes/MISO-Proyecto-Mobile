@@ -1,6 +1,5 @@
 package com.uniandes.project.abcall.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,18 +7,19 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.uniandes.project.abcall.R
+import java.io.File
 
 class SelectedFilesAdapter(
-    private val files: MutableList<Uri>, // Cambiamos a MutableList para permitir eliminar elementos
-    private val onRemoveFile: (Uri) -> Unit // Callback para eliminar un archivo
+    private val files: MutableList<File>, // Cambiamos a MutableList para permitir eliminar elementos
+    private val onRemoveFile: (File) -> Unit // Callback para eliminar un archivo
 ) : RecyclerView.Adapter<SelectedFilesAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val fileName: TextView = view.findViewById(R.id.is_tv_file_name)
         val deleteButton: ImageButton = view.findViewById(R.id.btn_delete_file)
 
-        fun bind(file: Uri) {
-            fileName.text = file.lastPathSegment // Mostrar el nombre del archivo
+        fun bind(file: File) {
+            fileName.text = file.name // Mostrar el nombre del archivo
 
             deleteButton.setOnClickListener {
                 onRemoveFile(file) // Llama al callback para eliminar el archivo

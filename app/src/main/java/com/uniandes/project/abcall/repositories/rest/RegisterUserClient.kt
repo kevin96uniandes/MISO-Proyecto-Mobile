@@ -1,10 +1,8 @@
 package com.uniandes.project.abcall.repositories.rest
 
 import android.util.Log
-import com.google.gson.Gson
 import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.RetrofitClient
-import com.uniandes.project.abcall.exceptions.UsernameAlreadyExistsException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,7 +10,9 @@ import retrofit2.Response
 class RegisterUserClient {
 
     fun registerUser(body: UserRegisterRequestBody, callback: (ApiResult<RegisterResponse>) -> Unit) {
-        RetrofitClient.apiService.register(userRegisterRequestBody = body).enqueue(object : Callback<RegisterResponse> {
+        RetrofitClient.apiService.register(
+            userRegisterRequestBody = body
+        ).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
                     callback(ApiResult.Success(response.body()!!))
