@@ -15,29 +15,36 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.IncidenceType
+import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.FragmentCreateIncidencesBinding
-import com.uniandes.project.abcall.ui.dashboard.ui.createIncidences.CreateIncidencesViewModel
-
-// import com.uniandes.project.abcall.ui.dashboard.ui.createIncidences.CreateIncidencesViewModel
+import com.uniandes.project.abcall.models.Incidence
+import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
+import java.io.File
 
 class CrateIncidencesFragment : Fragment() {
 
     private var _binding: FragmentCreateIncidencesBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var preferencesManager: PreferencesManager
+    private lateinit var viewModel: CreateIncidenceViewModel
+
+    private val selectedFiles = mutableListOf<File>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // val createIncidencesViewModel = ViewModelProvider(this).get(CreateIncidencesViewModel::class.java)
-
         _binding = FragmentCreateIncidencesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        var idIncidenceType = -1;
+        preferencesManager = PreferencesManager(binding.root.context)
+        viewModel = CreateIncidenceViewModel()
 
+
+
+        var idIncidenceType = -1;
         val etIncidenceType: TextInputEditText = binding.etIncidenceType
 
         etIncidenceType.setOnClickListener {
@@ -67,43 +74,40 @@ class CrateIncidencesFragment : Fragment() {
         val ilSubject: TextInputLayout = binding.ilSubject
         val etSubject: TextInputEditText = binding.etSubject
 
-
         val ilDetail: TextInputLayout = binding.ilDetail
         val etDetail: TextInputEditText = binding.etDetail
 
-        val btnRegister: Button = binding.btnSend
         val btnCancel: Button = binding.btnCancel
-
-
-
-
         */
 
         val btnLoadFiles: Button = binding.btnLoadFiles
 
         btnLoadFiles.setOnClickListener {
-            Log.d("Intent fail", "Antes de Buscar archivos")
-            openDirectory()
-            Log.d("Intent fail", "Después de Buscar archivos")
+            //
+        }
+
+        val btnRegister: Button = binding.btnSend
+
+        btnRegister.setOnClickListener {
+            viewModel.createIncidence(responseStepsToIncidence(
+                subject = "Testing subject",
+                detail = "Testing detail",
+                type = 1
+            ))
         }
 
         return root
     }
 
-    fun openDirectory() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-            putExtra(DocumentsContract.EXTRA_INITIAL_URI, ".")
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            intent.type = "*/*"
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
 
-            try {
-                startActivityForResult(Intent.createChooser(intent, "Select a file"), 100)
-            } catch (exception: Exception) {
-                Toast.makeText(requireContext(), "Please install a file manager", Toast.LENGTH_SHORT).show()
-            }
-        }
+    fun responseStepsToIncidence(subject: String, detail: String, type: Int) : Incidence {
+        return Incidence(
+            type = com.uniandes.project.abcall.enums.IncidenceType.entries[type].incidence,
+            subject = subject,
+            detail = detail,
+            personId = preferencesManager.getAuth().idPerson!!,
+            files = selectedFiles
+        )
     }
 
     override fun onDestroyView() {
