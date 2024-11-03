@@ -3,6 +3,7 @@ package com.uniandes.project.abcall.ui.dashboard.fragments
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
@@ -29,6 +30,8 @@ import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.FragmentCreateIncidencesBinding
 import com.uniandes.project.abcall.models.Incidence
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidenceCreateChatbotFragment.Companion
+import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
+import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
 import java.io.File
 
@@ -42,6 +45,8 @@ class CrateIncidencesFragment : Fragment() {
 
     private val MAX_FILES = 3
     private val selectedFiles = mutableListOf<File>()
+
+    private var fragmentChangeListener: FragmentChangeListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,9 +106,25 @@ class CrateIncidencesFragment : Fragment() {
                 detail = etDetail.text.toString(),
                 type = idIncidenceType
             ))
+            val dialog = CustomDialogFragment().newInstance(
+                "Incidencia envia satisfactoiamente",
+                "Su incidencia fué registrada exitosanmente, podrá visualizarla en su listado de incidencias",
+                R.raw.success
+            ) {
+                fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
+                Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
+            }
+            dialog.show(parentFragmentManager, "CustomDialog")
         }
 
         return root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FragmentChangeListener) {
+            fragmentChangeListener = context
+        }
     }
 
     private fun showFileSelectionDialog() {
@@ -243,7 +264,7 @@ class CrateIncidencesFragment : Fragment() {
         const val TITLE = "CreateIncidences"
 
         @JvmStatic
-        fun newInstance() =
+        fun newInstance () =
             CrateIncidencesFragment()
     }
 
