@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.databinding.FragmentMenuBinding
-import com.uniandes.project.abcall.ui.ClientCreateIncidencesActivity
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
 
 // TODO: Rename parameter arguments, choose names that match

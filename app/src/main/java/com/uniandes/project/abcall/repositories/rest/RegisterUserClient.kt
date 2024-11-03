@@ -1,7 +1,11 @@
 package com.uniandes.project.abcall.repositories.rest
 
 import android.util.Log
+<<<<<<< HEAD
 import com.google.gson.Gson
+=======
+import com.uniandes.project.abcall.config.ApiResult
+>>>>>>> develop
 import com.uniandes.project.abcall.config.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -9,10 +13,10 @@ import retrofit2.Response
 
 class RegisterUserClient {
 
-    fun registerUser(body: UserRegisterRequestBody, callback: (Int?) -> Unit) {
-        val gson = Gson()
-        Log.d("UserRegisterRequest", gson.toJson(body))
-        RetrofitClient.apiService.register(userRegisterRequestBody = body).enqueue(object : Callback<RegisterResponse> {
+    fun registerUser(body: UserRegisterRequestBody, callback: (ApiResult<RegisterResponse>) -> Unit) {
+        RetrofitClient.apiService.register(
+            userRegisterRequestBody = body
+        ).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
                     val code = response.body()!!.code
@@ -42,6 +46,6 @@ class RegisterUserClient {
     )
 
     data class RegisterResponse(
-        val code: Int
+        val code: Any?
     )
 }

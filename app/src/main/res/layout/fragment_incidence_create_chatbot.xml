@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- RecyclerView para mostrar los mensajes -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerChatbotViewMessages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:scrollbars="vertical" />
+
+    <!-- Barra de entrada de texto para enviar mensajes -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+
+        <EditText
+            android:id="@+id/et_message_chatbot"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Escribe un mensaje"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btn_attach_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_attach_file"
+            android:background="@color/abcall_second_color"
+            android:contentDescription="Adjuntar archivo"
+            android:padding="10dp"/>
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"/>
+
+        <ImageButton
+            android:id="@+id/btn_send_chatbot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Enviar"
+            android:src="@drawable/ic_send"
+            android:background="@color/abcall_primary_color"
+            android:padding="10dp"/>
+    </LinearLayout>
+</LinearLayout>

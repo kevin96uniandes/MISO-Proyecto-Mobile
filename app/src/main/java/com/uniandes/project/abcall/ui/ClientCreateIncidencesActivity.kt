@@ -1,3 +1,5 @@
+/*
+
 package com.uniandes.project.abcall.ui
 
 import android.app.AlertDialog
@@ -15,7 +17,12 @@ import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.TokenManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
+import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.repositories.rest.AuthClient
+import com.uniandes.project.abcall.repositories.rest.CreateIncidence
+import okhttp3.MultipartBody
+import java.io.File
+
 
 class ClientCreateIncidencesActivity : CrossIntentActivity() {
 
@@ -45,7 +52,19 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        tokenManager = TokenManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
+
+viewModel = CreateIncidenceViewModel(createIncidenceClient)
+
+        toolBar = findViewById(R.id.topAppBar)
+
+        toolBar.setNavigationOnClickListener { view ->
+            val intent = Intent(this, ClientHomeActivity::class.java)
+            startActivity(intent)
+        }
+
+
 
         etSubject = findViewById(R.id.et_subject)
         etDetail = findViewById(R.id.et_detail)
@@ -110,7 +129,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         }
 
         setupTextWatchers()
-        */
+
 
     }
 
@@ -180,3 +199,4 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         ilDetail.error = null
     }
 }
+*/
