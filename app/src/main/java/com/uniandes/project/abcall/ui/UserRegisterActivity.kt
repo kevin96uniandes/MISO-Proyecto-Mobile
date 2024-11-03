@@ -19,12 +19,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
-import com.uniandes.project.abcall.IdentificationType
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.TokenManager
 
 import com.uniandes.project.abcall.databinding.ActivityUserRegisterBinding
+import com.uniandes.project.abcall.enums.IdentificationType
+import com.uniandes.project.abcall.getCustomSharedPreferences
 
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 import com.uniandes.project.abcall.ui.components.CustomSpinnerAdapter
@@ -79,8 +79,8 @@ class UserRegisterActivity : CrossIntentActivity() {
         binding = ActivityUserRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-
-        tokenManager = TokenManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
 
         viewModel = RegisterUserViewModel(registerClient)
 
@@ -168,21 +168,21 @@ class UserRegisterActivity : CrossIntentActivity() {
 
         })
 
-        spIdentificationType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                // Obtener el tipo de identificación seleccionado
-                val selectedType = IdentificationType.entries[position]
-
-                // Obtener el ID del enum seleccionado
-                idIdentityType = selectedType.getIdType()
-
-                // Aquí puedes hacer lo que necesites con el ID seleccionado
-                Toast.makeText(this@UserRegisterActivity, "ID seleccionado: $idIdentityType", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // No se seleccionó ningún elemento
-            }
+        etIdentificationType.setOnClickListener {
+            val items = IdentificationType.entries.map { "${it.id} - ${it.type}" }.toTypedArray()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Selecciona una opción")
+                .setSingleChoiceItems(items, -1) { dialog, which ->
+                    val selectedItem = items[which]
+                    etIdentificationType.setText(selectedItem)
+                    idIdentityType = selectedItem.split("-")[0].trim().toInt()
+                    clearIdentificationTypeError()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancelar") { dialog, _ ->
+                    dialog.dismiss()
+                }
+            builder.show()
         }
 
         setupTextWatchers()

@@ -18,6 +18,7 @@ annotation = "1.6.0"
 orgJacocoAgent = "0.8.11"
 securityCrypto = "1.1.0-alpha06"
 squareupRetrofit = "2.9.0"
+junitKtx = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +39,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 org-jacoco-agent = { module = "org.jacoco:org.jacoco.agent", version.ref = "orgJacocoAgent" }
 squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "squareupRetrofit" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,6 +1,7 @@
 package com.uniandes.project.abcall.ui.dialogs
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,15 +16,17 @@ class CustomDialogFragment : DialogFragment() {
 
     private lateinit var title: String
     private lateinit var description: String
+    private var isVisibleButton = true
     private var lottieImage: Int = 0
     private var onDismissListener: (() -> Unit)? = null
 
-    fun newInstance(title: String, description: String, lottieImage: Int,  onDismissListener: (() -> Unit)? = null): CustomDialogFragment {
+    fun newInstance(title: String, description: String, lottieImage: Int, isVisibleButton:Boolean  = true, onDismissListener: (() -> Unit)? = null): CustomDialogFragment {
         val dialog = CustomDialogFragment()
         dialog.title = title
         dialog.description = description
         dialog.lottieImage = lottieImage
         dialog.onDismissListener = onDismissListener
+        dialog.isVisibleButton = isVisibleButton
         return dialog
     }
 
@@ -32,8 +35,13 @@ class CustomDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Infla el layout
         return layoutInflater.inflate(R.layout.custom_dialog, container, false)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,6 +51,8 @@ class CustomDialogFragment : DialogFragment() {
         val titleTextView: TextView = view.findViewById(R.id.dialog_title)
         val descriptionTextView: TextView = view.findViewById(R.id.dialog_description)
         val button: Button = view.findViewById(R.id.dialog_button)
+
+        button.visibility = if (isVisibleButton) View.VISIBLE else View.GONE
 
         lottieAnimationView.setAnimation(lottieImage)
         lottieAnimationView.playAnimation()

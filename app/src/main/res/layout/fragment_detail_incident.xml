@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".ui.dashboard.fragments.DetailIncidentFragment"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Asunto"
+            android:textStyle="bold"
+            android:textColor="@color/abcall_second_color"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/asuntoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cerrar plan" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo"
+            android:textStyle="bold"
+            android:textColor="@color/abcall_second_color"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tipoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PQR" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estado"
+            android:textStyle="bold"
+            android:textColor="@color/abcall_second_color"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <View
+                android:id="@+id/estadoView"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/estado_abierto"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/estadoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Abierta" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Detalle"
+            android:textStyle="bold"
+            android:textColor="@color/abcall_second_color"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/detalleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Proceso"
+            android:textStyle="bold"
+            android:textColor="@color/abcall_second_color"
+            android:layout_marginTop="16dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/procesoRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -8,9 +8,20 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.uniandes.project.abcall.R
+import com.uniandes.project.abcall.config.JwtManager
+import com.uniandes.project.abcall.config.PreferencesManager
+import com.uniandes.project.abcall.config.RetrofitClient
 import com.uniandes.project.abcall.databinding.ActivityDashboardBinding
 import com.uniandes.project.abcall.databinding.FragmentHomeBinding
+import com.uniandes.project.abcall.enums.UserType
+import com.uniandes.project.abcall.getCustomSharedPreferences
+import com.uniandes.project.abcall.models.Principal
+import com.uniandes.project.abcall.ui.CrossIntentActivity
+import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.ui.dashboard.fragments.DashboardFragment
+import com.uniandes.project.abcall.ui.dashboard.fragments.DetailIncidentFragment
+import com.uniandes.project.abcall.ui.dashboard.fragments.IncidenceCreateChatbotFragment
+import com.uniandes.project.abcall.ui.dashboard.fragments.CrateIncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.MenuFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.ReportFragment
@@ -20,7 +31,9 @@ import com.uniandes.project.abcall.ui.dashboard.ui.home.HomeFragment
 class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
 
     private lateinit var binding: ActivityDashboardBinding
-
+    private lateinit var preferencesManager: PreferencesManager
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var jwtManager: JwtManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,16 +43,39 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        changeFragment(MenuFragment.newInstance(), MenuFragment.TITLE)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
+        sharedPreferences = sPreferences
 
-        supportFragmentManager.addOnBackStackChangedListener {
-            val fragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
-            if (fragment != null) {
-                updateToolbarTitle(fragment)
-                if (fragment is MenuFragment) {
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                } else {
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if (preferencesManager.getToken() == null) {
+            preferencesManager.saveToken(intent.getStringExtra("token")!!)
+        }
+        val token = preferencesManager.getToken()!!
+        onlyTest(token)
+
+        RetrofitClient.updateAuthToken(token)
+
+        val principal = preferencesManager.getAuth()
+
+        principal.let {
+            if (principal.userType == UserType.USER) {
+                changeFragment(IncidencesFragment.newInstance())
+            } else{
+                changeFragment(MenuFragment.newInstance())
+            }
+
+            supportFragmentManager.addOnBackStackChangedListener {
+                val fragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
+                if (fragment != null) {
+                    updateToolbarTitle(fragment)
+                    if (fragment is MenuFragment) {
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    } else {
+                        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                        if (principal.userType == UserType.USER) {
+                            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                        }
+                    }
                 }
             }
         }
@@ -53,6 +89,20 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
                 } else {
                     supportFragmentManager.popBackStack()
                 }
+            })
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.logout -> {
+                logout()
+                true
             }
         })
     }
@@ -85,11 +135,38 @@ class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
     private fun updateToolbarTitle(fragment: Fragment) {
         Log.d("DashboardActivity", "Current Fragment: ${fragment::class.java.simpleName}")
         when (fragment) {
-            is MenuFragment -> setTitle(MenuFragment.TITLE)
-            is IncidencesFragment -> setTitle(IncidencesFragment.TITLE)
-            is DashboardFragment -> setTitle(DashboardFragment.TITLE)
-            is ReportFragment -> setTitle(ReportFragment.TITLE)
-            else -> setTitle("ABCAll App") // Un título por defecto
+            is MenuFragment -> title = MenuFragment.TITLE
+            is IncidencesFragment -> title = IncidencesFragment.TITLE
+            is DashboardFragment -> title = DashboardFragment.TITLE
+            is ReportFragment -> title = ReportFragment.TITLE
+            is IncidenceCreateChatbotFragment -> title = IncidenceCreateChatbotFragment.TITLE
+            is CrateIncidencesFragment -> title = CrateIncidencesFragment.TITLE
+            is DetailIncidentFragment -> title = DetailIncidentFragment.TITLE
+            else -> title = "ABCAll App"
         }
+    }
+
+    fun logout() {
+        preferencesManager.deletePrincipal()
+        preferencesManager.deleteToken()
+        with(sharedPreferences.edit()) {
+            putBoolean("isLoggedIn", false)
+            apply()
+        }
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+    }
+
+    fun onlyTest(token: String){
+        jwtManager = JwtManager()
+        val claims = jwtManager.decodeJWT(token)
+        val principal = Principal(
+            id = claims["id"] as Int,
+            idCompany = claims["id_company"] as Int?,
+            idPerson = claims["id_person"] as Int?,
+            userType = UserType.fromString(claims["user_type"] as String)
+        )
+
+        preferencesManager.savePrincipal(principal)
     }
 }

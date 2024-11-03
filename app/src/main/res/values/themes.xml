@@ -47,7 +47,6 @@
 
     <style name="customLoadFilesButton" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/abcall_white</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/abcall_primary_color</item>
         <item name="android:gravity">center</item>
     </style>
@@ -70,22 +69,28 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/abcall_white</item>
     </style>
-
-    <style name="CustomSpinnerStyle">
-        <item name="android:dropDownSelector">@drawable/spinner_item_selector</item>
-        <item name="android:textColor">@color/abcall_third_one</item>
-        <!-- Otros atributos de estilo de los elementos del Spinner -->
-    </style>
-
-    <style name="ErrorTextView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/abcall_error_color</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <!-- Agrega otros atributos personalizados aquí -->
-    </style>
     <style name="Theme.ABCAll.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ABCAll.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CustomToolBar">
+        <item name="android:elevation" tools:ignore="PrivateResource">@dimen/design_appbar_elevation</item>
+        <item name="android:background">@color/white</item>
+        <item name="titleTextColor">@color/abcall_toolbar_text_color</item>
+        <item name="subtitleTextColor">@color/material_on_primary_emphasis_medium</item>
+
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Toolbar.Primary</item>
+        <item name="popupTheme">@style/ThemeOverlay.MaterialComponents.Toolbar.Popup.Primary</item>
+    </style>
+
+    <style name="customIncidenceInputTextAppearance">
+        <item name="android:textColor">@color/abcall_primary_color</item>
+    </style>
+
+    <style name="customIncidenceInputText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/abcall_white</item>
+        <item name="textFillColor">@color/abcall_primary_color</item>
+        <item name="android:textColorHint">@color/abcall_primary_color</item>
+    </style>
+
 </resources>

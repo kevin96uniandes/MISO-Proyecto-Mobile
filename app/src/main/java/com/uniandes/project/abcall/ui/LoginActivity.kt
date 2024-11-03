@@ -11,8 +11,14 @@ import androidx.activity.enableEdgeToEdge
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
-import com.uniandes.project.abcall.config.TokenManager
+import com.uniandes.project.abcall.config.ApiResult
+import com.uniandes.project.abcall.config.JwtManager
+import com.uniandes.project.abcall.config.PreferencesManager
+import com.uniandes.project.abcall.config.RetrofitClient
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
+import com.uniandes.project.abcall.enums.UserType
+import com.uniandes.project.abcall.getCustomSharedPreferences
+import com.uniandes.project.abcall.models.Principal
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
@@ -28,7 +34,7 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var btnRegister: Button
 
     private lateinit var binding: ActivityLoginBinding
-    lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
     //private lateinit var tokenManager: TokenManager
 
@@ -50,6 +56,13 @@ class LoginActivity : CrossIntentActivity() {
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
 
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
+
+        sharedPreferences = sPreferences
+
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+
         btnLogin.setOnClickListener { validateForm() }
 
         btnRegister.setOnClickListener {
@@ -57,17 +70,58 @@ class LoginActivity : CrossIntentActivity() {
             startActivity(intent)
         }
 
-        viewModel.token.observe(this) { token ->
-            if (token != null) {
-                nextActivity(DashboardActivity::class.java)
-            } else {
-                val dialog = CustomDialogFragment().newInstance(
-                    "Inicio de sesión",
-                    "Usuario y/o contraseña incorrecta",
-                    R.raw.error
-                )
-                dialog.show(supportFragmentManager, "CustomDialog")
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+        if (isLoggedIn) {
+            startActivity(
+                Intent(this, DashboardActivity::class.java)
+            )
+            finish()
+        }
+
+        viewModel.result.observe(this) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    val token = result.data.token
+                    preferencesManager.saveToken(token)
+                    RetrofitClient.updateAuthToken(token)
+                    jwtManager = JwtManager()
+                    val claims = jwtManager.decodeJWT(token)
+                    val principal = Principal(
+                        id = claims["id"] as Int,
+                        idCompany = claims["id_company"] as Int?,
+                        idPerson = claims["id_person"] as Int?,
+                        userType = UserType.fromString(claims["user_type"] as String)
+                    )
+
+                    preferencesManager.savePrincipal(principal)
+
+                    with(sharedPreferences.edit()) {
+                        putBoolean("isLoggedIn", true)
+                        apply()
+                    }
+                    nextActivity (
+                        DashboardActivity::class.java,
+                        extras = listOf( Pair("token", token))
+                    )
+                    finish()
+                }
+                is ApiResult.Error -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Inicio de sesión",
+                        "Usuario y/o contraseña incorrecta",
+                        R.raw.error
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+                }
+                is ApiResult.NetworkError -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        "Inicio de sesión",
+                        "No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet.",
+                        R.raw.no_network
+                    )
+                    dialog.show(supportFragmentManager, "CustomDialog")
+                    Toast.makeText(this, "Error de red", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
