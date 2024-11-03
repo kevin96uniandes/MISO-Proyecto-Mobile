@@ -61,6 +61,10 @@ class IncidencesFragment : Fragment() {
             fragmentChangeListener?.onFragmentChange(IncidenceCreateChatbotFragment.newInstance())
         }
 
+        binding.incidenceMenuItemManual.setOnClickListener{
+            fragmentChangeListener?.onFragmentChange(CrateIncidencesFragment.newInstance())
+        }
+
         viewModel.incidentes.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ApiResult.Success -> {
@@ -73,7 +77,6 @@ class IncidencesFragment : Fragment() {
                 is ApiResult.NetworkError -> { }
             }
         }
-
         return binding.root
     }
 

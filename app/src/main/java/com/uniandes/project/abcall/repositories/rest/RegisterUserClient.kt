@@ -40,6 +40,6 @@ class RegisterUserClient {
     )
 
     data class RegisterResponse(
-        val code: Int
+        val code: Any?
     )
 }
