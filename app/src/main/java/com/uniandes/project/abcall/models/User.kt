@@ -1,5 +1,6 @@
 package com.uniandes.project.abcall.models
 
+import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class User(
@@ -7,7 +8,7 @@ data class User(
     val idPersona: Int? = null,
     val idEmpresa: Int? = null,
     val idTipoUsuario: Int,
-    val nombreUsuario: String,
+    @SerializedName("nombre_usuario") val nombreUsuario: String,
     val contrasena: String,
     val fechaCreacion: Date,
     val fechaActualizacion: Date,

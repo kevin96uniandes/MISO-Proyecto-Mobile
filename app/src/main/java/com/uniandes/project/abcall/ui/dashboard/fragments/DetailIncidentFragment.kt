@@ -34,6 +34,7 @@ class DetailIncidentFragment : Fragment() {
     private lateinit var tipoTextView: TextView
     private lateinit var estadoTextView: TextView
     private lateinit var estadoView: View
+    private lateinit var detalleTextView: TextView
 
     private lateinit var viewModelHistory: HistoryListViewModel
     private val historiesList = IncidentRepository()
@@ -71,11 +72,12 @@ class DetailIncidentFragment : Fragment() {
         tipoTextView = binding.tipoTextView
         estadoTextView = binding.estadoTextView
         estadoView = binding.estadoView
+        detalleTextView = binding.detalleTextView
 
         val recyclerView: RecyclerView = binding.procesoRecyclerView
-        historyAdapter = HistoryListAdapter(historyList)
+        historyAdapter = HistoryListAdapter(requireContext(), historyList)
         recyclerView.adapter = historyAdapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.incidentDetail.observe(viewLifecycleOwner){ result ->
             when (result) {
@@ -86,6 +88,7 @@ class DetailIncidentFragment : Fragment() {
                     tipoTextView.text = getTypeName(incidente.tipoId)
                     estadoTextView.text = getStateName(incidente.estadoId)
                     setEstadoBackground(incidente.estadoId)
+                    detalleTextView.text = incidente.descripcion
                 }
                 is ApiResult.Error -> { }
                 is ApiResult.NetworkError -> { }

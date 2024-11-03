@@ -11,7 +11,7 @@ data class History(
     val usuarioAsignadoId: Int,
     val usuarioCreadorId: Int,
     val evidence: List<Evidence>? = null,
-    val usuarioCreador: User? = null
+    @SerializedName("usuario_creador") val usuarioCreador: User? = null
 ){
     constructor() : this(0, "", "", 0, "", 0, 0)
 }
