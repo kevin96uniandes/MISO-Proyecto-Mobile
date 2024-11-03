@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_user_register"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
     tools:context=".ui.dashboard.fragments.CrateIncidencesFragment">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -11,8 +14,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="20sp"
-        android:paddingEnd="20sp"
-        android:layout_gravity="center">
+        android:paddingEnd="20sp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/il_incidence_type"
@@ -24,7 +30,9 @@
             android:hint="Seleccione el tipo de incidencia..."
             style="@style/customIncidenceInputText"
             android:clickable="true"
-            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/abcall_primary_color">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_incidence_type"
@@ -47,6 +55,8 @@
             android:hint="@string/asunto"
             style="@style/customIncidenceInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/abcall_primary_color"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -62,22 +72,25 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/il_detail"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="110dp"
             app:endIconMode="clear_text"
             android:layout_marginTop="16dp"
             app:endIconTint="@color/abcall_third_one"
             android:hint="@string/comentarios"
-
             style="@style/customIncidenceInputText"
-            app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
+            app:placeholderTextAppearance="@style/customLoginHintTextAppearance"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/abcall_primary_color"
+            app:strokeColor="@color/abcall_primary_color"
+            app:strokeWidth="1dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_detail"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:maxLines="1"
+                android:layout_height="100dp"
+                android:maxLines="5"
                 android:gravity="top|left"
-                android:inputType="text|textNoSuggestions"
+                android:inputType="textMultiLine|textNoSuggestions"
                 style="@style/customIncidenceInputTextAppearance"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -98,25 +111,26 @@
             />
 
         <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_cancel"
-                style="@style/customClearCancelButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="39dp"
-                android:text="@string/cancelar"
-                app:strokeColor="@color/abcall_primary_color"
-                app:strokeWidth="2dp"
-app:cornerRadius="20sp" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:text="@string/registar"
             style="@style/customPrimaryButton"
             app:cornerRadius="20sp" />
 
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancel"
+                style="@style/customClearCancelButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/cancelar"
+                app:strokeColor="@color/abcall_primary_color"
+                app:strokeWidth="2dp"
+                app:cornerRadius="20sp" />
+
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-</FrameLayout>
+</ScrollView>

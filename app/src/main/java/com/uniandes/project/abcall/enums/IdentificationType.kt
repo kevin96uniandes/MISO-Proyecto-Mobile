@@ -14,18 +14,3 @@ enum class IdentificationType(val id: Int, val type: String) {
         return type
     }
 }
-
-
-enum class IncidenceType(val id: Int, val type: String) {
-    REQUEST(1, "Petición"),
-    COMPLAINT(2, "Queja/Reclamo"),
-    SUGGESTION(3, "Sugerencia");
-
-    fun getIdType(): Int {
-        return id
-    }
-
-    fun getNameType(): String {
-        return type
-    }
-}

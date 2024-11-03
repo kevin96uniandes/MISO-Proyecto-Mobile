@@ -116,8 +116,8 @@ class IncidenceCreateChatbotFragment : Fragment() {
                 is ApiResult.Success -> {
                     cleanUpTempFile()
                     val dialog = CustomDialogFragment().newInstance(
-                        "Incidencia envia satisfactoiamente",
-                        "Su incidencia fué registrada exitosanmente, podrá visualizarla en su listado de incidencias",
+                        "Incidencia enviada satisfactoriamente",
+                        "Su incidencia fué registrada exitosamente, podrá visualizarla en su listado de incidencias",
                         R.raw.success
                     ) {
                         fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
@@ -164,7 +164,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
                     stepPosition++
                     when (stepPosition) {
                         5 -> {
-                            if (!validateDigitTyped(messageText, 1, 2)){
+                            if (!validateDigitTyped(messageText, 1, 3)){
                                 addMessage(SpannableString("Opción desconocida"))
                                 stepPosition--
                                 currentTurn = MessageChatbotSentBy.CHATBOT

@@ -14,6 +14,7 @@ import com.uniandes.project.abcall.adapter.IncidentsListAdapter
 import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.FragmentIncidencesBinding
+import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.models.ChatbotMessage
 import com.uniandes.project.abcall.models.Incident
 import com.uniandes.project.abcall.repositories.rest.IncidentRepository
@@ -46,7 +47,8 @@ class IncidencesFragment : Fragment() {
         _binding = FragmentIncidencesBinding.inflate(inflater, container, false)
         incidentList.clear()
 
-        preferencesManager = PreferencesManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
         val principal = preferencesManager.getAuth()
 
         viewModel = IncidentsListViewModel(incidentsList)
