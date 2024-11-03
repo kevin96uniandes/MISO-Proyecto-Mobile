@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
+import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 
 class ClientCreateIncidencesActivity : CrossIntentActivity() {
@@ -44,7 +45,8 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        preferencesManager = PreferencesManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
 
         etSubject = findViewById(R.id.et_subject)
         etDetail = findViewById(R.id.et_detail)

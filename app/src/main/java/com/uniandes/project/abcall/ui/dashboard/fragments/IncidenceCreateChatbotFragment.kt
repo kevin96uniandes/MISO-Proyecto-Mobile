@@ -36,6 +36,7 @@ import com.uniandes.project.abcall.databinding.FragmentIncidenceCreateChatbotBin
 import com.uniandes.project.abcall.enums.IncidenceType
 import com.uniandes.project.abcall.enums.MessageChatbotSentBy
 import com.uniandes.project.abcall.enums.Technology
+import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.models.ChatbotMessage
 import com.uniandes.project.abcall.models.Incidence
 import com.uniandes.project.abcall.repositories.rest.IncidenceClient
@@ -95,7 +96,8 @@ class IncidenceCreateChatbotFragment : Fragment() {
         recyclerView.adapter = messageAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        preferencesManager = PreferencesManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
 
         viewModel = CreateIncidenceViewModel()
 
@@ -119,7 +121,6 @@ class IncidenceCreateChatbotFragment : Fragment() {
                         R.raw.success
                     ) {
                         fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
-                        Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
                     }
                     dialog.show(parentFragmentManager, "CustomDialog")
                 }

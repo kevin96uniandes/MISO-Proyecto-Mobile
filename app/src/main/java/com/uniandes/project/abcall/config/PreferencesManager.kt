@@ -1,12 +1,12 @@
 package com.uniandes.project.abcall.config
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.uniandes.project.abcall.models.Principal
 
-class PreferencesManager(context: Context) {
+class PreferencesManager(private val sharedPreferences: SharedPreferences) {
 
-    val sharedPreferences = context.getSharedPreferences("ABCAllPreferences", Context.MODE_PRIVATE)
 
     companion object {
         const val AUTH_KEY = "authKey"

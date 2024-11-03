@@ -1,4 +1,4 @@
-package com.uniandes.project.abcall
+package com.uniandes.project.abcall.enums
 
 enum class IdentificationType(val id: Int, val type: String) {
     DNI(1, "Cédula de ciudanía"),

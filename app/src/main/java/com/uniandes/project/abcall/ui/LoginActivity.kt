@@ -18,6 +18,7 @@ import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.config.RetrofitClient
 import com.uniandes.project.abcall.databinding.ActivityLoginBinding
 import com.uniandes.project.abcall.enums.UserType
+import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.models.Principal
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.ui.dashboard.DashboardActivity
@@ -55,9 +56,10 @@ class LoginActivity : CrossIntentActivity() {
         btnLogin = findViewById(R.id.btn_log_in)
         btnRegister = findViewById(R.id.btn_register)
 
-        preferencesManager = PreferencesManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
 
-        sharedPreferences = preferencesManager.sharedPreferences
+        sharedPreferences = sPreferences
 
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
 
@@ -96,7 +98,10 @@ class LoginActivity : CrossIntentActivity() {
                         putBoolean("isLoggedIn", true)
                         apply()
                     }
-                    nextActivity(DashboardActivity::class.java)
+                    nextActivity (
+                        DashboardActivity::class.java,
+                        extras = listOf( Pair("token", token))
+                    )
                     finish()
                 }
                 is ApiResult.Error -> {

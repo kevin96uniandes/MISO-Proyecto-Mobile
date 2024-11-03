@@ -13,12 +13,13 @@ import android.widget.Toast
 // import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.uniandes.project.abcall.IdentificationType
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.PreferencesManager
 
 import com.uniandes.project.abcall.databinding.ActivityUserRegisterBinding
+import com.uniandes.project.abcall.enums.IdentificationType
+import com.uniandes.project.abcall.getCustomSharedPreferences
 
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
@@ -70,8 +71,8 @@ class UserRegisterActivity : CrossIntentActivity() {
         binding = ActivityUserRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-
-        preferencesManager = PreferencesManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
 
         viewModel = RegisterUserViewModel(registerClient)
 
@@ -192,7 +193,7 @@ class UserRegisterActivity : CrossIntentActivity() {
                     clearIdentificationTypeError()
                     dialog.dismiss()
                 }
-                .setNegativeButton("Cancelar") { dialog, which ->
+                .setNegativeButton("Cancelar") { dialog, _ ->
                     dialog.dismiss()
                 }
             builder.show()

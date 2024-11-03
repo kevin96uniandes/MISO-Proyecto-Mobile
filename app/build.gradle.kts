@@ -1,8 +1,10 @@
+
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id ("com.github.ben-manes.versions") version "0.46.0"
 }
 
 android {
@@ -60,7 +62,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -73,28 +74,37 @@ dependencies {
     implementation(libs.squareup.retrofit)
     implementation(libs.converter.gson)
     implementation("androidx.security:security-crypto:1.1.0-alpha03")
-    implementation ("com.airbnb.android:lottie:6.0.0")
-    implementation (libs.github.glide)
+    implementation("com.airbnb.android:lottie:6.0.0")
+    implementation(libs.github.glide)
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.0")
     implementation("io.jsonwebtoken:jjwt:0.12.6")
-    implementation ("com.github.clans:fab:1.6.4")
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
-    androidTestImplementation("io.mockk:mockk-android:1.13.8")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
-
-    testImplementation(libs.junit)
-    testImplementation("io.mockk:mockk:1.13.8")
-    testImplementation ("io.kotest:kotest-runner-junit5:5.5.4")
-    testImplementation ("junit:junit:4.13.2")
-    testImplementation ("io.kotest:kotest-runner-junit5:5.5.4") // Para Kotest con JUnit5
-    testImplementation ("io.kotest:kotest-assertions-core:5.5.4") // Aserciones de Kotest
-    testImplementation ("org.mockito:mockito-core:4.5.1") // Si estás usando Mockito
-
+    implementation("com.github.clans:fab:1.6.4")
+    implementation(libs.androidx.junit.ktx)
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0") {
+        // Excluir las versiones de hamcrest-core aquí
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+        exclude(group = "org.hamcrest", module = "hamcrest")
+    }
+    androidTestImplementation("org.hamcrest:hamcrest-core:1.3") // Cambiar a la versión 1.3
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+    androidTestImplementation("io.mockk:mockk-android:1.13.13")
+    androidTestImplementation("androidx.test:core-ktx:1.6.1") {
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+    }
+    androidTestImplementation("com.github.tomakehurst:wiremock:3.0.1") {
+        exclude(group = "org.apache.httpcomponents", module= "httpclient")
+        exclude(group = "asm", module= "asm")
+        exclude(group = "org.json", module= "json")
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+        exclude(group = "org.hamcrest", module = "hamcrest")
+    }
+    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.6.1")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+configurations.all {
+    exclude ("org.hamcrest', module: 'hamcrest-core")
 }
