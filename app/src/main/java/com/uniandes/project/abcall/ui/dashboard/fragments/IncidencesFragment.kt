@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.uniandes.project.abcall.adapter.IncidentChatbotAdapter
 import com.uniandes.project.abcall.adapter.IncidentsListAdapter
 import com.uniandes.project.abcall.config.ApiResult
+import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.FragmentIncidencesBinding
 import com.uniandes.project.abcall.models.ChatbotMessage
 import com.uniandes.project.abcall.models.Incident
@@ -27,6 +28,7 @@ class IncidencesFragment : Fragment() {
     private val incidentsList = IncidentRepository()
     private lateinit var incidentAdapter: IncidentsListAdapter
     private val incidentList = mutableListOf<Incident>()
+    private lateinit var preferencesManager: PreferencesManager
 
     private var fragmentChangeListener: FragmentChangeListener? = null
 
@@ -44,8 +46,11 @@ class IncidencesFragment : Fragment() {
         _binding = FragmentIncidencesBinding.inflate(inflater, container, false)
         incidentList.clear()
 
+        preferencesManager = PreferencesManager(binding.root.context)
+        val principal = preferencesManager.getAuth()
+
         viewModel = IncidentsListViewModel(incidentsList)
-        viewModel.getIncidentsByPerson(3)
+        viewModel.getIncidentsByPerson(principal.idPerson!!)
 
         val recyclerView: RecyclerView = binding.incidentRecyclerView
         incidentAdapter = IncidentsListAdapter(incidentList)

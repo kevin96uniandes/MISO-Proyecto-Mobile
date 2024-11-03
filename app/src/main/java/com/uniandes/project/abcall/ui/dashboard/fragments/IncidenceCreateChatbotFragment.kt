@@ -109,10 +109,10 @@ class IncidenceCreateChatbotFragment : Fragment() {
         }
 
         viewModel.result.observe(viewLifecycleOwner) { result ->
+            sendingDialog.dismiss()
             when(result) {
                 is ApiResult.Success -> {
                     cleanUpTempFile()
-                    sendingDialog.dismiss()
                     val dialog = CustomDialogFragment().newInstance(
                         "Incidencia envia satisfactoiamente",
                         "Su incidencia fué registrada exitosanmente, podrá visualizarla en su listado de incidencias",
@@ -239,7 +239,6 @@ class IncidenceCreateChatbotFragment : Fragment() {
     //Copiar: Transformar path uri en File
     private fun uriToFile(uri: Uri): File? {
         return try {
-            // Verifica si el Uri proviene de un contenido
             if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
                 // Crea un archivo temporal en el directorio de caché
                 val tempFile = File.createTempFile("tempFile", null, binding.root.context.cacheDir)
@@ -250,20 +249,26 @@ class IncidenceCreateChatbotFragment : Fragment() {
                 }
 
                 // Obtiene el nombre original del archivo
-                val fileName = getFileName(uri, binding.root.context.contentResolver) ?: "file"
+                var fileName = getFileName(uri, binding.root.context.contentResolver) ?: "file"
 
-                // Obtiene la extensión del archivo a partir del MIME type
-                val mimeType = binding.root.context.contentResolver.getType(uri)
-                val extension = when (mimeType) {
-                    "image/jpeg" -> ".jpg"
-                    "image/png" -> ".png"
-                    "application/pdf" -> ".pdf"
-                    // Agrega más tipos según tus necesidades
-                    else -> ""
+                // Verifica si el nombre ya contiene una extensión
+                val hasExtension = fileName.contains(".")
+
+                // Obtiene la extensión del archivo a partir del MIME type si es necesario
+                if (!hasExtension) {
+                    val mimeType = binding.root.context.contentResolver.getType(uri)
+                    val extension = when (mimeType) {
+                        "image/jpeg" -> ".jpg"
+                        "image/png" -> ".png"
+                        "application/pdf" -> ".pdf"
+                        // Agrega más tipos según tus necesidades
+                        else -> ""
+                    }
+                    fileName += extension // Añade la extensión si no existe
                 }
 
                 // Renombra el archivo temporal con el nombre original y la extensión correcta
-                val renamedFile = File(tempFile.parent, "$fileName$extension")
+                val renamedFile = File(tempFile.parent, fileName)
                 if (tempFile.renameTo(renamedFile)) {
                     renamedFile // Retorna el archivo renombrado
                 } else {
@@ -279,6 +284,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
             null
         }
     }
+
 
     //Copiar: Obrener nombre del archivo
     private fun getFileName(uri: Uri, contentResolver: ContentResolver): String? {
