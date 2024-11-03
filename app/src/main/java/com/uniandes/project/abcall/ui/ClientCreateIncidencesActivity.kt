@@ -23,6 +23,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityClienteCreateIncidencesBinding
+import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.repositories.rest.AuthClient
 import com.uniandes.project.abcall.repositories.rest.CreateIncidence
 import okhttp3.MultipartBody
@@ -59,7 +60,10 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        viewModel = CreateIncidenceViewModel(createIncidenceClient)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
+
+viewModel = CreateIncidenceViewModel(createIncidenceClient)
 
         toolBar = findViewById(R.id.topAppBar)
 
@@ -69,7 +73,7 @@ class ClientCreateIncidencesActivity : CrossIntentActivity() {
         }
 
 
-        preferencesManager = PreferencesManager(binding.root.context)
+
         etSubject = findViewById(R.id.et_subject)
         etDetail = findViewById(R.id.et_detail)
 

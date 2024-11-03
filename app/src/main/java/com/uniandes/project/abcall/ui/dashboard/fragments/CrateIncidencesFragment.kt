@@ -18,18 +18,17 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.uniandes.project.abcall.IncidenceType
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.adapter.SelectedFilesAdapter
 import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.FragmentCreateIncidencesBinding
+import com.uniandes.project.abcall.enums.IncidenceType
+import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.models.Incidence
-import com.uniandes.project.abcall.ui.dashboard.fragments.IncidenceCreateChatbotFragment.Companion
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
@@ -56,14 +55,15 @@ class CrateIncidencesFragment : Fragment() {
         _binding = FragmentCreateIncidencesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        preferencesManager = PreferencesManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
         viewModel = CreateIncidenceViewModel()
 
         var idIncidenceType = "";
         val etIncidenceType: TextInputEditText = binding.etIncidenceType
 
         etIncidenceType.setOnClickListener {
-            val items = IncidenceType.entries.map { "${it.id} - ${it.type}" }.toTypedArray()
+            val items = IncidenceType.entries.map { "${it.id} - ${it.incidence}" }.toTypedArray()
 
             val builder = AlertDialog.Builder(requireContext())
                 .setTitle("Selecciona una opción")
@@ -261,7 +261,7 @@ class CrateIncidencesFragment : Fragment() {
 
     companion object {
         private val FILE_REQUEST_CODE = 1001
-        const val TITLE = "CreateIncidences"
+        const val TITLE = "Crear incidencias"
 
         @JvmStatic
         fun newInstance () =

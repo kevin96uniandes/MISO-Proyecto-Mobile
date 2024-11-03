@@ -12,11 +12,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.uniandes.project.abcall.R
+import com.uniandes.project.abcall.config.JwtManager
 import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.config.RetrofitClient
 import com.uniandes.project.abcall.databinding.ActivityDashboardBinding
 import com.uniandes.project.abcall.databinding.FragmentHomeBinding
 import com.uniandes.project.abcall.enums.UserType
+import com.uniandes.project.abcall.getCustomSharedPreferences
+import com.uniandes.project.abcall.models.Principal
 import com.uniandes.project.abcall.ui.CrossIntentActivity
 import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.ui.dashboard.fragments.DashboardFragment
@@ -34,6 +37,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var jwtManager: JwtManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +47,17 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        preferencesManager = PreferencesManager(binding.root.context)
-        sharedPreferences = preferencesManager.sharedPreferences
-        val token = preferencesManager.getToken()
-        if (token == null){
-            logout()
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
+        sharedPreferences = sPreferences
+
+        if (preferencesManager.getToken() == null) {
+            preferencesManager.saveToken(intent.getStringExtra("token")!!)
         }
-        RetrofitClient.updateAuthToken(token!!)
+        val token = preferencesManager.getToken()!!
+        onlyTest(token)
+
+        RetrofitClient.updateAuthToken(token)
 
         val principal = preferencesManager.getAuth()
 
@@ -161,5 +169,18 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
         }
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
+    }
+
+    fun onlyTest(token: String){
+        jwtManager = JwtManager()
+        val claims = jwtManager.decodeJWT(token)
+        val principal = Principal(
+            id = claims["id"] as Int,
+            idCompany = claims["id_company"] as Int?,
+            idPerson = claims["id_person"] as Int?,
+            userType = UserType.fromString(claims["user_type"] as String)
+        )
+
+        preferencesManager.savePrincipal(principal)
     }
 }

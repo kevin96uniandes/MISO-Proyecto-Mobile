@@ -36,6 +36,7 @@ import com.uniandes.project.abcall.databinding.FragmentIncidenceCreateChatbotBin
 import com.uniandes.project.abcall.enums.IncidenceType
 import com.uniandes.project.abcall.enums.MessageChatbotSentBy
 import com.uniandes.project.abcall.enums.Technology
+import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.models.ChatbotMessage
 import com.uniandes.project.abcall.models.Incidence
 import com.uniandes.project.abcall.repositories.rest.IncidenceClient
@@ -95,7 +96,8 @@ class IncidenceCreateChatbotFragment : Fragment() {
         recyclerView.adapter = messageAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        preferencesManager = PreferencesManager(binding.root.context)
+        val sPreferences = getCustomSharedPreferences(binding.root.context)
+        preferencesManager = PreferencesManager(sPreferences)
 
         viewModel = CreateIncidenceViewModel()
 
@@ -114,12 +116,11 @@ class IncidenceCreateChatbotFragment : Fragment() {
                 is ApiResult.Success -> {
                     cleanUpTempFile()
                     val dialog = CustomDialogFragment().newInstance(
-                        "Incidencia envia satisfactoiamente",
-                        "Su incidencia fué registrada exitosanmente, podrá visualizarla en su listado de incidencias",
+                        "Incidencia enviada satisfactoriamente",
+                        "Su incidencia fué registrada exitosamente, podrá visualizarla en su listado de incidencias",
                         R.raw.success
                     ) {
                         fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
-                        Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
                     }
                     dialog.show(parentFragmentManager, "CustomDialog")
                 }
@@ -163,7 +164,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
                     stepPosition++
                     when (stepPosition) {
                         5 -> {
-                            if (!validateDigitTyped(messageText, 1, 2)){
+                            if (!validateDigitTyped(messageText, 1, 3)){
                                 addMessage(SpannableString("Opción desconocida"))
                                 stepPosition--
                                 currentTurn = MessageChatbotSentBy.CHATBOT
