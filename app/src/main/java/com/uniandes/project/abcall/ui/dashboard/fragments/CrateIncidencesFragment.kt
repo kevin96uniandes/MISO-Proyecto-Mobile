@@ -112,7 +112,7 @@ class CrateIncidencesFragment : Fragment() {
                 R.raw.success
             ) {
                 fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
-                Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
             }
             dialog.show(parentFragmentManager, "CustomDialog")
         }
