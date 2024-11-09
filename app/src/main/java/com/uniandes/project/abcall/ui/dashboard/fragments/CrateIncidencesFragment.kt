@@ -94,7 +94,6 @@ class CrateIncidencesFragment : Fragment() {
         val ilDetail: TextInputLayout = binding.ilDetail
         val etDetail: TextInputEditText = binding.etDetail
 
-        val btnCancel: Button = binding.btnCancel
         val btnLoadFiles: Button = binding.btnLoadFiles
 
         btnLoadFiles.setOnClickListener {
@@ -121,6 +120,14 @@ class CrateIncidencesFragment : Fragment() {
                 dialog.show(parentFragmentManager, "CustomDialog")
             }
         }
+
+        val btnCancel: Button = binding.btnCancel
+
+        btnCancel.setOnClickListener({
+            etIncidenceType.text?.clear()
+            etSubject.text?.clear()
+            etDetail.text?.clear()
+        })
 
         setupTextWatchers()
 
