@@ -111,8 +111,8 @@ class CrateIncidencesFragment : Fragment() {
                     type = idIncidenceType
                 ))
                 val dialog = CustomDialogFragment().newInstance(
-                    "Incidencia envia satisfactoiamente",
-                    "Su incidencia fué registrada exitosanmente, podrá visualizarla en su listado de incidencias",
+                    "Incidencia enviada satisfactoriamente",
+                    "Su incidencia fué registrada exitosamente, podrá visualizarla en su listado de incidencias",
                     R.raw.success
                 ) {
                     fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
