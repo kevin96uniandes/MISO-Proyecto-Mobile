@@ -105,10 +105,6 @@ class HistoryListAdapter (private val context: Context, private val historyList:
                         withContext(Dispatchers.Main) {
                             Toast.makeText(context, "Archivo descargado en: ${file.absolutePath}", Toast.LENGTH_LONG).show()
                         }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(context, "Error al descargar el archivo: Código de respuesta ${connection.responseCode}", Toast.LENGTH_SHORT).show()
-                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
