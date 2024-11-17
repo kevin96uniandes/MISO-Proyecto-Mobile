@@ -25,7 +25,7 @@ jobs:
           java-version: '21'
 
       - name: Install Android SDK and Build Tools
-          run: |
+        run: |
             sudo apt-get update
             sudo apt-get install -y wget unzip
             wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O commandlinetools.zip
