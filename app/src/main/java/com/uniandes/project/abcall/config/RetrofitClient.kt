@@ -1,29 +1,61 @@
 package com.uniandes.project.abcall.config
 
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    private val BASE_URL = "http://34.111.136.182"
+    private var BASE_URL = "http://34.111.136.182"
+    //private var BASE_URL = "http://192.168.18.14:5000"
 
-    private val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
+    private lateinit var authToken: String
+
+    // Cliente OkHttp que usaremos en Retrofit
+    private val okHttpClient: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.MINUTES)
+            .writeTimeout(30, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.MINUTES)
+            .addInterceptor(AuthInterceptor(::getAuthToken))
+            .addInterceptor(LoggingInterceptor())
+            .build()
+    }
+
+    // Propiedad Retrofit privada que se actualiza al cambiar la base URL
+    private var retrofit: Retrofit = createRetrofit(BASE_URL)
+
+    // Instancia del servicio API que se actualizará al cambiar la base URL
+    var apiService: ApiService = retrofit.create(ApiService::class.java)
+        private set
+
+    // Función que permite actualizar la instancia de ApiService cuando se cambia la URL
+    fun setBaseUrl(baseUrl: String) {
+        BASE_URL = baseUrl
+        retrofit = createRetrofit(BASE_URL)
+        apiService = retrofit.create(ApiService::class.java)
+    }
+
+    private fun createRetrofit(baseUrl: String): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    /*
-    val apiService: ApiService by lazy {
-        retrofit.create(ApiService::class.java)
+    // Método para pasar un mock de ApiService (para pruebas)
+    fun setApiService(mock: ApiService) {
+        apiService = mock
     }
 
-     */
+    // Método para obtener el token de autenticación
+    private fun getAuthToken(): String {
+        return authToken
+    }
 
-    var apiService: ApiService = retrofit.create(ApiService::class.java)
-        private set // Mantener la propiedad privada para evitar asignaciones externas
-
-    fun setApiService(mock: ApiService) {
-        apiService = mock // Permitir que se establezca un mock para pruebas
+    // Actualiza el token de autenticación
+    fun updateAuthToken(token: String) {
+        authToken = token
     }
 }
