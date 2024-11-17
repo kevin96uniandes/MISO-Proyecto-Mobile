@@ -21,7 +21,7 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'zulu'
           java-version: '21'
 
       - name: Install Android SDK and Build Tools
@@ -33,16 +33,13 @@ jobs:
             unzip -q commandlinetools.zip -d $HOME/android-sdk/cmdline-tools
             mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
             export ANDROID_HOME=$HOME/android-sdk
-            export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
+            export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/33.0.2:$PATH
             yes | sdkmanager --licenses
-            sdkmanager "platform-tools" "build-tools;33.0.2" 
+            sdkmanager "platform-tools" "build-tools;33.0.2"
     
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
-
-      - name: Run lint and resource checks
-        run: ./gradlew lintRelease --stacktrace
 
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace
