@@ -48,14 +48,14 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
           keytool -genkeypair \
-            -alias "$KEY_ALIAS" \
+            -alias "abc-call" \
             -keyalg RSA \
             -keysize 2048 \
             -validity 10000 \
             -dname "CN=Temporary, OU=Actions, O=GitHub, L=Cloud, ST=DevOps, C=US" \
-            -keypass ${{ secrets.KEY_PASSWORD }} \
+            -keypass "abc-call" \
             -keystore release-keystore.jks \
-            -storepass ${{ secrets.KEYSTORE_PASSWORD }}
+            -storepass "abc-call" 
 
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace
@@ -71,9 +71,9 @@ jobs:
 
           $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
             --ks release-keystore.jks \
-            --ks-key-alias "$KEY_ALIAS" \
-            --ks-pass pass:"$KEYSTORE_PASSWORD" \
-            --key-pass pass:"$KEY_PASSWORD" \
+            --ks-key-alias "abc-call" \
+            --ks-pass pass:"abc-call" \
+            --key-pass pass:"abc-call" \
             --out "$SIGNED_APK" \
             "$UNSIGNED_APK"
 
