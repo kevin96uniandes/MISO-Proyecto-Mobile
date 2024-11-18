@@ -80,6 +80,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt:0.12.6")
     implementation("com.github.clans:fab:1.6.4")
     implementation(libs.androidx.junit.ktx)
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0") {
         // Excluir las versiones de hamcrest-core aquí
         exclude(group = "org.hamcrest", module = "hamcrest-core")
