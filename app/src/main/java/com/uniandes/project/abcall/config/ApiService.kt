@@ -3,6 +3,8 @@ package com.uniandes.project.abcall.config
 import com.uniandes.project.abcall.models.History
 import com.uniandes.project.abcall.models.Incident
 import com.uniandes.project.abcall.repositories.rest.AuthClient
+import com.uniandes.project.abcall.repositories.rest.BoardPercentageClient
+import com.uniandes.project.abcall.repositories.rest.BoardSummaryClient
 import com.uniandes.project.abcall.repositories.rest.IncidenceClient
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 import okhttp3.MultipartBody
@@ -15,6 +17,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Multipart
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -43,4 +46,20 @@ interface ApiService {
         @Part("incidentDetail") incidentDetail: RequestBody,
         @Part files: List<MultipartBody.Part?>
     ): Call<IncidenceClient.IncidenceResponse>
+
+    @GET("/incident/summary")
+    fun getBoardSummary(
+        @Query("canal_id") channelId: Int?,
+        @Query("estado_id") stateId: Int?,
+        @Query("fecha_inicio") startDate: String,
+        @Query("fecha_fin") endDate: String
+    ): Call<BoardSummaryClient.BoardSummaryResponse>
+
+    @GET("/incident/channels/percentage")
+    fun getBoardPercentage(
+        @Query("canal_id") channelId: Int?,
+        @Query("estado_id") stateId: Int?,
+        @Query("fecha_inicio") startDate: String,
+        @Query("fecha_fin") endDate: String
+    ): Call<BoardPercentageClient.BoardPercentageResponse>
 }
