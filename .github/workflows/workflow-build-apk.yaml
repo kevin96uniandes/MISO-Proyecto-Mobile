@@ -71,9 +71,9 @@ jobs:
 
           $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
             --ks release-keystore.jks \
-            --ks-key-alias ${{ secrets.KEY_ALIAS }} \
-            --ks-pass pass:${{ secrets.KEY_PASSWORD }} \
-            --key-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+            --ks-key-alias $KEY_ALIAS \
+            --ks-pass pass:$KEY_PASSWORD \
+            --key-pass pass:$KEYSTORE_PASSWORD \
             --out "$SIGNED_APK" \
             "$UNSIGNED_APK"
 
