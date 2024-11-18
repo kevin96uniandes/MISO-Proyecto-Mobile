@@ -57,6 +57,7 @@ jobs:
   
       - name: Sign APK
         run: |
+          cd /usr/local/lib/android/sdk/build-tools/33.0.2/apksigner
           apksigner sign \
             --ks my-release-key.keystore \
             --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
