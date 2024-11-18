@@ -34,9 +34,9 @@ jobs:
             unzip -q commandlinetools.zip -d $HOME/android-sdk/cmdline-tools
             mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
             export ANDROID_HOME=$HOME/android-sdk
-            export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/29.0.3:$PATH
+            export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/34.0.0:$PATH
             yes | sdkmanager --licenses
-            sdkmanager "platform-tools" "build-tools;29.0.3" "platforms;android-33"
+            sdkmanager "platform-tools" "build-tools;34.0.0" "platforms;android-33"
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -44,14 +44,14 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace
 
-      - name: Sign App
-        uses: ilharp/sign-android-release@v1.0.4
-        with:
-          releaseDir: app/build/outputs/apk/release
-          signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
-          keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      - name: Sign APK
+        run: |
+          $ANDROID_HOME/build-tools/33.0.2/apksigner sign \
+            --ks my-release-key.keystore \
+            --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+            --ks-key-alias ${{ secrets.KEY_ALIAS }} \
+            --key-pass pass:${{ secrets.KEY_PASSWORD }} \
+            app/build/outputs/apk/release/app-release-unsigned.apk
 
       - name: Rename Signed APK
         run: mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/abc-call.apk
