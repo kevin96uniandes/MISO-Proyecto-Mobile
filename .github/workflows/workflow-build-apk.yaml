@@ -31,7 +31,7 @@ jobs:
         run: ./gradlew assembleRelease --stacktrace
 
       - name: Sign APK
-        uses: ilharp/sign-android-release@v1.0.4
+        uses: r0adkll/sign-android-release@v1
         with:
           releaseDir: app/build/outputs
           signingKey: ${{ secrets.KEYSTORE_BASE64 }}
