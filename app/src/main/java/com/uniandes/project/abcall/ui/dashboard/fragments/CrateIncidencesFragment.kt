@@ -10,6 +10,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -60,8 +63,8 @@ class CrateIncidencesFragment : Fragment() {
         viewModel = CreateIncidenceViewModel()
 
         var idIncidenceType = "";
-        val etIncidenceType: TextInputEditText = binding.etIncidenceType
 
+        val etIncidenceType: TextInputEditText = binding.etIncidenceType
         etIncidenceType.setOnClickListener {
             val items = IncidenceType.entries.map { "${it.id} - ${it.incidence}" }.toTypedArray()
 
@@ -91,7 +94,6 @@ class CrateIncidencesFragment : Fragment() {
         val ilDetail: TextInputLayout = binding.ilDetail
         val etDetail: TextInputEditText = binding.etDetail
 
-        val btnCancel: Button = binding.btnCancel
         val btnLoadFiles: Button = binding.btnLoadFiles
 
         btnLoadFiles.setOnClickListener {
@@ -101,21 +103,33 @@ class CrateIncidencesFragment : Fragment() {
         val btnRegister: Button = binding.btnSend
 
         btnRegister.setOnClickListener {
-            viewModel.createIncidence(responseStepsToIncidence(
-                subject = etSubject.text.toString(),
-                detail = etDetail.text.toString(),
-                type = idIncidenceType
-            ))
-            val dialog = CustomDialogFragment().newInstance(
-                "Incidencia envia satisfactoiamente",
-                "Su incidencia fué registrada exitosanmente, podrá visualizarla en su listado de incidencias",
-                R.raw.success
-            ) {
-                fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
-                //Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
+            if ( validateForm() ){
+                viewModel.createIncidence(responseStepsToIncidence(
+                    subject = etSubject.text.toString(),
+                    detail = etDetail.text.toString(),
+                    type = idIncidenceType
+                ))
+                val dialog = CustomDialogFragment().newInstance(
+                    "Incidencia enviada satisfactoriamente",
+                    "Su incidencia fué registrada exitosamente, podrá visualizarla en su listado de incidencias",
+                    R.raw.success
+                ) {
+                    fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
+                    //Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
+                }
+                dialog.show(parentFragmentManager, "CustomDialog")
             }
-            dialog.show(parentFragmentManager, "CustomDialog")
         }
+
+        val btnCancel: Button = binding.btnCancel
+
+        btnCancel.setOnClickListener({
+            etIncidenceType.text?.clear()
+            etSubject.text?.clear()
+            etDetail.text?.clear()
+        })
+
+        setupTextWatchers()
 
         return root
     }
@@ -257,8 +271,6 @@ class CrateIncidencesFragment : Fragment() {
         _binding = null
     }
 
-
-
     companion object {
         private val FILE_REQUEST_CODE = 1001
         const val TITLE = "Crear incidencias"
@@ -268,5 +280,82 @@ class CrateIncidencesFragment : Fragment() {
             CrateIncidencesFragment()
     }
 
+    private fun validateForm(): Boolean{
+        var isValid = true
 
+        binding.ilIncidenceType.error = null
+        binding.ilSubject.error = null
+        binding.ilDetail.error = null
+
+        val incidenceType = binding.etIncidenceType.text.toString().trim()
+        val subject = binding.etSubject.text.toString().trim()
+        val detail = binding.etDetail.text.toString().trim()
+
+
+        if (TextUtils.isEmpty(incidenceType)) {
+            binding.ilIncidenceType.error = "Tipo de incidencia obligatoria"
+            scrollToView(binding.ilIncidenceType)
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(subject)) {
+            binding.ilSubject.error = "Asunto obligatorio"
+            scrollToView(binding.ilSubject)
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(detail)) {
+            binding.ilDetail.error = "Detalle obligatorio"
+            scrollToView(binding.ilDetail)
+            isValid = false
+        }
+        return isValid
+    }
+
+    private fun scrollToView(view: View) {
+        view.parent.requestChildFocus(view, view)
+    }
+
+
+    private fun setupTextWatchers() {
+        binding.etIncidenceType.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                clearIncidenceTypeError()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        binding.etSubject.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                clearSubjectError()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        binding.etDetail.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                clearDetailError()
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+
+        })
+    }
+
+    private fun clearIncidenceTypeError() {
+        binding.ilIncidenceType.error = null
+    }
+
+    private fun clearSubjectError() {
+        binding.ilSubject.error = null
+    }
+
+    private fun clearDetailError() {
+        binding.ilDetail.error = null
+    }
 }

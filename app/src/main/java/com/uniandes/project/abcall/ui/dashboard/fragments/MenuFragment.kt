@@ -49,7 +49,8 @@ class MenuFragment : Fragment() {
         }
 
         binding.btnDashboard.setOnClickListener {
-            fragmentChangeListener?.onFragmentChange(DashboardFragment.newInstance(), DashboardFragment.TITLE)
+            fragmentChangeListener?.onFragmentChange(MonitorFragment.newInstance())
+
         }
 
         return binding.root
