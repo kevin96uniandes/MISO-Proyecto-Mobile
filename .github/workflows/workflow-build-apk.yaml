@@ -57,7 +57,6 @@ jobs:
   
       - name: Sign APK
         run: |
-          export PATH=/usr/local/lib/android/sdk/build-tools/34.0.0:$PATH
           apksigner sign \
             --ks my-release-key.keystore \
             --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
@@ -66,7 +65,7 @@ jobs:
             app/build/outputs/apk/release/app-release-unsigned.apk
   
       - name: Rename Signed APK
-        run: mv app-release-unsigned.apk abc-call.apk
+        run: mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/abc-call.apk
 
       - name: List all APKs
         run: find . -name "*.apk"
