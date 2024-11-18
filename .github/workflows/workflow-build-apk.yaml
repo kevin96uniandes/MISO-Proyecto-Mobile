@@ -44,6 +44,14 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace
 
+      - name: Verify Build Tools and apksigner
+        run: |
+          export PATH=$ANDROID_HOME/build-tools/33.0.2:$PATH
+          echo "Listing build-tools directory:"
+          ls $ANDROID_HOME/build-tools
+          echo "Verifying apksigner installation:"
+          which apksigner
+
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > my-release-key.keystore
   
