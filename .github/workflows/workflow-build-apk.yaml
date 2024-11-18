@@ -53,9 +53,9 @@ jobs:
             -keysize 2048 \
             -validity 10000 \
             -dname "CN=Temporary, OU=Actions, O=GitHub, L=Cloud, ST=DevOps, C=US" \
-            -keypass "$KEY_PASSWORD" \
+            -keypass ${{ secrets.KEY_PASSWORD }} \
             -keystore release-keystore.jks \
-            -storepass "$KEYSTORE_PASSWORD"
+            -storepass ${{ secrets.KEYSTORE_PASSWORD }}
 
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace
