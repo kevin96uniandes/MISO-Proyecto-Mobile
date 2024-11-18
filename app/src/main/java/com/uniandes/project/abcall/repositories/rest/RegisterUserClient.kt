@@ -1,7 +1,11 @@
 package com.uniandes.project.abcall.repositories.rest
 
 import android.util.Log
+<<<<<<< HEAD
+import com.google.gson.Gson
+=======
 import com.uniandes.project.abcall.config.ApiResult
+>>>>>>> develop
 import com.uniandes.project.abcall.config.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,17 +19,19 @@ class RegisterUserClient {
         ).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
-                    callback(ApiResult.Success(response.body()!!))
+                    val code = response.body()!!.code
+                    callback(code)
                 } else {
-                    val errorMessage = response.errorBody()?.string()
-                    callback(ApiResult.Error(response.code(), errorMessage))
+                    Log.e("AuthClient", "Error: ${response.errorBody()?.string()}")
+                    callback(null)
                 }
             }
+
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 Log.e("MainActivity", "Failure: ${t.message}")
-                callback(ApiResult.NetworkError)
             }
         })
+
     }
     data class UserRegisterRequestBody(
         val usuario: String,

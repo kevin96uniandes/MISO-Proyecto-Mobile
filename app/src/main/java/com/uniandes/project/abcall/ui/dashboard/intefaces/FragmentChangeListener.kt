@@ -3,5 +3,5 @@ package com.uniandes.project.abcall.ui.dashboard.intefaces
 import androidx.fragment.app.Fragment
 
 interface FragmentChangeListener {
-    fun onFragmentChange(fragment: Fragment)
+    fun onFragmentChange(fragment: Fragment, title: String)
 }
