@@ -10,7 +10,6 @@ permissions:
 jobs:
   merge-develop:
     if: ${{ contains(github.event.head_commit.message, 'release') || contains(github.event.head_commit.message, 'develop') }}
-    needs: workflow_angular
     runs-on: ubuntu-latest
     steps:
       - name: Getting branch name for merge
