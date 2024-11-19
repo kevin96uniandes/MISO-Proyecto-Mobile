@@ -11,7 +11,7 @@ jobs:
   merge-develop:
     if: ${{ contains(github.event.head_commit.message, 'release') || contains(github.event.head_commit.message, 'develop') }}
     runs-on: ubuntu-latest
-    steps:
+    steps: 
       - name: Getting branch name for merge
         id: branch-name
         uses: tj-actions/branch-names@v6
