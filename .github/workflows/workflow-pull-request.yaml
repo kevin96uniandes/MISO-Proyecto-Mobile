@@ -44,10 +44,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Create Pull Request to master
+      - name: Create Pull Request to main
         uses: repo-sync/pull-request@v2
         with:
           source_branch: release/v${{ github.run_number }}
-          destination_branch: master
-          pr_title: "release/v${{ github.run_number }} to master"
-          pr_body: "Auto-generated pull request for release to master."
+          destination_branch: main
+          pr_title: "release/v${{ github.run_number }} to main"
+          pr_body: "Auto-generated pull request for release to main."
