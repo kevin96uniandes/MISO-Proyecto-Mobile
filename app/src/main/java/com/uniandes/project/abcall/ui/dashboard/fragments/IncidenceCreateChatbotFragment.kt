@@ -73,10 +73,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
     private var currentTurn: MessageChatbotSentBy = MessageChatbotSentBy.CHATBOT
 
     private lateinit var viewModel: CreateIncidenceViewModel
-    private lateinit var fileUri: Uri
     private lateinit var preferencesManager: PreferencesManager
-    private lateinit var jwtManager: JwtManager
-    private lateinit var sharedPreferences: SharedPreferences
 
     private val MAX_FILES = 3
     private val selectedFiles = mutableListOf<File>()

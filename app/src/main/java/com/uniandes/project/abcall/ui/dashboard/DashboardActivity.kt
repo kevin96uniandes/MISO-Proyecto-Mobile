@@ -1,11 +1,7 @@
 package com.uniandes.project.abcall.ui.dashboard
 
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -32,7 +28,7 @@ import com.uniandes.project.abcall.ui.dashboard.fragments.ReportFragment
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
 import com.uniandes.project.abcall.ui.dashboard.ui.home.HomeFragment
 
-class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
+class DashboardActivity : AppCompatActivity(), FragmentChangeListener {
 
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var preferencesManager: PreferencesManager
@@ -82,25 +78,16 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
                     }
                 }
             }
+        }
 
-            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
 
-                    if (principal.userType == UserType.USER) {
-                        if (currentFragment is IncidencesFragment) {
-                            finish()
-                        }else{
-                            supportFragmentManager.popBackStack()
-                        }
-                    }else {
-                        if (currentFragment is MenuFragment) {
-                            finish()
-                        } else {
-                            supportFragmentManager.popBackStack()
-                        }
-                    }
-
+                if (currentFragment is MenuFragment) {
+                    finish()
+                } else {
+                    supportFragmentManager.popBackStack()
                 }
             })
         }
@@ -117,8 +104,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
                 logout()
                 true
             }
-            else -> super.onOptionsItemSelected(item)
-        }
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -126,7 +112,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
         return true
     }
 
-    private fun changeFragment(fragment: Fragment) {
+    private fun changeFragment(fragment: Fragment, title: String) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout, fragment)
@@ -142,8 +128,8 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
         updateToolbarTitle(fragment)
     }
 
-    override fun onFragmentChange(fragment: Fragment) {
-        changeFragment(fragment)
+    override fun onFragmentChange(fragment: Fragment, title: String) {
+        changeFragment(fragment, title)
     }
 
     private fun updateToolbarTitle(fragment: Fragment) {

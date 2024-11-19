@@ -3,7 +3,11 @@ name: Android Build
 on:
   push:
     branches:
+<<<<<<< HEAD
       - feature/generacion-apk-actions
+=======
+      - master
+>>>>>>> 7af8270132b2074590a2b8a83e7dd399b21ce4ad
   pull_request:
 
 jobs:
@@ -19,6 +23,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Set up JDK 21
+      
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'

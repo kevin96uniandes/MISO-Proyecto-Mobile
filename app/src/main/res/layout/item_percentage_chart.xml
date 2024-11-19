@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/idContainerGeneralPercentageChart"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/titleGraphPieChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="Incidencias por canal"/>
+
+    <LinearLayout
+        android:id="@+id/idContainerEmailPercentageChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_board_percentage_1"
+        android:padding="16sp"
+        android:layout_marginBottom="10sp">
+
+        <TextView
+            android:id="@+id/idChannelPercentageChartEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+            android:text="Correo Electrónico">
+        </TextView>
+
+        <TextView
+            android:id="@+id/idValuePercentageChartEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:text="0 %">
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/idContainerCallPercentageChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_board_percentage_2"
+        android:padding="16sp"
+        android:layout_marginBottom="10sp">
+
+        <TextView
+            android:id="@+id/idChannelPercentageChartCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+            android:text="Llamada Telefónica"
+            >
+        </TextView>
+
+        <TextView
+            android:id="@+id/idValuePercentageChartCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:text="0 %">
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/idContainerMobilePercentageChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_board_percentage_3"
+        android:padding="16sp"
+        android:layout_marginBottom="10sp">
+
+        <TextView
+            android:id="@+id/idChannelPercentageChartMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+            android:text="App Móvil"
+            >
+        </TextView>
+
+        <TextView
+            android:id="@+id/idValuePercentageChartMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:text="0 %">
+        </TextView>
+    </LinearLayout>
+</LinearLayout>

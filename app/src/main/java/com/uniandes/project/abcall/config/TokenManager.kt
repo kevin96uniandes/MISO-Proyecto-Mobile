@@ -3,7 +3,7 @@ package com.uniandes.project.abcall.config
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.uniandes.project.abcall.models.Principal
+import com.uniandes.project.abcall.models.Auth
 
 class PreferencesManager(private val sharedPreferences: SharedPreferences) {
 
@@ -15,8 +15,8 @@ class PreferencesManager(private val sharedPreferences: SharedPreferences) {
     }
 
     // Método para guardar el objeto Auth en SharedPreferences
-    fun savePrincipal(principal: Principal) {
-        val preference = gson.toJson(principal) // Convierte el objeto a JSON
+    fun saveAuth(auth: Auth) {
+        val preference = gson.toJson(auth) // Convierte el objeto a JSON
         val editor = sharedPreferences.edit()
         editor.putString(AUTH_KEY, preference) // Guarda el JSON
         editor.apply() // Aplica los cambios
@@ -28,7 +28,7 @@ class PreferencesManager(private val sharedPreferences: SharedPreferences) {
     }
 
     // Método para eliminar el token
-    fun deletePrincipal() {
+    fun deleteToken() {
         val editor = sharedPreferences.edit()
         editor.remove(AUTH_KEY) // Elimina el token
         editor.apply() // Aplica los cambios
