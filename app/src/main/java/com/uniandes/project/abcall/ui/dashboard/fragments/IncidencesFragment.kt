@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.adapter.IncidentChatbotAdapter
 import com.uniandes.project.abcall.adapter.IncidentsListAdapter
 import com.uniandes.project.abcall.config.ApiResult
@@ -37,6 +38,7 @@ class IncidencesFragment : Fragment() {
         super.onAttach(context)
         if (context is FragmentChangeListener) {
             fragmentChangeListener = context
+            TITLE = context.getString(R.string.issues)
         }
     }
 
@@ -83,7 +85,7 @@ class IncidencesFragment : Fragment() {
     }
 
     companion object {
-        const val TITLE = "Incidencias"
+        var TITLE = ""
         @JvmStatic
         fun newInstance() =
             IncidencesFragment()

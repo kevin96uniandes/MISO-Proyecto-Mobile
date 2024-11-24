@@ -28,6 +28,7 @@ import com.uniandes.project.abcall.ui.dashboard.fragments.IncidenceCreateChatbot
 import com.uniandes.project.abcall.ui.dashboard.fragments.CrateIncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.IncidencesFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.MenuFragment
+import com.uniandes.project.abcall.ui.dashboard.fragments.MonitorFragment
 import com.uniandes.project.abcall.ui.dashboard.fragments.ReportFragment
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
 import com.uniandes.project.abcall.ui.dashboard.ui.home.HomeFragment
@@ -54,6 +55,8 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
         if (preferencesManager.getToken() == null) {
             preferencesManager.saveToken(intent.getStringExtra("token")!!)
         }
+
+
         val token = preferencesManager.getToken()!!
         onlyTest(token)
 
@@ -65,21 +68,14 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
             if (principal.userType == UserType.USER) {
                 changeFragment(IncidencesFragment.newInstance())
             } else{
-                changeFragment(MenuFragment.newInstance())
+                changeFragment(MonitorFragment.newInstance())
             }
 
             supportFragmentManager.addOnBackStackChangedListener {
                 val fragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
                 if (fragment != null) {
                     updateToolbarTitle(fragment)
-                    if (fragment is MenuFragment) {
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    } else {
-                        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                        if (principal.userType == UserType.USER) {
-                            supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                        }
-                    }
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
             }
 
@@ -94,7 +90,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
                             supportFragmentManager.popBackStack()
                         }
                     }else {
-                        if (currentFragment is MenuFragment) {
+                        if (currentFragment is MonitorFragment) {
                             finish()
                         } else {
                             supportFragmentManager.popBackStack()
@@ -123,6 +119,9 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
+        if(title == MonitorFragment.TITLE) {
+            return false
+        }
         return true
     }
 
@@ -132,13 +131,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
         fragmentTransaction.replace(R.id.frame_layout, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
-
-        if (fragment is MenuFragment) {
-            supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        } else {
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         updateToolbarTitle(fragment)
     }
 
@@ -148,15 +141,14 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
 
     private fun updateToolbarTitle(fragment: Fragment) {
         Log.d("DashboardActivity", "Current Fragment: ${fragment::class.java.simpleName}")
-        when (fragment) {
-            is MenuFragment -> title = MenuFragment.TITLE
-            is IncidencesFragment -> title = IncidencesFragment.TITLE
-            is DashboardFragment -> title = DashboardFragment.TITLE
-            is ReportFragment -> title = ReportFragment.TITLE
-            is IncidenceCreateChatbotFragment -> title = IncidenceCreateChatbotFragment.TITLE
-            is CrateIncidencesFragment -> title = CrateIncidencesFragment.TITLE
-            is DetailIncidentFragment -> title = DetailIncidentFragment.TITLE
-            else -> title = "ABCAll App"
+        title = when (fragment) {
+            is MenuFragment -> MenuFragment.TITLE
+            is IncidencesFragment -> IncidencesFragment.TITLE
+            is IncidenceCreateChatbotFragment -> IncidenceCreateChatbotFragment.TITLE
+            is CrateIncidencesFragment -> CrateIncidencesFragment.TITLE
+            is DetailIncidentFragment -> DetailIncidentFragment.TITLE
+            is MonitorFragment -> MonitorFragment.TITLE
+            else -> "ABCAll App"
         }
     }
 
@@ -176,7 +168,7 @@ class DashboardActivity : CrossIntentActivity(), FragmentChangeListener {
         val claims = jwtManager.decodeJWT(token)
         val principal = Principal(
             id = claims["id"] as Int,
-            idCompany = claims["id_company"] as Int?,
+            idCompany = claims["id_company"] as Int,
             idPerson = claims["id_person"] as Int?,
             userType = UserType.fromString(claims["user_type"] as String)
         )

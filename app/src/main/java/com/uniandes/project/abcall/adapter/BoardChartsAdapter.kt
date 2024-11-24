@@ -56,7 +56,7 @@ class BoardChartsAdapter(val items: MutableList<ChartItem>) : RecyclerView.Adapt
         private val titleTextView: TextView = itemView.findViewById(R.id.titleGraphPieChart)
         fun bind(pieChartItem: ChartItem.PieChartItem) {
             titleTextView.text = pieChartItem.title
-
+            Log.d("Pie chart data", pieChartItem.entries.toString())
             if (pieChartItem.entries.isEmpty()) {
                 pieChart.visibility = View.GONE
                 titleTextView.visibility = View.GONE

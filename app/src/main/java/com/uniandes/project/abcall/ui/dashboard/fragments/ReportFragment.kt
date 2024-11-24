@@ -17,7 +17,7 @@ class ReportFragment : Fragment() {
     }
 
     companion object {
-        const val TITLE = "Reportes"
+        const val TITLE = "Report"
 
         @JvmStatic
         fun newInstance() =

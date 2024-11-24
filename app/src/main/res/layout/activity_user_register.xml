@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nuevo usuario"
+            android:text="@string/new_user"
             android:gravity="center"
             android:textColor="@color/abcall_primary_color"
             android:textSize="30sp"
@@ -34,7 +34,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="Nombre"
+            android:hint="@string/Name"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
@@ -55,7 +55,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="Apellido"
+            android:hint="@string/Lastname"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
@@ -76,7 +76,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="Tipo de identificación"
+            android:hint="@string/Identification_type"
             style="@style/customLoginInputText"
             android:clickable="true"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
@@ -99,7 +99,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="Número de identificación"
+            android:hint="@string/Identification_number"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
@@ -120,7 +120,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="Correo electrónico"
+            android:hint="@string/Email"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
@@ -141,7 +141,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="Teléfono"
+            android:hint="@string/Cellphone"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
@@ -162,7 +162,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@color/abcall_third_one"
             android:layout_marginTop="16dp"
-            android:hint="Usuario"
+            android:hint="@string/Username"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
@@ -204,7 +204,7 @@
             app:endIconMode="password_toggle"
             android:layout_marginTop="16dp"
             app:endIconTint="@color/abcall_third_one"
-            android:hint="Confirmar contrasena"
+            android:hint="@string/Confirm_password"
             style="@style/customLoginInputText"
             app:placeholderTextAppearance="@style/customLoginHintTextAppearance">
 
@@ -225,7 +225,7 @@
             style="@style/customPrimaryButton"
             app:cornerRadius="20sp"
             android:layout_marginTop="16dp"
-            android:text="Registrar"/>
+            android:text="@string/Registry"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_clear"
@@ -234,7 +234,7 @@
             style="@style/customSecondaryButton"
             app:cornerRadius="20sp"
             android:layout_marginTop="16dp"
-            android:text="Limpiar"/>
+            android:text="@string/Clean"/>
 
     </LinearLayout>
 

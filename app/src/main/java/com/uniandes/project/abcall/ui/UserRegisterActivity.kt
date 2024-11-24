@@ -20,6 +20,7 @@ import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.ActivityUserRegisterBinding
 import com.uniandes.project.abcall.enums.IdentificationType
 import com.uniandes.project.abcall.getCustomSharedPreferences
+import com.uniandes.project.abcall.models.Principal
 
 import com.uniandes.project.abcall.repositories.rest.RegisterUserClient
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
@@ -62,7 +63,8 @@ class UserRegisterActivity : CrossIntentActivity() {
     private lateinit var viewModel: RegisterUserViewModel
 
     private val registerClient = RegisterUserClient()
-    private lateinit var preferencesManager: PreferencesManager
+
+    private lateinit var principal: Principal
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,8 +73,6 @@ class UserRegisterActivity : CrossIntentActivity() {
         binding = ActivityUserRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-        val sPreferences = getCustomSharedPreferences(binding.root.context)
-        preferencesManager = PreferencesManager(sPreferences)
 
         viewModel = RegisterUserViewModel(registerClient)
 
@@ -117,7 +117,7 @@ class UserRegisterActivity : CrossIntentActivity() {
                     phone = etPhone.text.toString(),
                     email = etEmail.text.toString(),
                     identificationNumber = etIdentificationNumber.text.toString().toLong(),
-                    idIdentityType = idIdentityType
+                    idIdentityType = idIdentityType,
                 )
                 viewModel.registerUser(userRegister)
 

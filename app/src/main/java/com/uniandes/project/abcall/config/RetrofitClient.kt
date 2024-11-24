@@ -6,8 +6,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    //private var BASE_URL = "http://34.111.136.182"
-    private var BASE_URL = "http://192.168.18.14:5000"
+    private var BASE_URL = "http://34.149.73.72"
+    //private var BASE_URL = "http://192.168.18.14:5000"
+    //private var BASE_URL = "http://192.168.128.182:5000"
 
     private lateinit var authToken: String
 

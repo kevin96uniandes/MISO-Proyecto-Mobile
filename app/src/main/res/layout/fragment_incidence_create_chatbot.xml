@@ -26,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Escribe un mensaje"
+            android:hint="@string/enter_a_message"
             android:padding="8dp" />
 
         <ImageButton
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_attach_file"
             android:background="@color/abcall_second_color"
-            android:contentDescription="Adjuntar archivo"
+            android:contentDescription="@string/Attach_documents"
             android:padding="10dp"/>
 
         <View
@@ -46,7 +46,7 @@
             android:id="@+id/btn_send_chatbot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Enviar"
+            android:contentDescription="@string/send"
             android:src="@drawable/ic_send"
             android:background="@color/abcall_primary_color"
             android:padding="10dp"/>
