@@ -54,7 +54,6 @@
         fab:menu_labels_position="left"
         fab:menu_openDirection="up"
         fab:menu_backgroundColor="@android:color/transparent"
-        fab:menu_fab_label="Crear incidencia"
         android:layout_gravity="bottom|right">
 
         <com.github.clans.fab.FloatingActionButton
@@ -63,7 +62,7 @@
             android:layout_height="wrap_content"
             fab:fab_size="mini"
             android:src="@drawable/ic_bot"
-            fab:fab_label="Asistida" />
+            fab:fab_label="@string/assisted" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/incidence_menu_item_manual"

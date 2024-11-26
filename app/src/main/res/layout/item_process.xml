@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Asesor:"
+        android:text="@string/agent"
         android:layout_marginTop="4dp" />
 
     <TextView
@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Observación"
+        android:text="@string/observation"
         android:textStyle="bold"
         android:textColor="@color/abcall_second_color"
         android:layout_marginTop="8dp" />
@@ -48,7 +48,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Adjuntos"
+        android:text="@string/attaches"
         android:textStyle="bold"
         android:textColor="@color/abcall_second_color"
         android:layout_marginTop="8dp" />

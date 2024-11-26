@@ -11,7 +11,8 @@
         android:id="@+id/containerFilterLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
         <!-- Filtros fechas-->
         <LinearLayout
             android:id="@+id/filterDateLayout"
@@ -29,7 +30,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 app:endIconTint="@color/abcall_second_color"
-                android:hint="Fecha inicio"
+                android:hint="@string/start_date"
                 android:clickable="true"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="@color/abcall_second_color">
@@ -56,7 +57,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 app:endIconTint="@color/abcall_second_color"
-                android:hint="Fecha Fin"
+                android:hint="@string/end_date"
                 android:clickable="true"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="@color/abcall_second_color">
@@ -91,7 +92,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 app:endIconTint="@color/abcall_second_color"
-                android:hint="Canales incidencia"
+                android:hint="@string/issue_channels"
                 android:clickable="true"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="@color/abcall_second_color">
@@ -116,7 +117,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 app:endIconTint="@color/abcall_second_color"
-                android:hint="Estados incidencia"
+                android:hint="@string/issue_states"
                 android:clickable="true"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="@color/abcall_second_color">

@@ -35,7 +35,7 @@ class LoginActivity : CrossIntentActivity() {
     private lateinit var btnRegister: Button
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var viewModel: AuthViewModel
+    lateinit var viewModel: AuthViewModel
     private val authClient = AuthClient()
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var jwtManager: JwtManager
@@ -70,10 +70,15 @@ class LoginActivity : CrossIntentActivity() {
             startActivity(intent)
         }
 
-        if (isLoggedIn) {
+        val isRunningTest = intent.getBooleanExtra("isTest", false)
+        if (isLoggedIn && !isRunningTest) {
+            logout()
+            /*
             startActivity(
                 Intent(this, DashboardActivity::class.java)
             )
+
+             */
             finish()
         }
 
@@ -87,7 +92,7 @@ class LoginActivity : CrossIntentActivity() {
                     val claims = jwtManager.decodeJWT(token)
                     val principal = Principal(
                         id = claims["id"] as Int,
-                        idCompany = claims["id_company"] as Int?,
+                        idCompany = claims["id_company"] as Int,
                         idPerson = claims["id_person"] as Int?,
                         userType = UserType.fromString(claims["user_type"] as String)
                     )
@@ -101,6 +106,7 @@ class LoginActivity : CrossIntentActivity() {
                     nextActivity (
                         DashboardActivity::class.java,
                         extras = listOf( Pair("token", token))
+
                     )
                     finish()
                 }
@@ -181,5 +187,14 @@ class LoginActivity : CrossIntentActivity() {
 
     private fun clearPasswordError() {
         ilPassword.error = null
+    }
+
+    private fun logout (){
+        preferencesManager.deletePrincipal()
+        preferencesManager.deleteToken()
+        with(sharedPreferences.edit()) {
+            putBoolean("isLoggedIn", false)
+            apply()
+        }
     }
 }

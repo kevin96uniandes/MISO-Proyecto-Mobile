@@ -44,6 +44,7 @@ interface ApiService {
         @Part("incidentChannel") incidentChannel: RequestBody,
         @Part("incidentSubject") incidentSubject: RequestBody,
         @Part("incidentDetail") incidentDetail: RequestBody,
+        @Part("id_company") idCompany: RequestBody,
         @Part files: List<MultipartBody.Part?>
     ): Call<IncidenceClient.IncidenceResponse>
 

@@ -76,6 +76,7 @@ class MonitorFragment : Fragment() {
         super.onAttach(context)
         if (context is FragmentChangeListener) {
             fragmentChangeListener = context
+            context.getString(R.string.monitor)
         }
     }
 
@@ -124,9 +125,9 @@ class MonitorFragment : Fragment() {
         }
 
         filterChannelEt.setOnClickListener {
-            val items = (listOf("Todos") + Technology.entries.map { it.channel }).toTypedArray()
+            val items = (listOf(getString(R.string.all)) + Technology.entries.map { it.channel }).toTypedArray()
             val builder = AlertDialog.Builder(binding.root.context)
-            builder.setTitle("Selecciona un canal")
+            builder.setTitle(getString(R.string.select_channel))
                 .setSingleChoiceItems(items, -1) { dialog, which ->
                     val selectedItem = items[which]
                     filterChannelEt.setText(selectedItem)
@@ -134,16 +135,16 @@ class MonitorFragment : Fragment() {
                     getBoardPercentage()
                     dialog.dismiss()
                 }
-                .setNegativeButton("Cancelar") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.dismiss()
                 }
             builder.show()
         }
 
         filterStateEt.setOnClickListener {
-            val items = (listOf("Todos") + IncidenceStatus.entries.map { it.status }).toTypedArray()
+            val items = (listOf(getString(R.string.all)) + IncidenceStatus.entries.map { it.status }).toTypedArray()
             val builder = AlertDialog.Builder(binding.root.context)
-            builder.setTitle("Selecciona un estado")
+            builder.setTitle(getString(R.string.select_state))
                 .setSingleChoiceItems(items, -1) { dialog, which ->
                     val selectedItem = items[which]
                     filterStateEt.setText(selectedItem)
@@ -151,33 +152,13 @@ class MonitorFragment : Fragment() {
                     getBoardPercentage()
                     dialog.dismiss()
                 }
-                .setNegativeButton("Cancelar") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.dismiss()
                 }
             builder.show()
         }
         boardSummaryViewModelObserver()
         boardPercentageViewModelObserver()
-
-/*
-        pieChart = binding.pieChartn
-        val entries = listOf(
-            PieEntry(40f, "Category 1"),
-            PieEntry(30f, "Category 2"),
-            PieEntry(20f, "Category 3"),
-            PieEntry(10f, "Category 4")
-        )
-
-        val dataSet = PieDataSet(entries, "Categorías")
-        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
-        dataSet.valueTextSize = 12f
-        val pieData = PieData(dataSet)
-        pieData.setDrawValues(true)
-        pieChart.data = pieData
-
-        pieChart.invalidate()
-
- */
 
         filtersInitialValues()
         getBoardPercentage()
@@ -219,7 +200,7 @@ class MonitorFragment : Fragment() {
             startDate.after(endDate) -> {
                 Toast.makeText(
                     binding.root.context,
-                    "La fecha de inicio no puede ser mayor que la fecha de fin.",
+                    getString(R.string.start_date_cannot_be_greater_than_end_date),
                     Toast.LENGTH_SHORT
                 ).show()
                 false
@@ -228,7 +209,7 @@ class MonitorFragment : Fragment() {
             startDate.after(currentDate) || endDate.after(currentDate) -> {
                 Toast.makeText(
                     binding.root.context,
-                    "Las fechas no pueden superar la fecha actual.",
+                    getString(R.string.dates_cannot_exceed_current_date),
                     Toast.LENGTH_SHORT
                 ).show()
                 false
@@ -293,22 +274,7 @@ class MonitorFragment : Fragment() {
         val pieEntries = estateCounts.map {
             PieEntry(it.value.toFloat(), it.key)
         }
-
-        val groupedByStatusAndDate = data.incidences.groupBy { it.estate }
-            .mapValues { entry -> entry.value.groupingBy { it.updateDate }.eachCount() }
-
-
-        val barEntries = mutableListOf<BarEntry>()
-        var index = 1f
-
-        groupedByStatusAndDate.forEach { (estate, dates) ->
-            dates.forEach { (date, count) ->
-                barEntries.add(BarEntry(index, count.toFloat(), BarChartLabels(estate, dates)))
-                //dateLabels.add(date)
-                index++
-            }
-        }
-
+        Log.d("pie chart Monitor", pieEntries.toString())
         val groupedByState = data.incidences.groupBy { it.estate }
         val lineDataSets = mutableListOf<LineDataSet>()
 
@@ -325,30 +291,8 @@ class MonitorFragment : Fragment() {
             lineIndex++  // Incrementar el índice para el siguiente grupo de estado
         }
 
-        val pieItem =
-            ChartItem.PieChartItem(
-                entries = pieEntries,
-                "Distribución de incidentes por estado"
-            ,
-/*
-            ChartItem.BarChartItem(
-                barEntries,
-                "Incidentes por estado y fecha de actualización"
-            ),
-            ChartItem.LineChartItem(
-                entries = lineDataSets.flatMap { it.values },
-                dataLabelsDate.toList(),
-                "Line Chart 1"
-            )
-            */
-
-        )
-        //val chartAdapter = BoardChartsAdapter(chartItems)
-        //recyclerViewContainer.adapter = chartAdapter
         val items = adapter.items // Accede a la lista del adaptador
-        items[1] = ChartItem.PieChartItem(entries = pieEntries, title = "Distribución de incidentes por estado")
-        //adapter.notifyItemChanged(0)
-        //chartItems.add(1, pieItem)
+        items[1] = ChartItem.PieChartItem(entries = pieEntries, title = getString(R.string.incident_distribution_by_status))
         recyclerViewContainer.adapter?.notifyDataSetChanged()
         adapter.notifyItemChanged(1)
     }
@@ -381,14 +325,10 @@ class MonitorFragment : Fragment() {
     }
 
     companion object {
-        const val TITLE = "Monitores"
+        const val TITLE = ""
         @JvmStatic
         fun newInstance() =
             MonitorFragment()
     }
 
-    data class BarChartLabels(
-        val state: String,
-        val date: Map<String, Int>
-    )
 }

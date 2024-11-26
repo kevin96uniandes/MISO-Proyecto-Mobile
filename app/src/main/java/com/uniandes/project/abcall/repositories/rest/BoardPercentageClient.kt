@@ -25,6 +25,7 @@ class BoardPercentageClient {
                     Log.e("board success", response.body()!!.toString())
                     callback(ApiResult.Success(response.body()!!))
                 }else {
+                    Log.e("board error", response.errorBody()!!.string())
                     val errorMessage = response.errorBody()?.string()
                     callback(ApiResult.Error(response.code(), errorMessage))
                 }

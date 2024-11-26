@@ -51,6 +51,7 @@ class DetailIncidentFragment : Fragment() {
         super.onAttach(context)
         if (context is FragmentChangeListener) {
             var fragmentChangeListener = context
+            TITLE = context.getString(R.string.issue_detail)
         }
     }
 
@@ -147,7 +148,7 @@ class DetailIncidentFragment : Fragment() {
 
     companion object {
         lateinit var arguments: Bundle
-        const val TITLE = "Detalle incidencia"
+        var TITLE = ""
         @JvmStatic
         fun newInstance() =
             DetailIncidentFragment()
