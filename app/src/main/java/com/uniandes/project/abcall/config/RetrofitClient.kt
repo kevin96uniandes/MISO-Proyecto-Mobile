@@ -50,7 +50,6 @@ object RetrofitClient {
         apiService = mock
     }
 
-    // Método para obtener el token de autenticación
     private fun getAuthToken(): String {
         return authToken
     }
