@@ -27,11 +27,13 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.uniandes.project.abcall.R
 import com.uniandes.project.abcall.adapter.SelectedFilesAdapter
+import com.uniandes.project.abcall.config.ApiResult
 import com.uniandes.project.abcall.config.PreferencesManager
 import com.uniandes.project.abcall.databinding.FragmentCreateIncidencesBinding
 import com.uniandes.project.abcall.enums.IncidenceType
 import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.models.Incidence
+import com.uniandes.project.abcall.models.Principal
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
 import com.uniandes.project.abcall.ui.dialogs.CustomDialogFragment
 import com.uniandes.project.abcall.viewmodels.CreateIncidenceViewModel
@@ -50,6 +52,10 @@ class CrateIncidencesFragment : Fragment() {
 
     private var fragmentChangeListener: FragmentChangeListener? = null
 
+    private lateinit var sendingDialog: CustomDialogFragment
+
+    private lateinit var principal: Principal
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,6 +68,8 @@ class CrateIncidencesFragment : Fragment() {
         preferencesManager = PreferencesManager(sPreferences)
         viewModel = CreateIncidenceViewModel()
 
+        principal = preferencesManager.getAuth()
+
         var idIncidenceType = "";
 
         val etIncidenceType: TextInputEditText = binding.etIncidenceType
@@ -69,7 +77,7 @@ class CrateIncidencesFragment : Fragment() {
             val items = IncidenceType.entries.map { "${it.id} - ${it.incidence}" }.toTypedArray()
 
             val builder = AlertDialog.Builder(requireContext())
-                .setTitle("Selecciona una opción")
+                .setTitle(getString(R.string.select_an_option))
                 .setSingleChoiceItems(items, -1) { dialog, which ->
                     val selectedItem = items[which]
                     etIncidenceType.setText(selectedItem)
@@ -77,7 +85,7 @@ class CrateIncidencesFragment : Fragment() {
                     //clearIdentificationTypeError()
                     dialog.dismiss()
                 }
-                .setNegativeButton("Cancelar") { dialog, which ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, which ->
                     dialog.dismiss()
                 }
 
@@ -109,17 +117,50 @@ class CrateIncidencesFragment : Fragment() {
                     detail = etDetail.text.toString(),
                     type = idIncidenceType
                 ))
-                val dialog = CustomDialogFragment().newInstance(
-                    "Incidencia enviada satisfactoriamente",
-                    "Su incidencia fué registrada exitosamente, podrá visualizarla en su listado de incidencias",
-                    R.raw.success
-                ) {
-                    fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
-                    //Toast.makeText(binding.root.context, "Error de red", Toast.LENGTH_SHORT).show()
-                }
-                dialog.show(parentFragmentManager, "CustomDialog")
+                sendingDialog = CustomDialogFragment().newInstance(
+                    getString(R.string.submitting_issue),
+                    getString(R.string.please_wait_a_moment_while_the_attachment_is_are_being_sent),
+                    R.raw.sending,
+                    false
+                )
+                sendingDialog.show(parentFragmentManager, "CustomDialog")
             }
         }
+
+        viewModel.result.observe(viewLifecycleOwner) { result ->
+            sendingDialog.dismiss()
+            when(result) {
+                is ApiResult.Success -> {
+                    cleanUpTempFile()
+                    val dialog = CustomDialogFragment().newInstance(
+                        getString(R.string.issue_successfully_submitted),
+                        getString(R.string.your_issue_was_successfully_registered),
+                        R.raw.success
+                    ) {
+                        fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
+                    }
+                    dialog.show(parentFragmentManager, "CustomDialog")
+                }
+                is ApiResult.Error -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        getString(R.string.error_submitting_issue),
+                        getString(R.string.please_try_again_in_a_few_minutes),
+                        R.raw.error
+                    )
+                    dialog.show(parentFragmentManager, "CustomDialog")
+                }
+                ApiResult.NetworkError -> {
+                    val dialog = CustomDialogFragment().newInstance(
+                        getString(R.string.user_registration),
+                        getString(R.string.unable_to_connect_to_the_server),
+                        R.raw.no_network
+                    )
+                    dialog.show(parentFragmentManager, "CustomDialog")
+                }
+            }
+        }
+
+
 
         val btnCancel: Button = binding.btnCancel
 
@@ -138,6 +179,20 @@ class CrateIncidencesFragment : Fragment() {
         super.onAttach(context)
         if (context is FragmentChangeListener) {
             fragmentChangeListener = context
+            context.getString(R.string.create_issues)
+        }
+    }
+
+    fun cleanUpTempFile() {
+        selectedFiles.map {
+            if (it.exists()) {
+                val deleted = it.delete()
+                if (deleted) {
+                    Log.d("FileCleanup", "Temporary file deleted: ${it.name}")
+                } else {
+                    Log.e("FileCleanup", "Failed to delete temporary file: ${it.name}")
+                }
+            }
         }
     }
 
@@ -164,7 +219,7 @@ class CrateIncidencesFragment : Fragment() {
 
     private fun removeFile(file: File) {
         selectedFiles.remove(file)
-        Toast.makeText(context, "Archivo eliminado", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.file_deleted), Toast.LENGTH_SHORT).show()
     }
 
     private fun openFileSelector() {
@@ -179,7 +234,8 @@ class CrateIncidencesFragment : Fragment() {
             subject = subject,
             detail = detail,
             personId = preferencesManager.getAuth().idPerson!!,
-            files = selectedFiles
+            files = selectedFiles,
+            idCompany = principal.idCompany
         )
     }
 
@@ -195,10 +251,12 @@ class CrateIncidencesFragment : Fragment() {
                         selectedFiles.add(file)
                         showFileSelectionDialog()
                     } else {
-                        Toast.makeText(context, "No se pudo obtener el archivo.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,
+                            getString(R.string.file_could_not_be_retrieved), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "Solo puedes agregar hasta $MAX_FILES archivos.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,
+                        "${getString(R.string.you_can_only_add_up_to, MAX_FILES.toString())}}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -273,7 +331,7 @@ class CrateIncidencesFragment : Fragment() {
 
     companion object {
         private val FILE_REQUEST_CODE = 1001
-        const val TITLE = "Crear incidencias"
+        var TITLE = ""
 
         @JvmStatic
         fun newInstance () =
@@ -293,19 +351,19 @@ class CrateIncidencesFragment : Fragment() {
 
 
         if (TextUtils.isEmpty(incidenceType)) {
-            binding.ilIncidenceType.error = "Tipo de incidencia obligatoria"
+            binding.ilIncidenceType.error = getString(R.string.issue_type_is_required)
             scrollToView(binding.ilIncidenceType)
             isValid = false
         }
 
         if (TextUtils.isEmpty(subject)) {
-            binding.ilSubject.error = "Asunto obligatorio"
+            binding.ilSubject.error = getString(R.string.subject_required)
             scrollToView(binding.ilSubject)
             isValid = false
         }
 
         if (TextUtils.isEmpty(detail)) {
-            binding.ilDetail.error = "Detalle obligatorio"
+            binding.ilDetail.error = getString(R.string.detail_required)
             scrollToView(binding.ilDetail)
             isValid = false
         }

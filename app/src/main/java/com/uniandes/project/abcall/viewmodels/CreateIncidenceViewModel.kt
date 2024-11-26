@@ -22,7 +22,8 @@ class CreateIncidenceViewModel : ViewModel(){
                 type = incidence.type,
                 subject = incidence.subject,
                 detail = incidence.detail,
-                files = incidence.files
+                files = incidence.files,
+                idCompany = incidence.idCompany
             )
         ){ code ->
             _result.value = code

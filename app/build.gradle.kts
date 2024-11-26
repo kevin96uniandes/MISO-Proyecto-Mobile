@@ -81,17 +81,13 @@ dependencies {
     implementation("com.github.clans:fab:1.6.4")
     implementation(libs.androidx.junit.ktx)
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0") {
-        // Excluir las versiones de hamcrest-core aquí
-        exclude(group = "org.hamcrest", module = "hamcrest-core")
-        exclude(group = "org.hamcrest", module = "hamcrest")
-    }
+
+
+
     androidTestImplementation("org.hamcrest:hamcrest-core:1.3") // Cambiar a la versión 1.3
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
     androidTestImplementation("io.mockk:mockk-android:1.13.13")
-    androidTestImplementation("androidx.test:core-ktx:1.6.1") {
-        exclude(group = "org.hamcrest", module = "hamcrest-core")
-    }
+
     androidTestImplementation("com.github.tomakehurst:wiremock:3.0.1") {
         exclude(group = "org.apache.httpcomponents", module= "httpclient")
         exclude(group = "asm", module= "asm")
@@ -100,6 +96,14 @@ dependencies {
         exclude(group = "org.hamcrest", module = "hamcrest")
     }
     androidTestImplementation ("androidx.test.espresso:espresso-intents:3.6.1")
+    androidTestImplementation("androidx.test:core-ktx:1.6.1") {
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+    }
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0") {
+        // Excluir las versiones de hamcrest-core aquí
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+        exclude(group = "org.hamcrest", module = "hamcrest")
+    }
 }
 
 tasks.withType<Test> {

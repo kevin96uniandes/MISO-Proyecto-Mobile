@@ -1,5 +1,6 @@
 package com.uniandes.project.abcall.ui.dashboard.fragments
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
@@ -39,6 +40,7 @@ import com.uniandes.project.abcall.enums.Technology
 import com.uniandes.project.abcall.getCustomSharedPreferences
 import com.uniandes.project.abcall.models.ChatbotMessage
 import com.uniandes.project.abcall.models.Incidence
+import com.uniandes.project.abcall.models.Principal
 import com.uniandes.project.abcall.repositories.rest.IncidenceClient
 import com.uniandes.project.abcall.ui.LoginActivity
 import com.uniandes.project.abcall.ui.dashboard.intefaces.FragmentChangeListener
@@ -51,13 +53,7 @@ import java.util.Locale
 
 class IncidenceCreateChatbotFragment : Fragment() {
 
-    private val steps: List<SpannableString> = listOf(
-        SpannableString("Bienvenido a nuestro chat, es un placer guiarlo para crear una nueva incidencia.\nEn cualquier momento puede agregar documentos en el ícono de adjuntar que aparece en la parte inferior"),
-        SpannableString("Tipo de incidencia:\n1. ${IncidenceType.PROBLEM.incidence}\n2. ${IncidenceType.QUESTION_REQUEST.incidence}\n3. ${IncidenceType.SUGGESTION.incidence}"),
-        SpannableString("Asunto"),
-        SpannableString("Detalle"),
-        SpannableString("1. Enviar\n2. Ver resumen de la incidencia\n3. Salir"),
-    )
+    private var steps: List<SpannableString> = listOf()
 
     private var canAddResponseStep: Boolean = true
 
@@ -82,11 +78,21 @@ class IncidenceCreateChatbotFragment : Fragment() {
 
     private var fragmentChangeListener: FragmentChangeListener? = null
 
+    private lateinit var principal: Principal
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentIncidenceCreateChatbotBinding.inflate(inflater, container, false)
+
+        steps = listOf(
+        SpannableString(getString(R.string.welcome_chatbot)),
+        SpannableString("${getString(R.string.issue_type)}:\n1. ${IncidenceType.PROBLEM.incidence}\n2. ${IncidenceType.QUESTION_REQUEST.incidence}\n3. ${IncidenceType.SUGGESTION.incidence}"),
+        SpannableString(getString(R.string.subject)),
+        SpannableString(getString(R.string.detail)),
+        SpannableString("1. ${getString(R.string.send)}\n2. ${getString (R.string.show_issue_summary)}\n3. ${getString (R.string.exit)}"),
+        )
 
         val recyclerView: RecyclerView = binding.recyclerChatbotViewMessages
         messageAdapter = IncidentChatbotAdapter(messageList)
@@ -95,6 +101,8 @@ class IncidenceCreateChatbotFragment : Fragment() {
 
         val sPreferences = getCustomSharedPreferences(binding.root.context)
         preferencesManager = PreferencesManager(sPreferences)
+
+        principal = preferencesManager.getAuth()
 
         viewModel = CreateIncidenceViewModel()
 
@@ -113,8 +121,8 @@ class IncidenceCreateChatbotFragment : Fragment() {
                 is ApiResult.Success -> {
                     cleanUpTempFile()
                     val dialog = CustomDialogFragment().newInstance(
-                        "Incidencia enviada satisfactoriamente",
-                        "Su incidencia fué registrada exitosamente, podrá visualizarla en su listado de incidencias",
+                        getString(R.string.issue_successfully_submitted),
+                        getString(R.string.your_issue_was_successfully_registered),
                         R.raw.success
                     ) {
                         fragmentChangeListener?.onFragmentChange(IncidencesFragment.newInstance())
@@ -123,16 +131,16 @@ class IncidenceCreateChatbotFragment : Fragment() {
                 }
                 is ApiResult.Error -> {
                     val dialog = CustomDialogFragment().newInstance(
-                        "Error enviando incidencia",
-                        "Por favor vuelva a intentarlo en unos minutos",
+                        getString(R.string.error_submitting_issue),
+                        getString(R.string.please_try_again_in_a_few_minutes),
                         R.raw.error
                     )
                     dialog.show(parentFragmentManager, "CustomDialog")
                 }
                 ApiResult.NetworkError -> {
                     val dialog = CustomDialogFragment().newInstance(
-                        "Registro de usuario",
-                        "No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet.",
+                        getString(R.string.user_registration),
+                        getString(R.string.unable_to_connect_to_the_server),
                         R.raw.no_network
                     )
                     dialog.show(parentFragmentManager, "CustomDialog")
@@ -150,7 +158,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
                     addMessage(SpannableString(messageText))
                     messageInput.text.clear()
                     changeTurn()
-                    addMessage(SpannableString("Tipo de incidencia desconocida"))
+                    addMessage(SpannableString(getString(R.string.unknown_issue_type)))
                     addMessage(steps[stepPosition])
                     changeTurn()
                 }else {
@@ -162,7 +170,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
                     when (stepPosition) {
                         5 -> {
                             if (!validateDigitTyped(messageText, 1, 3)){
-                                addMessage(SpannableString("Opción desconocida"))
+                                addMessage(SpannableString(getString(R.string.unknown_option)))
                                 stepPosition--
                                 currentTurn = MessageChatbotSentBy.CHATBOT
                                 addMessage(steps[stepPosition])
@@ -173,8 +181,8 @@ class IncidenceCreateChatbotFragment : Fragment() {
                                         //Copiar: Envio al servidor
                                         viewModel.createIncidence(responseStepsToIncidence())
                                         sendingDialog = CustomDialogFragment().newInstance(
-                                            "Enviando incidencia",
-                                            "Espere un momento mientras se envía(n) el(los) adjunto(s)",
+                                            getString(R.string.submitting_issue),
+                                            getString(R.string.please_wait_a_moment_while_the_attachment_is_are_being_sent),
                                             R.raw.sending,
                                             false
                                         )
@@ -213,6 +221,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
     }
 
     //Copiar: Resultado del selector de archivos
+    @SuppressLint("StringFormatInvalid")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -225,10 +234,12 @@ class IncidenceCreateChatbotFragment : Fragment() {
                         selectedFiles.add(file)
                         showFileSelectionDialog()
                     } else {
-                        Toast.makeText(context, "No se pudo obtener el archivo.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,
+                            getString(R.string.file_could_not_be_retrieved), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "Solo puedes agregar hasta $MAX_FILES archivos.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,
+                        "${getString(R.string.you_can_only_add_up_to, MAX_FILES.toString())}}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -331,7 +342,7 @@ class IncidenceCreateChatbotFragment : Fragment() {
     //Copiar: Quitar los archivos de la lista cuando se han seleccionado
     private fun removeFile(file: File) {
         selectedFiles.remove(file)
-        Toast.makeText(context, "Archivo eliminado", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.file_deleted), Toast.LENGTH_SHORT).show()
     }
 
     //Copiar: Limpiar los archivos temporales luego de haberlo enviado al servidor
@@ -391,12 +402,49 @@ class IncidenceCreateChatbotFragment : Fragment() {
 
     private fun showSummaryAssistedIncidence(): SpannableString {
         val message = StringBuilder()
-        message.append("Resumen de la incidencia\n\n")
-        message.append("Tipo de incidencia:\n")
+        message.append("${getString(R.string.summary_issue)}\n\n")
+        message.append("${getString(R.string.issue_type)}:\n")
         message.append("${IncidenceType.entries[responseSteps[0].toInt() - 1].incidence}\n\n")
-        message.append("Asunto:\n${responseSteps[1]}\n\n")
-        message.append("Detalle:\n${responseSteps[2]}\n\n")
-        message.append("Adjuntos:\n${summaryMessafeFiles()}")
+        message.append("${getString(R.string.subject_required)}:\n${responseSteps[1]}\n\n")
+        message.append("${getString(R.string.detail)}:\n${responseSteps[2]}\n\n")
+        message.append("${getString(R.string.attaches)}:\n${summaryMessafeFiles()}")
+
+        val spannableMessage = SpannableString(message.toString())
+
+        fun applyBoldSpan(label: String) {
+            val startIndex = message.indexOf("$label:")
+            if (startIndex != -1) {
+                val endIndex = message.indexOf("\n", startIndex) + 1
+                if (endIndex > startIndex) {
+                    spannableMessage.setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        startIndex,
+                        endIndex,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            }
+        }
+
+        // Aplica estilos en los encabezados que existen
+        applyBoldSpan(getString(R.string.summary_issue))
+        applyBoldSpan(getString(R.string.issue_type))
+        applyBoldSpan(getString(R.string.subject_required))
+        applyBoldSpan(getString(R.string.detail))
+        applyBoldSpan(getString(R.string.attaches))
+
+        return spannableMessage
+    }
+
+/*
+    private fun showSummaryAssistedIncidence(): SpannableString {
+        val message = StringBuilder()
+        message.append("${getString(R.string.summary_issue)}\n\n")
+        message.append("${getString(R.string.issue_type)}:\n")
+        message.append("${IncidenceType.entries[responseSteps[0].toInt() - 1].incidence}\n\n")
+        message.append("${getString(R.string.subject_required)}:\n${responseSteps[1]}\n\n")
+        message.append("${getString(R.string.detail)}:\n${responseSteps[2]}\n\n")
+        message.append("${getString(R.string.attaches)}:\n${summaryMessafeFiles()}")
 
         val spannableMessage = SpannableString(message.toString())
 
@@ -409,35 +457,35 @@ class IncidenceCreateChatbotFragment : Fragment() {
 
         spannableMessage.setSpan(
             StyleSpan(Typeface.BOLD),
-            message.indexOf("Tipo de incidencia:"),
-            message.indexOf("\n", message.indexOf("Tipo de incidencia:")) + 1,
+            message.indexOf("${getString(R.string.issue_type)}:"),
+            message.indexOf("\n", message.indexOf("${getString(R.string.issue_type)}:")) + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
         spannableMessage.setSpan(
             StyleSpan(Typeface.BOLD),
-            message.indexOf("Asunto:"),
-            message.indexOf("\n", message.indexOf("Asunto:")) + 1,
+            message.indexOf("${getString(R.string.subject)}:"),
+            message.indexOf("\n", message.indexOf("${getString(R.string.subject)}:")) + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
         spannableMessage.setSpan(
             StyleSpan(Typeface.BOLD),
-            message.indexOf("Detalle:"),
-            message.indexOf("\n", message.indexOf("Detalle:")) + 1,
+            message.indexOf("${getString(R.string.detail)}:"),
+            message.indexOf("\n", message.indexOf("${getString(R.string.detail)}:")) + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
         spannableMessage.setSpan(
             StyleSpan(Typeface.BOLD),
-            message.indexOf("Adjuntos:"),
-            message.indexOf("\n", message.indexOf("Adjuntos:")) + 1,
+            message.indexOf("${getString(R.string.attaches)}:"),
+            message.indexOf("\n", message.indexOf("${getString(R.string.attaches)}:")) + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
         return spannableMessage
     }
-
+*/
     fun validateDigitTyped(pos: String, start: Int, end: Int): Boolean {
         var position = 0
         return try {
@@ -455,7 +503,8 @@ class IncidenceCreateChatbotFragment : Fragment() {
             subject = responseSteps[1],
             detail = responseSteps[2],
             personId = preferencesManager.getAuth().idPerson!!,
-            files = selectedFiles
+            files = selectedFiles,
+            idCompany = principal.idCompany
         )
     }
 

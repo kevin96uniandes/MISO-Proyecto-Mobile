@@ -22,12 +22,14 @@ class IncidenceClient {
             multipartBody.channel,
             multipartBody.subject,
             multipartBody.detail,
-            multipartBody.files
+            multipartBody.idCompany,
+            multipartBody.files,
         ).enqueue(object : Callback<IncidenceResponse> {
             override fun onResponse(call: Call<IncidenceResponse>, response: Response<IncidenceResponse>) {
                 if (response.isSuccessful) {
                     callback(ApiResult.Success(response.body()!!)) // Llama a callback en caso de éxito
                 } else {
+                    Log.d("Error creating incidence", response.errorBody()!!.string())
                     val errorMessage = response.errorBody()?.string()
                     callback(ApiResult.Error(response.code(), errorMessage))
                 }
@@ -44,7 +46,8 @@ class IncidenceClient {
         val type: String,
         val subject: String,
         val detail: String,
-        val files: List<File>
+        val files: List<File>,
+        val idCompany: Int
     )
 
     data class CreateIncidenceRequestBody(
@@ -53,7 +56,8 @@ class IncidenceClient {
         val channel: RequestBody,
         val subject: RequestBody,
         val detail: RequestBody,
-        val files: List<MultipartBody.Part>
+        val files: List<MultipartBody.Part>,
+        val idCompany: RequestBody
     )
 
     private fun CreateIncidenceRequest.toCreateIncidenceRequest(): CreateIncidenceRequestBody {
@@ -65,7 +69,8 @@ class IncidenceClient {
             channel = RequestBody.create(MediaType.parse("text/plain"), Technology.MOBILE.channel),
             subject = RequestBody.create(MediaType.parse("text/plain"), subject),
             detail = RequestBody.create(MediaType.parse("text/plain"), detail),
-            files = filesMultipart
+            files = filesMultipart,
+            idCompany = RequestBody.create(MediaType.parse("text/plain"), idCompany.toString()),
         )
     }
 
